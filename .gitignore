@@ -1,7 +1,22 @@
+
+# Entorno virtual
 venv/
 .venv/
+
+# Archivos temporales de Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Variables privadas
 .env
 .env.*
 !.env.example
+
+# Archivos estáticos generados por Django
+staticfiles/
+
+# Archivos del editor
+.vscode/
+.idea/

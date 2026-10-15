@@ -1,4 +1,9 @@
+
+import os
+
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 
 # ============================================================
@@ -9,14 +14,81 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # ============================================================
+# FUNCIONES AUXILIARES
+# ============================================================
+
+def obtener_booleano(nombre, valor_por_defecto=False):
+
+    valor = os.environ.get(nombre)
+
+    if valor is None:
+        return valor_por_defecto
+
+    return valor.strip().lower() in (
+        "1",
+        "true",
+        "yes",
+        "on",
+    )
+
+
+def obtener_lista(nombre):
+
+    valor = os.environ.get(nombre, "")
+
+    return [
+        elemento.strip()
+        for elemento in valor.split(",")
+        if elemento.strip()
+    ]
+
+
+# ============================================================
 # CONFIGURACIÓN GENERAL
 # ============================================================
 
-SECRET_KEY = "django-insecure-editor-retorika-desarrollo"
+EN_RENDER = bool(os.environ.get("RENDER"))
 
-DEBUG = True
+DEBUG = obtener_booleano(
+    "DEBUG",
+    valor_por_defecto=not EN_RENDER,
+)
 
-ALLOWED_HOSTS = []
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+if not SECRET_KEY:
+
+    if DEBUG:
+        SECRET_KEY = "django-insecure-editor-retorika-desarrollo"
+    else:
+        raise ImproperlyConfigured(
+            "Debes configurar SECRET_KEY en las variables "
+            "de entorno de Render."
+        )
+
+
+ALLOWED_HOSTS = obtener_lista("ALLOWED_HOSTS")
+
+if EN_RENDER:
+
+    render_hostname = os.environ.get(
+        "RENDER_EXTERNAL_HOSTNAME"
+    )
+
+    if render_hostname:
+        ALLOWED_HOSTS.append(render_hostname)
+
+
+if DEBUG:
+
+    ALLOWED_HOSTS.extend([
+        "localhost",
+        "127.0.0.1",
+        "[::1]",
+    ])
+
+
+ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS))
 
 
 # ============================================================
@@ -33,7 +105,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # EDITOR
+    # RETORI-CUT
     "reels",
 ]
 
@@ -44,6 +116,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
+    # Archivos estáticos en producción
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -123,8 +199,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": (
-            "django.contrib.auth.password_validation."
+            "django.contrib.auth.password.validation."
             "CommonPasswordValidator"
+        ).replace(
+            "password.validation",
+            "password_validation",
         ),
     },
     {
@@ -154,7 +233,7 @@ USE_TZ = True
 # CSS, JAVASCRIPT, IMÁGENES...
 # ============================================================
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -163,26 +242,76 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": (
+            "whitenoise.storage."
+            "CompressedManifestStaticFilesStorage"
+        ),
+    },
+}
+
+
 # ============================================================
 # ARCHIVOS MULTIMEDIA
-# Vídeos subidos, miniaturas, audios, exportaciones...
+# Vídeos, miniaturas, subtítulos, exportaciones...
 # ============================================================
 
 MEDIA_URL = "/media/"
 
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = Path(
+    os.environ.get(
+        "MEDIA_ROOT",
+        str(BASE_DIR / "media"),
+    )
+)
 
 
 # ============================================================
 # CONFIGURACIÓN DE SUBIDA DE VÍDEOS
 # ============================================================
 
-# Permitimos archivos grandes durante el desarrollo.
-# Más adelante controlaremos el límite desde EDITOR.
-
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+
+
+# ============================================================
+# SEGURIDAD EN PRODUCCIÓN
+# ============================================================
+
+CSRF_TRUSTED_ORIGINS = obtener_lista(
+    "CSRF_TRUSTED_ORIGINS"
+)
+
+if EN_RENDER:
+
+    render_hostname = os.environ.get(
+        "RENDER_EXTERNAL_HOSTNAME"
+    )
+
+    if render_hostname:
+
+        origen_render = (
+            f"https://{render_hostname}"
+        )
+
+        if origen_render not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(origen_render)
+
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
+
+SESSION_COOKIE_SECURE = not DEBUG
+
+CSRF_COOKIE_SECURE = not DEBUG
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+X_FRAME_OPTIONS = "DENY"
 
 
 # ============================================================
