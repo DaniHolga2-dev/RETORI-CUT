@@ -1,0 +1,1016 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Configuración de marca | RETORI-CUT{% endblock %}
+
+{% block nav_configuracion %}activo{% endblock %}
+
+{% block header_title %}
+    Configuración de marca
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* ========================================================
+       CONTENEDOR GENERAL
+    ======================================================== */
+
+    .marca-contenedor {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding-bottom: 45px;
+        color: #172033;
+    }
+
+    .marca-introduccion {
+        margin-bottom: 26px;
+    }
+
+    .marca-introduccion h1 {
+        margin: 0 0 9px;
+        font-size: 27px;
+        font-weight: 800;
+        letter-spacing: -0.7px;
+    }
+
+    .marca-introduccion p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* ========================================================
+       DISTRIBUCIÓN
+    ======================================================== */
+
+    .marca-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(300px, 0.85fr);
+        gap: 22px;
+        align-items: start;
+    }
+
+    .marca-columna {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        min-width: 0;
+    }
+
+    /* ========================================================
+       TARJETAS
+    ======================================================== */
+
+    .marca-tarjeta {
+        background: #ffffff;
+        border: 1px solid #e5eaf2;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 6px 24px rgba(24, 39, 75, 0.035);
+    }
+
+    .marca-tarjeta-titulo {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 23px;
+    }
+
+    .marca-tarjeta-icono {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 37px;
+        height: 37px;
+        border-radius: 11px;
+        background: #eaf1ff;
+        color: #156fe7;
+        font-size: 19px;
+        flex-shrink: 0;
+    }
+
+    .marca-tarjeta-titulo h2 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 750;
+    }
+
+    .marca-tarjeta-titulo p {
+        margin: 4px 0 0;
+        font-size: 12px;
+        color: #8390a5;
+    }
+
+    /* ========================================================
+       CAMPOS
+    ======================================================== */
+
+    .marca-campo {
+        margin-bottom: 20px;
+        min-width: 0;
+    }
+
+    .marca-campo:last-child {
+        margin-bottom: 0;
+    }
+
+    .marca-campo label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 650;
+        color: #334155;
+    }
+
+    .marca-ayuda {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #94a3b8;
+        line-height: 1.5;
+    }
+
+    .marca-dos-columnas {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .marca-contenedor .rc-input,
+    .marca-contenedor .rc-select {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        padding: 12px 13px;
+        border: 1px solid #dce3ee;
+        border-radius: 10px;
+        background: #ffffff;
+        color: #263449;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .marca-contenedor .rc-input:focus,
+    .marca-contenedor .rc-select:focus {
+        border-color: #156fe7;
+        box-shadow: 0 0 0 3px rgba(21, 111, 231, 0.09);
+    }
+
+    .marca-contenedor .rc-input-archivo {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        padding: 11px;
+        border: 1px dashed #cbd5e1;
+        border-radius: 10px;
+        font-size: 12px;
+        color: #475569;
+    }
+
+    /* ========================================================
+       COLORES
+    ======================================================== */
+
+    .marca-colores {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .marca-color {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid #e7ecf4;
+        border-radius: 12px;
+        min-width: 0;
+    }
+
+    .marca-color input[type="color"] {
+        width: 43px;
+        height: 43px;
+        flex-shrink: 0;
+        padding: 3px;
+        border: 1px solid #e2e8f0;
+        border-radius: 9px;
+        background: white;
+        cursor: pointer;
+    }
+
+    .marca-color-detalle {
+        min-width: 0;
+    }
+
+    .marca-color-detalle label {
+        margin: 0 0 4px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .marca-color-detalle span {
+        font-size: 11px;
+        color: #8492a6;
+        font-family: monospace;
+    }
+
+    /* ========================================================
+       CHECKBOX
+    ======================================================== */
+
+    .marca-opcion {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 14px 0;
+        border-top: 1px solid #edf0f5;
+    }
+
+    .marca-opcion label {
+        font-size: 13px;
+        font-weight: 650;
+        cursor: pointer;
+    }
+
+    .marca-opcion input[type="checkbox"] {
+        width: 19px;
+        height: 19px;
+        accent-color: #156fe7;
+        cursor: pointer;
+    }
+
+    /* ========================================================
+       PREVISUALIZACIÓN
+    ======================================================== */
+
+    .marca-preview {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        aspect-ratio: 9 / 12;
+        max-height: 440px;
+        overflow: hidden;
+        border-radius: 14px;
+        background:
+            radial-gradient(circle at 50% 30%, #35445d, transparent 55%),
+            linear-gradient(145deg, #101b31, #060a12);
+    }
+
+    .marca-preview::before {
+        content: "";
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        top: 17%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.035);
+        box-shadow: 0 100px 0 45px rgba(255, 255, 255, 0.025);
+    }
+
+    .marca-preview-texto {
+        position: absolute;
+        z-index: 1;
+        left: 7%;
+        right: 7%;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+        color: white;
+        font-family: Montserrat, Arial, sans-serif;
+        font-size: 22px;
+        font-weight: 850;
+        line-height: 1.45;
+        text-transform: uppercase;
+        text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.9);
+        overflow-wrap: anywhere;
+    }
+
+    .marca-preview-destacado {
+        display: inline-block;
+        padding: 1px 7px;
+        background: #156fe7;
+        color: white;
+        border-radius: 2px;
+    }
+
+    .marca-preview-etiqueta {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        padding: 7px 10px;
+        border-radius: 7px;
+        background: rgba(0, 0, 0, 0.42);
+        color: #e2e8f0;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+    .marca-preview-nota {
+        margin: 13px 0 0;
+        color: #94a3b8;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    /* ========================================================
+       ERRORES
+    ======================================================== */
+
+    .marca-error {
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 12px;
+    }
+
+    /* ========================================================
+       BOTONES
+    ======================================================== */
+
+    .marca-acciones {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .marca-boton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 21px;
+        border: 0;
+        border-radius: 11px;
+        background: #156fe7;
+        color: white;
+        font-size: 13px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .marca-boton:hover {
+        background: #0758c6;
+        transform: translateY(-1px);
+    }
+
+    .marca-boton-secundario {
+        background: #eef2f8;
+        color: #475569;
+        text-decoration: none;
+    }
+
+    .marca-boton-secundario:hover {
+        background: #e2e8f0;
+    }
+
+    /* ========================================================
+       RESPONSIVE
+    ======================================================== */
+
+    @media (max-width: 900px) {
+
+        .marca-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .marca-preview {
+            max-height: 380px;
+        }
+
+    }
+
+    @media (max-width: 520px) {
+
+        .marca-tarjeta {
+            padding: 19px;
+        }
+
+        .marca-colores,
+        .marca-dos-columnas {
+            grid-template-columns: 1fr;
+        }
+
+        .marca-introduccion h1 {
+            font-size: 23px;
+        }
+
+        .marca-acciones {
+            flex-direction: column-reverse;
+        }
+
+        .marca-acciones > * {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="marca-contenedor">
+
+    <div class="marca-introduccion">
+
+        <h1>Identidad de marca</h1>
+
+        <p>
+            Personaliza los elementos visuales que utilizará
+            RETORI-CUT en la edición de tus vídeos.
+        </p>
+
+    </div>
+
+    <form
+        method="post"
+        enctype="multipart/form-data"
+        id="formulario-marca"
+    >
+
+        {% csrf_token %}
+
+        {% if formulario.non_field_errors %}
+            <div class="marca-error">
+                {{ formulario.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="marca-grid">
+
+            <!-- ============================================
+                 COLUMNA IZQUIERDA
+            ============================================= -->
+
+            <div class="marca-columna">
+
+                <!-- IDENTIDAD -->
+
+                <section class="marca-tarjeta">
+
+                    <div class="marca-tarjeta-titulo">
+
+                        <span class="marca-tarjeta-icono">✦</span>
+
+                        <div>
+                            <h2>Identidad corporativa</h2>
+                            <p>Nombre, logotipo y recursos de marca</p>
+                        </div>
+
+                    </div>
+
+                    <div class="marca-campo">
+
+                        <label for="{{ formulario.nombre.id_for_label }}">
+                            Nombre de marca
+                        </label>
+
+                        {{ formulario.nombre }}
+
+                        <div class="marca-error">
+                            {{ formulario.nombre.errors }}
+                        </div>
+
+                    </div>
+
+                    <div class="marca-campo">
+
+                        <label for="{{ formulario.logo.id_for_label }}">
+                            Logotipo
+                        </label>
+
+                        {{ formulario.logo }}
+
+                        {% if configuracion.logo %}
+                            <p class="marca-ayuda">
+                                Logotipo actual:
+                                <a href="{{ configuracion.logo.url }}" target="_blank" rel="noopener">
+                                    Ver archivo
+                                </a>
+                            </p>
+                        {% endif %}
+
+                        <div class="marca-error">
+                            {{ formulario.logo.errors }}
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- COLORES -->
+
+                <section class="marca-tarjeta">
+
+                    <div class="marca-tarjeta-titulo">
+
+                        <span class="marca-tarjeta-icono">◉</span>
+
+                        <div>
+                            <h2>Colores corporativos</h2>
+                            <p>Paleta de identidad Retorika</p>
+                        </div>
+
+                    </div>
+
+                    <div class="marca-colores">
+
+                        <div class="marca-color">
+
+                            {{ formulario.color_azul }}
+
+                            <div class="marca-color-detalle">
+                                <label for="{{ formulario.color_azul.id_for_label }}">Azul</label>
+                                <span data-hex="color_azul">{{ formulario.color_azul.value }}</span>
+                            </div>
+
+                        </div>
+
+                        <div class="marca-color">
+
+                            {{ formulario.color_fucsia }}
+
+                            <div class="marca-color-detalle">
+                                <label for="{{ formulario.color_fucsia.id_for_label }}">Fucsia</label>
+                                <span data-hex="color_fucsia">{{ formulario.color_fucsia.value }}</span>
+                            </div>
+
+                        </div>
+
+                        <div class="marca-color">
+
+                            {{ formulario.color_verde }}
+
+                            <div class="marca-color-detalle">
+                                <label for="{{ formulario.color_verde.id_for_label }}">Verde</label>
+                                <span data-hex="color_verde">{{ formulario.color_verde.value }}</span>
+                            </div>
+
+                        </div>
+
+                        <div class="marca-color">
+
+                            {{ formulario.color_blanco }}
+
+                            <div class="marca-color-detalle">
+                                <label for="{{ formulario.color_blanco.id_for_label }}">Blanco</label>
+                                <span data-hex="color_blanco">{{ formulario.color_blanco.value }}</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="marca-error">
+                        {{ formulario.color_azul.errors }}
+                        {{ formulario.color_fucsia.errors }}
+                        {{ formulario.color_verde.errors }}
+                        {{ formulario.color_blanco.errors }}
+                    </div>
+
+                </section>
+
+
+                <!-- TIPOGRAFÍA -->
+
+                <section class="marca-tarjeta">
+
+                    <div class="marca-tarjeta-titulo">
+
+                        <span class="marca-tarjeta-icono">Aa</span>
+
+                        <div>
+                            <h2>Tipografía</h2>
+                            <p>Fuente principal para los subtítulos</p>
+                        </div>
+
+                    </div>
+
+                    <div class="marca-campo">
+
+                        <label for="{{ formulario.tipografia.id_for_label }}">
+                            Fuente
+                        </label>
+
+                        {{ formulario.tipografia }}
+
+                        <div class="marca-error">
+                            {{ formulario.tipografia.errors }}
+                        </div>
+
+                    </div>
+
+                    <div class="marca-campo">
+
+                        <label for="{{ formulario.archivo_tipografia.id_for_label }}">
+                            Archivo de fuente personalizada
+                        </label>
+
+                        {{ formulario.archivo_tipografia }}
+
+                        <p class="marca-ayuda">
+                            Puedes subir una fuente TTF u OTF.
+                            La integración con FFmpeg se realizará
+                            en una fase posterior.
+                        </p>
+
+                        <div class="marca-error">
+                            {{ formulario.archivo_tipografia.errors }}
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- SUBTÍTULOS -->
+
+                <section class="marca-tarjeta">
+
+                    <div class="marca-tarjeta-titulo">
+
+                        <span class="marca-tarjeta-icono">▤</span>
+
+                        <div>
+                            <h2>Estilo de subtítulos</h2>
+                            <p>Tamaño, posición y separación</p>
+                        </div>
+
+                    </div>
+
+                    <div class="marca-dos-columnas">
+
+                        <div class="marca-campo">
+
+                            <label for="{{ formulario.tamano_subtitulos.id_for_label }}">
+                                Tamaño
+                            </label>
+
+                            {{ formulario.tamano_subtitulos }}
+
+                            <div class="marca-error">
+                                {{ formulario.tamano_subtitulos.errors }}
+                            </div>
+
+                        </div>
+
+                        <div class="marca-campo">
+
+                            <label for="{{ formulario.posicion_subtitulos.id_for_label }}">
+                                Posición
+                            </label>
+
+                            {{ formulario.posicion_subtitulos }}
+
+                            <div class="marca-error">
+                                {{ formulario.posicion_subtitulos.errors }}
+                            </div>
+
+                        </div>
+
+                        <div class="marca-campo">
+
+                            <label for="{{ formulario.margen_vertical.id_for_label }}">
+                                Margen vertical
+                            </label>
+
+                            {{ formulario.margen_vertical }}
+
+                        </div>
+
+                        <div class="marca-campo">
+
+                            <label for="{{ formulario.margen_horizontal.id_for_label }}">
+                                Margen horizontal
+                            </label>
+
+                            {{ formulario.margen_horizontal }}
+
+                        </div>
+
+                        <div class="marca-campo">
+
+                            <label for="{{ formulario.interlineado.id_for_label }}">
+                                Interlineado
+                            </label>
+
+                            {{ formulario.interlineado }}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ANIMACIONES -->
+
+                <section class="marca-tarjeta">
+
+                    <div class="marca-tarjeta-titulo">
+
+                        <span class="marca-tarjeta-icono">✧</span>
+
+                        <div>
+                            <h2>Animaciones</h2>
+                            <p>Entrada y ritmo de los subtítulos</p>
+                        </div>
+
+                    </div>
+
+                    <div class="marca-dos-columnas">
+
+                        <div class="marca-campo">
+
+                            <label for="{{ formulario.animacion_subtitulos.id_for_label }}">
+                                Tipo de animación
+                            </label>
+
+                            {{ formulario.animacion_subtitulos }}
+
+                        </div>
+
+                        <div class="marca-campo">
+
+                            <label for="{{ formulario.duracion_animacion.id_for_label }}">
+                                Duración (segundos)
+                            </label>
+
+                            {{ formulario.duracion_animacion }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="marca-opcion">
+
+                        <label for="{{ formulario.destacar_palabras.id_for_label }}">
+                            Destacar palabras importantes
+                        </label>
+
+                        {{ formulario.destacar_palabras }}
+
+                    </div>
+
+                    <div class="marca-campo">
+
+                        <label for="{{ formulario.color_destacado.id_for_label }}">
+                            Color del destacado
+                        </label>
+
+                        {{ formulario.color_destacado }}
+
+                        <div class="marca-error">
+                            {{ formulario.color_destacado.errors }}
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- EFECTOS -->
+
+                <section class="marca-tarjeta">
+
+                    <div class="marca-tarjeta-titulo">
+
+                        <span class="marca-tarjeta-icono">⚡</span>
+
+                        <div>
+                            <h2>Efectos de edición</h2>
+                            <p>Intensidad predeterminada</p>
+                        </div>
+
+                    </div>
+
+                    <div class="marca-campo">
+
+                        <label for="{{ formulario.intensidad_efectos.id_for_label }}">
+                            Intensidad
+                        </label>
+
+                        {{ formulario.intensidad_efectos }}
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- ============================================
+                 COLUMNA DERECHA
+            ============================================= -->
+
+            <div class="marca-columna">
+
+                <section class="marca-tarjeta">
+
+                    <div class="marca-tarjeta-titulo">
+
+                        <span class="marca-tarjeta-icono">▶</span>
+
+                        <div>
+                            <h2>Vista previa</h2>
+                            <p>Ejemplo visual de los subtítulos</p>
+                        </div>
+
+                    </div>
+
+                    <div class="marca-preview">
+
+                        <span class="marca-preview-etiqueta">
+                            PREVISUALIZACIÓN
+                        </span>
+
+                        <div
+                            class="marca-preview-texto"
+                            id="preview-texto"
+                        >
+                            CREA CONTENIDO
+                            <span
+                                class="marca-preview-destacado"
+                                id="preview-destacado"
+                            >
+                                DIFERENTE
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <p class="marca-preview-nota">
+                        La vista previa es orientativa.
+                        La apariencia final dependerá del
+                        renderizado de FFmpeg y de las fuentes
+                        disponibles.
+                    </p>
+
+                </section>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================
+             ACCIONES
+        ================================================= -->
+
+        <div class="marca-acciones">
+
+            <a
+                href="{% url 'nuevo_reel' %}"
+                class="marca-boton marca-boton-secundario"
+            >
+                Volver
+            </a>
+
+            <button
+                type="submit"
+                class="marca-boton"
+            >
+                Guardar configuración
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const previewTexto = document.getElementById("preview-texto");
+    const previewDestacado = document.getElementById("preview-destacado");
+
+    const tamano = document.getElementById("id_tamano_subtitulos");
+    const posicion = document.getElementById("id_posicion_subtitulos");
+    const tipografia = document.getElementById("id_tipografia");
+    const colorDestacado = document.getElementById("id_color_destacado");
+    const destacar = document.getElementById("id_destacar_palabras");
+
+    function actualizarPreview() {
+
+        if (tamano) {
+            const valor = Number(tamano.value) || 12;
+            previewTexto.style.fontSize = (valor * 1.6) + "px";
+        }
+
+        if (posicion) {
+
+            if (posicion.value === "superior") {
+                previewTexto.style.top = "25%";
+            } else if (posicion.value === "inferior") {
+                previewTexto.style.top = "76%";
+            } else {
+                previewTexto.style.top = "50%";
+            }
+
+        }
+
+        if (tipografia) {
+
+            const fuentes = {
+                "Montserrat": "Montserrat, Arial, sans-serif",
+                "Arial": "Arial, sans-serif",
+                "Retorika": "Montserrat, Arial, sans-serif"
+            };
+
+            previewTexto.style.fontFamily =
+                fuentes[tipografia.value] || fuentes["Montserrat"];
+
+        }
+
+        if (colorDestacado) {
+            previewDestacado.style.backgroundColor = colorDestacado.value;
+        }
+
+        if (destacar) {
+
+            previewDestacado.style.backgroundColor =
+                destacar.checked
+                    ? (colorDestacado ? colorDestacado.value : "#156fe7")
+                    : "transparent";
+
+            previewDestacado.style.padding =
+                destacar.checked ? "1px 7px" : "0";
+
+        }
+
+    }
+
+    const campos = [
+        tamano,
+        posicion,
+        tipografia,
+        colorDestacado,
+        destacar,
+    ];
+
+    campos.forEach(function (campo) {
+
+        if (campo) {
+            campo.addEventListener("input", actualizarPreview);
+            campo.addEventListener("change", actualizarPreview);
+        }
+
+    });
+
+    const nombresColores = [
+        "color_azul",
+        "color_fucsia",
+        "color_verde",
+        "color_blanco",
+    ];
+
+    nombresColores.forEach(function (nombre) {
+
+        const input = document.getElementById("id_" + nombre);
+        const etiqueta = document.querySelector(
+            '[data-hex="' + nombre + '"]'
+        );
+
+        if (!input || !etiqueta) {
+            return;
+        }
+
+        function actualizarHex() {
+            etiqueta.textContent = input.value.toUpperCase();
+        }
+
+        input.addEventListener("input", actualizarHex);
+
+        actualizarHex();
+
+    });
+
+    actualizarPreview();
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,1530 @@
+
+/* ============================================================
+   RETORI-CUT · RETORIKA
+   ESTILOS GENERALES
+============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --azul-retorika: #156fe7;
+    --verde-retorika: #03d26e;
+    --azul-profundo: #105cb1;
+    --azul-muy-claro: #f1f7ff;
+    --azul-claro: #e5f0ff;
+    --blanco: #ffffff;
+    --texto: #101b38;
+    --texto-secundario: #68758d;
+    --texto-suave: #94a0b5;
+    --borde: #e5eaf2;
+    --borde-azul: #b9d6ff;
+    --fondo: #f6f8fc;
+    --fondo-sidebar: #ffffff;
+
+    --sombra-suave:
+        0 8px 30px rgba(20, 49, 91, 0.06);
+
+    --sombra:
+        0 14px 40px rgba(20, 49, 91, 0.10);
+
+    --sidebar-ancho: 240px;
+    --cabecera-alto: 72px;
+    --radio: 16px;
+}
+
+/* ============================================================
+   RESET
+============================================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Montserrat", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    border: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-ancho);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    background: var(--fondo-sidebar);
+    border-right: 1px solid var(--borde);
+    z-index: 100;
+}
+
+/* ============================================================
+   MARCA
+============================================================ */
+
+.sidebar-marca {
+    margin-bottom: 36px;
+}
+
+.marca-enlace {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 8px;
+}
+
+.marca-icono {
+    width: 39px;
+    height: 39px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: var(--azul-retorika);
+    overflow: hidden;
+}
+
+.marca-icono span {
+    position: absolute;
+    width: 4px;
+    height: 20px;
+    background: var(--blanco);
+    border-radius: 10px;
+}
+
+.marca-icono span:nth-child(1) {
+    left: 11px;
+}
+
+.marca-icono span:nth-child(2) {
+    left: 18px;
+    height: 15px;
+    transform: rotate(-42deg);
+}
+
+.marca-icono span:nth-child(3) {
+    left: 25px;
+    height: 11px;
+    transform: rotate(42deg);
+}
+
+.marca-texto {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.marca-texto strong {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+}
+
+.marca-texto small {
+    margin-top: 5px;
+    color: var(--texto-secundario);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ============================================================
+   NAVEGACIÓN
+============================================================ */
+
+.sidebar-navegacion {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.nav-item {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 13px;
+    border-radius: 10px;
+    color: var(--texto-secundario);
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease;
+}
+
+.nav-item:hover {
+    background: var(--azul-muy-claro);
+    color: var(--azul-retorika);
+}
+
+.nav-item.activo {
+    background: var(--azul-retorika);
+    color: var(--blanco);
+    box-shadow:
+        0 8px 20px rgba(21, 111, 231, 0.20);
+}
+
+.nav-icono {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.nav-deshabilitado {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.nav-deshabilitado:hover {
+    background: transparent;
+    color: var(--texto-secundario);
+}
+
+.sidebar-inferior {
+    margin-top: auto;
+}
+
+/* ============================================================
+   APLICACIÓN
+============================================================ */
+
+.aplicacion {
+    min-height: 100vh;
+    margin-left: var(--sidebar-ancho);
+}
+
+/* ============================================================
+   CABECERA
+============================================================ */
+
+.cabecera {
+    height: var(--cabecera-alto);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 34px;
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid var(--borde);
+}
+
+.cabecera-titulo {
+    font-size: 16px;
+    font-weight: 750;
+}
+
+.cabecera-acciones {
+    display: flex;
+    align-items: center;
+}
+
+.estado-retorika {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--borde);
+    border-radius: 100px;
+    background: var(--blanco);
+    color: var(--texto-secundario);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.estado-punto {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--azul-retorika);
+    box-shadow:
+        0 0 0 4px rgba(21, 111, 231, 0.10);
+}
+
+/* ============================================================
+   CONTENIDO GENERAL
+============================================================ */
+
+.contenido {
+    min-height: calc(100vh - var(--cabecera-alto));
+    padding: 46px 40px 60px;
+}
+
+/* ============================================================
+   NUEVO REEL
+============================================================ */
+
+.nuevo-reel {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   CABECERA NUEVO REEL
+============================================================ */
+
+.nuevo-reel-cabecera {
+    max-width: 670px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.seccion-etiqueta {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--azul-retorika);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+}
+
+.nuevo-reel-cabecera h1 {
+    margin-bottom: 10px;
+    color: var(--texto);
+    font-size: clamp(31px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -1.4px;
+    line-height: 1.1;
+}
+
+.nuevo-reel-cabecera p {
+    max-width: 590px;
+    margin: 0 auto;
+    color: var(--texto-secundario);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   FORMULARIO
+============================================================ */
+
+.formulario-reel {
+    width: 100%;
+}
+
+/* ============================================================
+   ZONA DE SUBIDA
+============================================================ */
+
+.zona-subida {
+    min-height: 330px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 35px;
+    border: 1.5px dashed var(--borde-azul);
+    border-radius: 20px;
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(21, 111, 231, 0.07),
+            transparent 42%
+        ),
+        var(--blanco);
+    box-shadow: var(--sombra-suave);
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.zona-subida:hover {
+    border-color: var(--azul-retorika);
+    box-shadow: var(--sombra);
+}
+
+.zona-subida.arrastrando {
+    border-color: var(--azul-retorika);
+    background: var(--azul-muy-claro);
+    transform: translateY(-2px);
+    box-shadow:
+        0 18px 45px rgba(21, 111, 231, 0.13);
+}
+
+/* ============================================================
+   INPUT REAL
+============================================================ */
+
+.input-video-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ============================================================
+   ZONA VACÍA
+============================================================ */
+
+.subida-vacia {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.subida-icono {
+    width: 66px;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    border-radius: 18px;
+    background: var(--azul-muy-claro);
+    color: var(--azul-retorika);
+}
+
+.subida-icono svg {
+    width: 32px;
+    height: 32px;
+}
+
+.subida-vacia h2 {
+    margin-bottom: 7px;
+    font-size: 21px;
+    font-weight: 750;
+    letter-spacing: -0.4px;
+}
+
+.subida-vacia > p {
+    margin-bottom: 21px;
+    color: var(--texto-secundario);
+    font-size: 14px;
+}
+
+/* ============================================================
+   BOTÓN SUBIR
+============================================================ */
+
+.boton-subir {
+    min-width: 142px;
+    padding: 11px 20px;
+    border-radius: 9px;
+    background: var(--azul-retorika);
+    color: var(--blanco);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow:
+        0 7px 18px rgba(21, 111, 231, 0.20);
+    transition:
+        transform 0.16s ease,
+        background 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+.boton-subir:hover {
+    background: var(--azul-profundo);
+    transform: translateY(-1px);
+    box-shadow:
+        0 10px 22px rgba(21, 111, 231, 0.24);
+}
+
+.boton-subir:active {
+    transform: translateY(0);
+}
+
+/* ============================================================
+   FORMATOS
+============================================================ */
+
+.formatos-admitidos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 22px;
+}
+
+.formatos-admitidos span {
+    padding: 5px 9px;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    background: #fafbfd;
+    color: var(--texto-suave);
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.4px;
+}
+
+/* ============================================================
+   ARCHIVO SELECCIONADO
+============================================================ */
+
+.archivo-seleccionado {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 23px;
+    border: 1px solid var(--borde);
+    border-radius: 15px;
+    background: var(--blanco);
+}
+
+.archivo-seleccionado[hidden] {
+    display: none;
+}
+
+.archivo-icono {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: var(--azul-muy-claro);
+    color: var(--azul-retorika);
+}
+
+.archivo-icono svg {
+    width: 30px;
+    height: 30px;
+}
+
+.archivo-informacion {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.archivo-etiqueta {
+    margin-bottom: 5px;
+    color: var(--azul-retorika);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.archivo-informacion strong {
+    overflow: hidden;
+    margin-bottom: 7px;
+    font-size: 16px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.archivo-datos {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--texto-secundario);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.separador-dato {
+    color: #c5ccd8;
+}
+
+/* ============================================================
+   CAMBIAR VÍDEO
+============================================================ */
+
+.boton-cambiar-video {
+    flex-shrink: 0;
+    padding: 9px 13px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    background: var(--blanco);
+    color: var(--texto-secundario);
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+    transition:
+        color 0.16s ease,
+        border-color 0.16s ease,
+        background 0.16s ease;
+}
+
+.boton-cambiar-video:hover {
+    border-color: var(--borde-azul);
+    background: var(--azul-muy-claro);
+    color: var(--azul-retorika);
+}
+
+/* ============================================================
+   ERRORES
+============================================================ */
+
+.errores-formulario {
+    margin-top: 14px;
+    padding: 13px 16px;
+    border: 1px solid #f1c6c6;
+    border-radius: 9px;
+    background: #fff7f7;
+    color: #a13c3c;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ============================================================
+   PASOS DEL PROCESO
+============================================================ */
+
+.informacion-proceso {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        60px
+        minmax(0, 1fr)
+        60px
+        minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    margin: 29px 0 27px;
+    padding: 0 14px;
+}
+
+.informacion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.informacion-numero {
+    width: 31px;
+    height: 31px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--azul-muy-claro);
+    color: var(--azul-retorika);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.informacion-item strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.informacion-item p {
+    color: var(--texto-secundario);
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.informacion-linea {
+    position: relative;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--borde);
+}
+
+/* Luz azul que recorre la línea */
+
+.informacion-linea::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -45%;
+    width: 45%;
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--azul-retorika),
+        transparent
+    );
+    animation:
+        flujo-retorika 2.4s ease-in-out infinite;
+}
+
+/* Segunda línea ligeramente retrasada */
+
+.informacion-linea:nth-of-type(4)::after {
+    animation-delay: 0.7s;
+}
+
+/* ============================================================
+   ANIMACIÓN DEL FLUJO
+============================================================ */
+
+@keyframes flujo-retorika {
+    0% {
+        left: -45%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+/* ============================================================
+   CREAR REEL
+============================================================ */
+
+.nuevo-reel-acciones {
+    display: flex;
+    justify-content: center;
+}
+
+/* ============================================================
+   BOTÓN CREAR REEL
+============================================================ */
+
+.boton-crear-reel {
+    min-width: 210px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    padding: 13px 24px;
+    border-radius: 10px;
+    background: var(--azul-retorika);
+    color: var(--blanco);
+    font-size: 14px;
+    font-weight: 750;
+    cursor: pointer;
+    box-shadow:
+        0 9px 24px rgba(21, 111, 231, 0.22);
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.boton-crear-reel svg {
+    width: 18px;
+    height: 18px;
+    transition:
+        transform 0.25s ease;
+}
+
+/* ============================================================
+   BRILLO AL PASAR EL RATÓN
+============================================================ */
+
+.boton-crear-reel:not(:disabled):hover {
+    background: #2680f5;
+    transform: translateY(-2px);
+    animation:
+        brillo-boton-retorika 1.15s ease-in-out infinite alternate;
+}
+
+.boton-crear-reel:not(:disabled):hover svg {
+    transform: translateX(4px);
+}
+
+/* ============================================================
+   ANIMACIÓN DEL RESPLANDOR
+============================================================ */
+
+@keyframes brillo-boton-retorika {
+    0% {
+        box-shadow:
+            0 9px 24px rgba(21, 111, 231, 0.30),
+            0 0 8px rgba(21, 111, 231, 0.25);
+    }
+
+    100% {
+        box-shadow:
+            0 12px 30px rgba(21, 111, 231, 0.45),
+            0 0 18px rgba(21, 111, 231, 0.75),
+            0 0 35px rgba(21, 111, 231, 0.45),
+            0 0 55px rgba(21, 111, 231, 0.20);
+    }
+}
+
+/* ============================================================
+   BOTÓN DESACTIVADO
+============================================================ */
+
+.boton-crear-reel:disabled {
+    background: #cbd5e3;
+    color: #ffffff;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.8;
+}
+
+
+/* ============================================================
+   RETORI-CUT
+   PANTALLA DE PROCESAMIENTO
+============================================================ */
+
+.procesando-reel {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   CABECERA DE PROCESAMIENTO
+============================================================ */
+
+.procesando-cabecera {
+    max-width: 650px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.procesando-cabecera h1 {
+    margin-bottom: 10px;
+    color: var(--texto);
+    font-size: clamp(31px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -1.4px;
+    line-height: 1.1;
+}
+
+.procesando-cabecera p {
+    max-width: 570px;
+    margin: 0 auto;
+    color: var(--texto-secundario);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   TARJETA PRINCIPAL
+============================================================ */
+
+.procesando-tarjeta {
+    position: relative;
+    padding: 38px 42px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    border-radius: 20px;
+    background: var(--blanco);
+    box-shadow: var(--sombra-suave);
+}
+
+/* ============================================================
+   ICONO CENTRAL
+============================================================ */
+
+.procesando-icono {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: #f4fff9;
+    color: var(--verde-retorika);
+    isolation: isolate;
+}
+
+/* ============================================================
+   ANILLO VERDE ANIMADO
+============================================================ */
+
+.procesando-icono-anillo {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent var(--inicio-circulo),
+        var(--verde-retorika) var(--inicio-circulo),
+        var(--verde-retorika) var(--fin-circulo),
+        transparent var(--fin-circulo),
+        transparent 360deg
+    );
+
+    -webkit-mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - 4px),
+        #000 calc(100% - 4px)
+    );
+
+    mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - 4px),
+        #000 calc(100% - 4px)
+    );
+
+    filter: drop-shadow(
+        0 0 5px rgba(3, 210, 110, 0.45)
+    );
+
+    animation: dibujar-circulo 2.8s ease-in-out infinite;
+}
+
+/* ============================================================
+   VARIABLES ANIMABLES
+============================================================ */
+
+@property --inicio-circulo {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@property --fin-circulo {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+/* ============================================================
+   ANIMACIÓN CIRCULAR
+============================================================ */
+
+@keyframes dibujar-circulo {
+
+    0% {
+        --inicio-circulo: 0deg;
+        --fin-circulo: 0deg;
+    }
+
+    45% {
+        --inicio-circulo: 0deg;
+        --fin-circulo: 360deg;
+    }
+
+    55% {
+        --inicio-circulo: 0deg;
+        --fin-circulo: 360deg;
+    }
+
+    100% {
+        --inicio-circulo: 360deg;
+        --fin-circulo: 360deg;
+    }
+
+}
+
+/* ============================================================
+   PLAY MODERNO CON BRILLO
+============================================================ */
+
+.procesando-icono > svg {
+    position: relative;
+    z-index: 2;
+    width: 29px;
+    height: 29px;
+    margin-left: 2px;
+    overflow: visible;
+    filter: drop-shadow(
+        0 0 4px rgba(3, 210, 110, 0.35)
+    );
+}
+
+/* Convierte el Play relleno del HTML en contorno */
+
+.procesando-icono > svg path {
+    fill: none;
+    stroke: var(--verde-retorika);
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ============================================================
+   ARCHIVO RECIBIDO
+============================================================ */
+
+.procesando-archivo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.procesando-archivo > span {
+    margin-bottom: 5px;
+    color: var(--azul-retorika);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.procesando-archivo strong {
+    max-width: 100%;
+    overflow: hidden;
+    color: var(--texto);
+    font-size: 16px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.procesando-archivo p {
+    margin-top: 4px;
+    color: var(--texto-suave);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ============================================================
+   PROGRESO GENERAL
+============================================================ */
+
+.procesando-progreso {
+    margin-bottom: 34px;
+}
+
+.procesando-progreso-superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 9px;
+    font-size: 11px;
+}
+
+.procesando-progreso-superior span {
+    color: var(--texto-secundario);
+    font-weight: 600;
+}
+
+.procesando-progreso-superior strong {
+    color: var(--azul-retorika);
+    font-weight: 800;
+}
+
+/* ============================================================
+   BARRA DE PROGRESO
+============================================================ */
+
+.procesando-barra {
+    width: 100%;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 100px;
+    background: var(--azul-claro);
+}
+
+.procesando-barra-progreso {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: inherit;
+    background: var(--azul-retorika);
+    transition: width 0.5s ease;
+}
+
+.procesando-barra-progreso::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.65),
+        transparent
+    );
+    animation: brillo-progreso 1.8s ease-in-out infinite;
+}
+
+@keyframes brillo-progreso {
+    100% {
+        left: 100%;
+    }
+}
+
+/* ============================================================
+   FASES DEL PROCESAMIENTO
+============================================================ */
+
+.procesando-fases {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.procesando-fase {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 60px;
+    padding: 10px 13px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    opacity: 0.48;
+    transition:
+        opacity 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.procesando-fase.completada {
+    opacity: 1;
+}
+
+.procesando-fase.activa {
+    border-color: var(--borde-azul);
+    background: var(--azul-muy-claro);
+    opacity: 1;
+}
+
+/* ============================================================
+   ICONOS DE FASE
+============================================================ */
+
+.fase-icono {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef1f6;
+    color: var(--texto-suave);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.procesando-fase.completada .fase-icono {
+    background: var(--azul-retorika);
+    color: var(--blanco);
+}
+
+.procesando-fase.activa .fase-icono {
+    background: var(--blanco);
+    color: var(--azul-retorika);
+    box-shadow:
+        0 4px 14px rgba(21, 111, 231, 0.12);
+}
+
+.fase-icono svg {
+    width: 17px;
+    height: 17px;
+}
+
+/* ============================================================
+   TEXTO DE LAS FASES
+============================================================ */
+
+.fase-texto {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.fase-texto strong {
+    margin-bottom: 3px;
+    color: var(--texto);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.fase-texto span {
+    color: var(--texto-secundario);
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   ANIMACIÓN DE LA FASE ACTIVA
+============================================================ */
+
+.fase-cargando {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    border-radius: 50%;
+
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent var(--inicio-circulo),
+        var(--azul-retorika) var(--inicio-circulo),
+        var(--azul-retorika) var(--fin-circulo),
+        transparent var(--fin-circulo),
+        transparent 360deg
+    );
+
+    -webkit-mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - 2px),
+        #000 calc(100% - 2px)
+    );
+
+    mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - 2px),
+        #000 calc(100% - 2px)
+    );
+
+    animation: dibujar-circulo 2.8s ease-in-out infinite;
+}
+
+/* ============================================================
+   AVISO INFERIOR
+============================================================ */
+
+.procesando-aviso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--borde);
+    color: var(--texto-secundario);
+    text-align: center;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.procesando-aviso-punto {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--azul-retorika);
+    box-shadow:
+        0 0 0 4px rgba(21, 111, 231, 0.10);
+    animation: pulso-procesando 1.5s ease-in-out infinite;
+}
+
+@keyframes pulso-procesando {
+    0%, 100% {
+        opacity: 0.45;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE - PANTALLAS PEQUEÑAS
+============================================================ */
+
+@media (max-width: 900px) {
+
+    :root {
+        --sidebar-ancho: 210px;
+    }
+
+    .contenido {
+        padding: 34px 25px 45px;
+    }
+
+    .cabecera {
+        padding: 0 24px;
+    }
+
+    .informacion-proceso {
+        grid-template-columns:
+            minmax(0, 1fr)
+            35px
+            minmax(0, 1fr)
+            35px
+            minmax(0, 1fr);
+        gap: 6px;
+        padding: 0;
+    }
+
+    .informacion-item {
+        gap: 8px;
+    }
+
+}
+
+/* ============================================================
+   RESPONSIVE - MÓVIL
+============================================================ */
+
+@media (max-width: 600px) {
+
+    :root {
+        --sidebar-ancho: 0px;
+        --cabecera-alto: 64px;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 13px 16px;
+        border-right: none;
+        border-bottom: 1px solid var(--borde);
+    }
+
+    .sidebar-marca {
+        margin-bottom: 12px;
+    }
+
+    .marca-enlace {
+        padding: 0;
+    }
+
+    .sidebar-navegacion {
+        flex-direction: row;
+        gap: 5px;
+        overflow-x: auto;
+    }
+
+    .nav-item {
+        min-height: 38px;
+        flex-shrink: 0;
+        gap: 7px;
+        padding: 0 10px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .nav-icono {
+        width: 17px;
+        height: 17px;
+        font-size: 15px;
+    }
+
+    .sidebar-inferior {
+        display: none;
+    }
+
+    .aplicacion {
+        margin-left: 0;
+    }
+
+    .cabecera {
+        height: var(--cabecera-alto);
+        padding: 0 17px;
+    }
+
+    .cabecera-titulo {
+        font-size: 13px;
+    }
+
+    .estado-retorika {
+        padding: 7px 9px;
+        font-size: 10px;
+    }
+
+    .contenido {
+        min-height: calc(100vh - var(--cabecera-alto));
+        padding: 30px 16px 45px;
+    }
+
+    /* NUEVO REEL */
+
+    .nuevo-reel-cabecera {
+        margin-bottom: 24px;
+    }
+
+    .nuevo-reel-cabecera h1 {
+        font-size: 30px;
+    }
+
+    .nuevo-reel-cabecera p {
+        font-size: 13px;
+    }
+
+    .zona-subida {
+        min-height: 300px;
+        padding: 24px 15px;
+        border-radius: 16px;
+    }
+
+    .subida-vacia h2 {
+        font-size: 18px;
+    }
+
+    .subida-vacia > p {
+        font-size: 12px;
+    }
+
+    .archivo-seleccionado {
+        flex-wrap: wrap;
+        gap: 13px;
+        padding: 16px;
+    }
+
+    .archivo-informacion strong {
+        font-size: 13px;
+    }
+
+    .boton-cambiar-video {
+        width: 100%;
+    }
+
+    .informacion-proceso {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin: 25px 0;
+        padding: 0 10px;
+    }
+
+    .informacion-linea {
+        display: none;
+    }
+
+    .informacion-item {
+        gap: 12px;
+    }
+
+    .informacion-item strong {
+        font-size: 12px;
+    }
+
+    .informacion-item p {
+        font-size: 11px;
+    }
+
+    .boton-crear-reel {
+        width: 100%;
+    }
+
+    /* PROCESANDO REEL */
+
+    .procesando-cabecera {
+        margin-bottom: 24px;
+    }
+
+    .procesando-cabecera h1 {
+        font-size: 30px;
+    }
+
+    .procesando-cabecera p {
+        font-size: 13px;
+    }
+
+    .procesando-tarjeta {
+        padding: 30px 20px;
+        border-radius: 16px;
+    }
+
+    .procesando-icono {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 18px;
+    }
+
+    .procesando-icono > svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    .procesando-archivo {
+        margin-bottom: 26px;
+    }
+
+    .procesando-archivo strong {
+        font-size: 14px;
+    }
+
+    .procesando-progreso {
+        margin-bottom: 28px;
+    }
+
+    .procesando-fase {
+        gap: 12px;
+        min-height: 58px;
+        padding: 9px 10px;
+    }
+
+    .fase-icono {
+        width: 32px;
+        height: 32px;
+    }
+
+    .fase-texto strong {
+        font-size: 11px;
+    }
+
+    .fase-texto span {
+        font-size: 9px;
+    }
+
+    .procesando-aviso {
+        align-items: flex-start;
+        margin-top: 24px;
+        padding-top: 20px;
+        text-align: left;
+        line-height: 1.5;
+    }
+
+}
+
+/* ============================================================
+   ELEMENTOS OCULTOS
+============================================================ */
+
+.subida-vacia[hidden] {
+    display: none;
+}
+
+/* ============================================================
+   ACCESIBILIDAD
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .procesando-icono-anillo,
+    .fase-cargando,
+    .procesando-barra-progreso::after,
+    .procesando-aviso-punto,
+    .informacion-linea::after {
+        animation: none;
+    }
+
+}

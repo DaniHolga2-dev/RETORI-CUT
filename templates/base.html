@@ -1,0 +1,357 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="RETORI-CUT - Edición automática de Reels de Retorika"
+    >
+
+    <title>
+        {% block title %}RETORI-CUT{% endblock %}
+    </title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{% static 'reels/img/logotipo.png' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'reels/css/style.css' %}"
+    >
+
+    {% block extra_css %}
+    {% endblock %}
+
+    <style>
+
+        /* ================================================
+           LOGOTIPO RETORI-CUT
+        ================================================= */
+
+        .sidebar-marca .marca-enlace {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .sidebar-marca .marca-logotipo {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .sidebar-marca .marca-texto {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .sidebar-marca .marca-texto strong {
+            display: block;
+            white-space: nowrap;
+        }
+
+        .sidebar-marca .marca-texto small {
+            display: block;
+        }
+
+        /* ================================================
+           NAVEGACIÓN
+        ================================================= */
+
+        .sidebar-navegacion .nav-item,
+        .sidebar-inferior .nav-item {
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .sidebar-navegacion .nav-item.active {
+            background: rgba(21, 111, 231, 0.12);
+            color: #156fe7;
+            font-weight: 700;
+        }
+
+        .sidebar-navegacion .nav-item.active .nav-icono {
+            color: #156fe7;
+        }
+
+        /* ================================================
+           MENSAJES DEL SISTEMA
+        ================================================= */
+
+        .mensaje-sistema {
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #eaf7ef;
+            color: #17633b;
+            border: 1px solid #ccebd8;
+        }
+
+        .mensaje-sistema.error {
+            background: #fff0f2;
+            color: #a82a40;
+            border-color: #f4cbd3;
+        }
+
+        .mensaje-sistema.warning {
+            background: #fff8e8;
+            color: #946312;
+            border-color: #f5e3b5;
+        }
+
+        /* ================================================
+           CABECERA
+        ================================================= */
+
+        .cabecera-acciones {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ================================================
+           RESPONSIVE MÓVIL
+        ================================================= */
+
+        @media (max-width: 768px) {
+
+            .sidebar-marca .marca-logotipo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .sidebar-marca .marca-enlace {
+                gap: 9px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ============================================================
+     SIDEBAR
+============================================================ -->
+
+<aside class="sidebar">
+
+
+    <!-- ========================================================
+         MARCA
+    ========================================================= -->
+
+    <div class="sidebar-marca">
+
+        <a
+            href="{% url 'nuevo_reel' %}"
+            class="marca-enlace"
+        >
+
+            <img
+                src="{% static 'reels/img/logotipo.png' %}"
+                alt="Logotipo RETORI-CUT"
+                class="marca-logotipo"
+            >
+
+            <div class="marca-texto">
+
+                <strong>
+                    RETORI-CUT
+                </strong>
+
+                <small>
+                    by Retorika
+                </small>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================================
+         NAVEGACIÓN PRINCIPAL
+    ========================================================= -->
+
+    <nav class="sidebar-navegacion">
+
+
+        <!-- NUEVO REEL -->
+
+        <a
+            href="{% url 'nuevo_reel' %}"
+            class="nav-item {% block nav_nuevo %}{% endblock %}"
+        >
+
+            <span class="nav-icono">
+                +
+            </span>
+
+            <span>
+                Nuevo Reel
+            </span>
+
+        </a>
+
+
+        <!-- MIS VÍDEOS -->
+
+        <a
+            href="#"
+            class="nav-item nav-deshabilitado"
+            aria-disabled="true"
+            tabindex="-1"
+        >
+
+            <span class="nav-icono">
+                ▣
+            </span>
+
+            <span>
+                Mis vídeos
+            </span>
+
+        </a>
+
+
+        <!-- PLANTILLAS -->
+
+        <a
+            href="{% url 'mis_plantillas' %}"
+            class="nav-item {% block nav_plantillas %}{% endblock %}"
+        >
+
+            <span class="nav-icono">
+                ◈
+            </span>
+
+            <span>
+                Plantillas
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+</aside>
+
+
+<!-- ============================================================
+     CONTENIDO PRINCIPAL
+============================================================ -->
+
+<div class="aplicacion">
+
+
+    <!-- ========================================================
+         CABECERA
+    ========================================================= -->
+
+    <header class="cabecera">
+
+        <div class="cabecera-titulo">
+
+            {% block header_title %}
+                Nuevo Reel
+            {% endblock %}
+
+        </div>
+
+
+        <div class="cabecera-acciones">
+
+            <div class="estado-retorika">
+
+                <span class="estado-punto"></span>
+
+                RETORI-CUT
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ========================================================
+         CONTENIDO
+    ========================================================= -->
+
+    <main class="contenido">
+
+
+        <!-- MENSAJES DE DJANGO -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div
+                    class="mensaje-sistema {% if message.tags %}{{ message.tags }}{% endif %}"
+                    role="status"
+                >
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <!-- CONTENIDO DE CADA PÁGINA -->
+
+        {% block content %}
+        {% endblock %}
+
+
+    </main>
+
+
+</div>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+
+<script
+    src="{% static 'reels/js/editor.js' %}"
+></script>
+
+{% block extra_js %}
+{% endblock %}
+
+
+</body>
+
+</html>

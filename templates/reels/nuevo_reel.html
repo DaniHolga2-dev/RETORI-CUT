@@ -1,0 +1,380 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Nuevo Reel | RETORI-CUT
+{% endblock %}
+
+
+{% block nav_nuevo %}activo{% endblock %}
+
+
+{% block header_title %}
+Nuevo Reel
+{% endblock %}
+
+
+{% block content %}
+
+
+<section class="nuevo-reel">
+
+
+    <!-- ========================================================
+         CABECERA DE LA PÁGINA
+    ========================================================= -->
+
+    <div class="nuevo-reel-cabecera">
+
+        <span class="seccion-etiqueta">
+            NUEVO PROYECTO
+        </span>
+
+        <h1>
+            Crea un nuevo Reel
+        </h1>
+
+        <p>
+            Sube el vídeo original y RETORI-CUT se encargará
+            de prepararlo con el estilo de Retorika.
+        </p>
+
+    </div>
+
+
+
+    <!-- ========================================================
+         FORMULARIO
+    ========================================================= -->
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        id="formulario-reel"
+        class="formulario-reel"
+    >
+
+        {% csrf_token %}
+
+
+        <!-- ====================================================
+             ZONA DE SUBIDA
+        ===================================================== -->
+
+        <div
+            class="zona-subida"
+            id="zona-subida"
+        >
+
+
+            <!-- INPUT REAL -->
+
+            <div class="input-video-oculto">
+
+                {{ formulario.archivo_original }}
+
+            </div>
+
+
+            <!-- ESTADO SIN ARCHIVO -->
+
+            <div
+                class="subida-vacia"
+                id="subida-vacia"
+            >
+
+                <div class="subida-icono">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M12 16V4M12 4L7.5 8.5M12 4L16.5 8.5M5 14.5V18C5 19.1 5.9 20 7 20H17C18.1 20 19 19.1 19 18V14.5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <h2>
+                    Arrastra tu vídeo aquí
+                </h2>
+
+
+                <p>
+                    o selecciona un archivo desde tu equipo
+                </p>
+
+
+                <button
+                    type="button"
+                    class="boton-subir"
+                    id="boton-seleccionar-video"
+                >
+                    Subir vídeo
+                </button>
+
+
+                <div class="formatos-admitidos">
+
+                    <span>
+                        MP4
+                    </span>
+
+                    <span>
+                        MOV
+                    </span>
+
+                    <span>
+                        M4V
+                    </span>
+
+                    <span>
+                        WEBM
+                    </span>
+
+                    <span>
+                        MXF
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ESTADO CON ARCHIVO SELECCIONADO
+            ================================================== -->
+
+            <div
+                class="archivo-seleccionado"
+                id="archivo-seleccionado"
+                hidden
+            >
+
+                <div class="archivo-icono">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M6 3H14L19 8V21H6V3Z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M14 3V8H19"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M10 12.5L15 15.5L10 18.5V12.5Z"
+                            fill="currentColor"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <div class="archivo-informacion">
+
+                    <span class="archivo-etiqueta">
+                        VÍDEO SELECCIONADO
+                    </span>
+
+                    <strong id="archivo-nombre">
+                        vídeo.mp4
+                    </strong>
+
+                    <div class="archivo-datos">
+
+                        <span id="archivo-formato">
+                            MP4
+                        </span>
+
+                        <span class="separador-dato">
+                            ·
+                        </span>
+
+                        <span id="archivo-peso">
+                            0 MB
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="boton-cambiar-video"
+                    id="boton-cambiar-video"
+                >
+                    Cambiar vídeo
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             ERRORES
+        ===================================================== -->
+
+        {% if formulario.archivo_original.errors %}
+
+            <div class="errores-formulario">
+
+                {% for error in formulario.archivo_original.errors %}
+
+                    <p>
+                        {{ error }}
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- ====================================================
+             INFORMACIÓN
+        ===================================================== -->
+
+        <div class="informacion-proceso">
+
+
+            <div class="informacion-item">
+
+                <div class="informacion-numero">
+                    1
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sube el vídeo
+                    </strong>
+
+                    <p>
+                        Selecciona el archivo original.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="informacion-linea"></div>
+
+
+            <div class="informacion-item">
+
+                <div class="informacion-numero">
+                    2
+                </div>
+
+                <div>
+
+                    <strong>
+                        RETORI-CUT lo prepara
+                    </strong>
+
+                    <p>
+                        Transcripción, subtítulos y efectos Retorika.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="informacion-linea"></div>
+
+
+            <div class="informacion-item">
+
+                <div class="informacion-numero">
+                    3
+                </div>
+
+                <div>
+
+                    <strong>
+                        Revisa y exporta
+                    </strong>
+
+                    <p>
+                        Corrige lo necesario y descarga el Reel.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ====================================================
+             ACCIÓN PRINCIPAL
+        ===================================================== -->
+
+        <div class="nuevo-reel-acciones">
+
+            <button
+                type="submit"
+                class="boton-crear-reel"
+                id="boton-crear-reel"
+                disabled
+            >
+
+                <span>
+                    Crear mi Reel
+                </span>
+
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M5 12H19M19 12L14 7M19 12L14 17"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+
+</section>
+
+
+{% endblock %}

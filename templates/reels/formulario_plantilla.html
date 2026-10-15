@@ -1,0 +1,649 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }} | RETORI-CUT{% endblock %}
+
+{% block nav_plantillas %}active{% endblock %}
+
+{% block content %}
+
+<style>
+    .editor-plantilla {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 10px 0 50px;
+    }
+
+    .editor-heading {
+        margin-bottom: 30px;
+    }
+
+    .editor-back {
+        display: inline-block;
+        text-decoration: none;
+        color: #156fe7;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    .editor-heading h1 {
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0 0 8px;
+        letter-spacing: -1px;
+    }
+
+    .editor-heading p {
+        color: #7a8495;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .editor-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+        gap: 25px;
+        align-items: start;
+    }
+
+    .editor-card {
+        background: white;
+        border: 1px solid #e6eaf1;
+        border-radius: 18px;
+        padding: 25px;
+        margin-bottom: 22px;
+        box-shadow: 0 6px 25px rgba(15, 35, 70, 0.035);
+    }
+
+    .editor-card h2 {
+        font-size: 16px;
+        font-weight: 800;
+        margin: 0 0 22px;
+        color: #19243a;
+    }
+
+    .editor-field {
+        margin-bottom: 20px;
+    }
+
+    .editor-field:last-child {
+        margin-bottom: 0;
+    }
+
+    .editor-field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #36435a;
+    }
+
+    .editor-field input:not([type="checkbox"]),
+    .editor-field select,
+    .editor-field textarea {
+        width: 100%;
+        max-width: 100%;
+        padding: 12px 13px;
+        border: 1px solid #dfe5ee;
+        border-radius: 10px;
+        background: #fff;
+        color: #26344a;
+        font: inherit;
+        font-size: 13px;
+        box-sizing: border-box;
+    }
+
+    .editor-field input[type="color"] {
+        height: 46px;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .editor-field input:focus,
+    .editor-field select:focus,
+    .editor-field textarea:focus {
+        outline: none;
+        border-color: #156fe7;
+        box-shadow: 0 0 0 3px rgba(21,111,231,0.1);
+    }
+
+    .editor-field .helptext {
+        display: block;
+        margin-top: 6px;
+        color: #8490a2;
+        font-size: 11px;
+    }
+
+    .editor-field .errorlist {
+        color: #d8354f;
+        font-size: 12px;
+        padding-left: 18px;
+        margin: 7px 0;
+    }
+
+    .editor-two-columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 17px;
+    }
+
+    .editor-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 12px 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: #36435a;
+    }
+
+    .editor-checkbox input {
+        width: 17px;
+        height: 17px;
+        accent-color: #156fe7;
+    }
+
+    .editor-checkbox label {
+        cursor: pointer;
+    }
+
+    .editor-preview {
+        position: sticky;
+        top: 25px;
+    }
+
+    .editor-video-preview {
+        aspect-ratio: 9 / 16;
+        max-height: 470px;
+        margin: 0 auto;
+        border-radius: 15px;
+        background: linear-gradient(155deg, #15213d, #31466d);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .editor-video-preview::before {
+        content: "";
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.04);
+        top: 10%;
+        left: -90px;
+    }
+
+    .editor-subtitle-preview {
+        position: absolute;
+        top: 50%;
+        left: 8%;
+        right: 8%;
+        transform: translateY(-50%);
+        text-align: center;
+        font-family: Montserrat, Arial, sans-serif;
+        font-size: 19px;
+        font-weight: 900;
+        line-height: 1.35;
+        color: white;
+        text-transform: uppercase;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        transition: 0.2s;
+    }
+
+    .editor-subtitle-preview span {
+        background: #156fe7;
+        padding: 2px 5px;
+        border-radius: 3px;
+    }
+
+    .editor-preview-caption {
+        font-size: 11px;
+        color: #8a94a5;
+        text-align: center;
+        margin-top: 15px;
+        line-height: 1.6;
+    }
+
+    .editor-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        padding-top: 8px;
+    }
+
+    .editor-save {
+        background: #156fe7;
+        color: white;
+        border: none;
+        border-radius: 11px;
+        padding: 14px 22px;
+        font-weight: 800;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .editor-save:hover {
+        background: #095ac4;
+    }
+
+    .editor-cancel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #48566e;
+        border: 1px solid #e0e5ed;
+        border-radius: 11px;
+        padding: 14px 22px;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    @media (max-width: 850px) {
+        .editor-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .editor-preview {
+            position: static;
+        }
+
+        .editor-video-preview {
+            width: min(100%, 270px);
+        }
+    }
+
+    @media (max-width: 550px) {
+        .editor-card {
+            padding: 18px;
+        }
+
+        .editor-two-columns {
+            grid-template-columns: 1fr;
+        }
+
+        .editor-heading h1 {
+            font-size: 25px;
+        }
+
+        .editor-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="editor-plantilla">
+
+    <div class="editor-heading">
+
+        <a href="{% url 'mis_plantillas' %}" class="editor-back">
+            ← Volver a mis plantillas
+        </a>
+
+        <h1>{{ titulo }}</h1>
+
+        <p>
+            Personaliza la apariencia de tus vídeos.
+        </p>
+
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {% if formulario.non_field_errors %}
+            <div class="editor-card">
+                {{ formulario.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="editor-layout">
+
+            <div>
+
+                <section class="editor-card">
+
+                    <h2>Información general</h2>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.nombre.id_for_label }}">
+                            Nombre de la plantilla
+                        </label>
+                        {{ formulario.nombre }}
+                        {{ formulario.nombre.errors }}
+                    </div>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.descripcion.id_for_label }}">
+                            Descripción
+                        </label>
+                        {{ formulario.descripcion }}
+                        {{ formulario.descripcion.errors }}
+                    </div>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.logo.id_for_label }}">
+                            Logotipo
+                        </label>
+                        {{ formulario.logo }}
+                        {{ formulario.logo.errors }}
+                    </div>
+
+                </section>
+
+                <section class="editor-card">
+
+                    <h2>Colores de marca</h2>
+
+                    <div class="editor-two-columns">
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.color_azul.id_for_label }}">
+                                Color principal
+                            </label>
+                            {{ formulario.color_azul }}
+                            {{ formulario.color_azul.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.color_fucsia.id_for_label }}">
+                                Color secundario
+                            </label>
+                            {{ formulario.color_fucsia }}
+                            {{ formulario.color_fucsia.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.color_verde.id_for_label }}">
+                                Color adicional
+                            </label>
+                            {{ formulario.color_verde }}
+                            {{ formulario.color_verde.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.color_blanco.id_for_label }}">
+                                Color del texto
+                            </label>
+                            {{ formulario.color_blanco }}
+                            {{ formulario.color_blanco.errors }}
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="editor-card">
+
+                    <h2>Tipografía</h2>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.tipografia.id_for_label }}">
+                            Fuente
+                        </label>
+                        {{ formulario.tipografia }}
+                        {{ formulario.tipografia.errors }}
+                    </div>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.archivo_tipografia.id_for_label }}">
+                            Subir fuente personalizada
+                        </label>
+                        {{ formulario.archivo_tipografia }}
+                        {{ formulario.archivo_tipografia.errors }}
+                    </div>
+
+                </section>
+
+                <section class="editor-card">
+
+                    <h2>Subtítulos</h2>
+
+                    <div class="editor-checkbox">
+                        {{ formulario.subtitulos_activos }}
+                        <label for="{{ formulario.subtitulos_activos.id_for_label }}">
+                            Activar subtítulos
+                        </label>
+                    </div>
+
+                    <div class="editor-two-columns">
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.tamano_subtitulos.id_for_label }}">
+                                Tamaño del texto
+                            </label>
+                            {{ formulario.tamano_subtitulos }}
+                            {{ formulario.tamano_subtitulos.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.posicion_subtitulos.id_for_label }}">
+                                Posición
+                            </label>
+                            {{ formulario.posicion_subtitulos }}
+                            {{ formulario.posicion_subtitulos.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.margen_vertical.id_for_label }}">
+                                Margen vertical
+                            </label>
+                            {{ formulario.margen_vertical }}
+                            {{ formulario.margen_vertical.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.margen_horizontal.id_for_label }}">
+                                Margen horizontal
+                            </label>
+                            {{ formulario.margen_horizontal }}
+                            {{ formulario.margen_horizontal.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.interlineado.id_for_label }}">
+                                Interlineado
+                            </label>
+                            {{ formulario.interlineado }}
+                            {{ formulario.interlineado.errors }}
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="editor-card">
+
+                    <h2>Animaciones</h2>
+
+                    <div class="editor-two-columns">
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.animacion_subtitulos.id_for_label }}">
+                                Tipo de animación
+                            </label>
+                            {{ formulario.animacion_subtitulos }}
+                            {{ formulario.animacion_subtitulos.errors }}
+                        </div>
+
+                        <div class="editor-field">
+                            <label for="{{ formulario.duracion_animacion.id_for_label }}">
+                                Duración (segundos)
+                            </label>
+                            {{ formulario.duracion_animacion }}
+                            {{ formulario.duracion_animacion.errors }}
+                        </div>
+
+                    </div>
+
+                    <div class="editor-checkbox">
+                        {{ formulario.destacar_palabras }}
+                        <label for="{{ formulario.destacar_palabras.id_for_label }}">
+                            Destacar palabras importantes
+                        </label>
+                    </div>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.color_destacado.id_for_label }}">
+                            Color de las palabras destacadas
+                        </label>
+                        {{ formulario.color_destacado }}
+                        {{ formulario.color_destacado.errors }}
+                    </div>
+
+                </section>
+
+                <section class="editor-card">
+
+                    <h2>Efectos</h2>
+
+                    <div class="editor-checkbox">
+                        {{ formulario.efectos_activos }}
+                        <label for="{{ formulario.efectos_activos.id_for_label }}">
+                            Activar efectos
+                        </label>
+                    </div>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.intensidad_efectos.id_for_label }}">
+                            Intensidad
+                        </label>
+                        {{ formulario.intensidad_efectos }}
+                        {{ formulario.intensidad_efectos.errors }}
+                    </div>
+
+                </section>
+
+                <div class="editor-actions">
+
+                    <a href="{% url 'mis_plantillas' %}"
+                       class="editor-cancel">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="editor-save">
+                        Guardar plantilla
+                    </button>
+
+                </div>
+
+            </div>
+
+            <aside class="editor-preview">
+
+                <div class="editor-card">
+
+                    <h2>Vista previa</h2>
+
+                    <div class="editor-video-preview">
+
+                        <div id="subtitlePreview"
+                             class="editor-subtitle-preview">
+                            CREA TU
+                            <span id="highlightPreview">ESTILO</span>
+                        </div>
+
+                    </div>
+
+                    <p class="editor-preview-caption">
+                        Representación aproximada del estilo.
+                        Las animaciones se aplicarán durante
+                        la exportación cuando estén implementadas.
+                    </p>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const subtitle = document.getElementById("subtitlePreview");
+    const highlight = document.getElementById("highlightPreview");
+
+    const colorText = document.getElementById("id_color_blanco");
+    const colorHighlight = document.getElementById("id_color_destacado");
+    const font = document.getElementById("id_tipografia");
+    const size = document.getElementById("id_tamano_subtitulos");
+    const position = document.getElementById("id_posicion_subtitulos");
+    const enabled = document.getElementById("id_subtitulos_activos");
+    const highlightEnabled = document.getElementById("id_destacar_palabras");
+
+    function updatePreview() {
+
+        if (colorText) {
+            subtitle.style.color = colorText.value;
+        }
+
+        if (colorHighlight) {
+            highlight.style.backgroundColor = colorHighlight.value;
+        }
+
+        if (font) {
+            subtitle.style.fontFamily =
+                font.value + ", Arial, sans-serif";
+        }
+
+        if (size) {
+            const value = parseInt(size.value, 10) || 12;
+            subtitle.style.fontSize =
+                Math.max(12, Math.min(value * 1.5, 48)) + "px";
+        }
+
+        if (position) {
+
+            if (position.value === "superior") {
+                subtitle.style.top = "20%";
+            } else if (position.value === "inferior") {
+                subtitle.style.top = "80%";
+            } else {
+                subtitle.style.top = "50%";
+            }
+        }
+
+        if (enabled) {
+            subtitle.style.display =
+                enabled.checked ? "block" : "none";
+        }
+
+        if (highlightEnabled) {
+            highlight.style.backgroundColor =
+                highlightEnabled.checked && colorHighlight
+                    ? colorHighlight.value
+                    : "transparent";
+        }
+    }
+
+    [
+        colorText,
+        colorHighlight,
+        font,
+        size,
+        position,
+        enabled,
+        highlightEnabled
+    ].forEach(function (field) {
+
+        if (field) {
+            field.addEventListener("input", updatePreview);
+            field.addEventListener("change", updatePreview);
+        }
+    });
+
+    updatePreview();
+
+});
+</script>
+
+{% endblock %}

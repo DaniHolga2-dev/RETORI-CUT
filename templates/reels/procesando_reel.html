@@ -1,0 +1,1555 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edición automática | RETORI-CUT{% endblock %}
+{% block header_title %}Edición automática{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* ============================================================
+   RETORI-CUT - PANTALLA DE PROCESAMIENTO
+============================================================ */
+
+.rc-editor {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #17243b;
+}
+
+.rc-editor * {
+    box-sizing: border-box;
+}
+
+.rc-encabezado {
+    margin-bottom: 26px;
+}
+
+.rc-etiqueta {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #156fe7;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+}
+
+.rc-encabezado h1 {
+    margin: 0 0 10px;
+    font-size: clamp(25px, 3vw, 35px);
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.rc-encabezado p {
+    margin: 0;
+    color: #778399;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ============================================================
+   PANEL PRINCIPAL
+============================================================ */
+
+.rc-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: 36px;
+    padding: 34px;
+    background: #fff;
+    border: 1px solid #e8edf5;
+    border-radius: 22px;
+    box-shadow: 0 12px 45px rgba(26, 51, 91, .045);
+}
+
+.rc-panel-izquierda,
+.rc-panel-derecha {
+    min-width: 0;
+}
+
+.rc-panel-titulo {
+    margin: 0 0 8px;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.rc-panel-descripcion {
+    margin: 0 0 28px;
+    color: #8290a5;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* ============================================================
+   FASES DE PROCESAMIENTO
+============================================================ */
+
+.rc-fases {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rc-fase {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 77px;
+    padding: 12px 14px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    transition: background .25s, border-color .25s;
+}
+
+.rc-fase-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    background: #f0f3f8;
+    color: #a5afc0;
+    transition: all .25s;
+}
+
+.rc-fase-icono svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.rc-fase-contenido {
+    flex: 1;
+    min-width: 0;
+}
+
+.rc-fase-contenido strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.rc-fase-contenido span {
+    display: block;
+    font-size: 12px;
+    color: #95a0b2;
+    line-height: 1.5;
+}
+
+.rc-fase-estado {
+    display: none;
+    font-size: 13px;
+    font-weight: 800;
+    color: #156fe7;
+}
+
+.rc-fase.completada .rc-fase-icono {
+    background: #eaf2ff;
+    color: #156fe7;
+}
+
+.rc-fase.completada .rc-fase-estado {
+    display: block;
+}
+
+.rc-fase.activa {
+    background: #f2f7ff;
+    border-color: #dbe8ff;
+}
+
+.rc-fase.activa .rc-fase-icono {
+    background: #156fe7;
+    color: #fff;
+    animation: rc-pulso 1.8s infinite;
+}
+
+.rc-fase.activa .rc-fase-contenido strong {
+    color: #156fe7;
+}
+
+.rc-fase.error {
+    background: #fff1f2;
+    border-color: #fecdd3;
+}
+
+.rc-fase.error .rc-fase-icono {
+    background: #ffe4e6;
+    color: #e11d48;
+}
+
+@keyframes rc-pulso {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(21, 111, 231, .18);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(21, 111, 231, 0);
+    }
+}
+
+/* ============================================================
+   INFORMACIÓN DEL ARCHIVO
+============================================================ */
+
+.rc-informacion {
+    margin-top: 26px;
+    padding-top: 23px;
+    border-top: 1px solid #edf0f6;
+}
+
+.rc-archivo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.rc-archivo-icono {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #eef4ff;
+    color: #156fe7;
+}
+
+.rc-archivo-icono svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+}
+
+.rc-archivo-datos {
+    min-width: 0;
+}
+
+.rc-archivo-datos strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.rc-archivo-datos span {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    color: #8b97a9;
+}
+
+/* ============================================================
+   BARRA DE PROGRESO
+============================================================ */
+
+.rc-progreso-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.rc-progreso-cabecera span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #65758e;
+}
+
+.rc-progreso-cabecera strong {
+    color: #156fe7;
+    font-size: 17px;
+}
+
+.rc-barra {
+    width: 100%;
+    height: 9px;
+    background: #eaf0f8;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.rc-barra-interior {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #156fe7, #59a6ff);
+    border-radius: 20px;
+    transition: width .6s ease;
+}
+
+.rc-mensaje {
+    margin: 12px 0 0;
+    color: #8290a5;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   PREVISUALIZACIÓN DEL VÍDEO
+============================================================ */
+
+.rc-panel-derecha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rc-preview-titulo {
+    width: 100%;
+    margin: 0 0 17px;
+    font-size: 13px;
+    font-weight: 750;
+    color: #52627b;
+}
+
+.rc-preview {
+    position: relative;
+    width: min(100%, 290px);
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: 19px;
+    background: #07162e;
+    box-shadow: 0 15px 35px rgba(20, 45, 85, .17);
+}
+
+.rc-preview img,
+.rc-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.rc-preview video {
+    background: #07162e;
+}
+
+.rc-preview-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: rgba(8, 27, 65, .48);
+    backdrop-filter: blur(1.5px);
+}
+
+.rc-circulo {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #60a5fa 0%,
+        rgba(255,255,255,.25) 0%
+    );
+}
+
+.rc-circulo::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border-radius: 50%;
+    background: #142f58;
+}
+
+.rc-circulo strong {
+    position: relative;
+    z-index: 1;
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.rc-preview-estado {
+    padding: 8px 13px;
+    border-radius: 30px;
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.rc-preview-pie {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    color: #8b97a9;
+    font-size: 12px;
+    text-align: center;
+}
+
+.rc-preview-pie span {
+    width: 7px;
+    height: 7px;
+    background: #156fe7;
+    border-radius: 50%;
+}
+
+/* ============================================================
+   BOTONES DE DESCARGA
+============================================================ */
+
+.rc-acciones {
+    width: 100%;
+    max-width: 290px;
+    margin-top: 20px;
+    display: grid;
+    gap: 10px;
+}
+
+.rc-descargar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 11px;
+    background: #156fe7;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+
+.rc-descargar:hover {
+    background: #105cb1;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.rc-descargar.secundario {
+    background: #eef4ff;
+    color: #156fe7;
+}
+
+.rc-descargar.secundario:hover {
+    background: #dceaff;
+}
+
+.rc-descargar svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ============================================================
+   AVISOS
+============================================================ */
+
+.rc-aviso {
+    margin-top: 22px;
+    padding: 15px 18px;
+    border: 1px solid #e2eaff;
+    border-radius: 12px;
+    background: #f6f9ff;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.rc-aviso.error {
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #be123c;
+}
+
+/* ============================================================
+   ELEMENTOS OCULTOS
+============================================================ */
+
+.rc-editor [hidden] {
+    display: none !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .rc-panel {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 23px;
+    }
+
+    .rc-panel-derecha {
+        border-top: 1px solid #edf0f6;
+        padding-top: 24px;
+    }
+
+    .rc-preview {
+        width: min(100%, 260px);
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .rc-panel {
+        padding: 17px;
+        border-radius: 16px;
+    }
+
+    .rc-fase {
+        padding: 10px 8px;
+        gap: 12px;
+    }
+
+    .rc-fase-icono {
+        width: 42px;
+        height: 42px;
+    }
+
+    .rc-fase-contenido strong {
+        font-size: 13px;
+    }
+
+    .rc-preview {
+        width: min(100%, 235px);
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<section
+    class="rc-editor"
+    id="rc-editor"
+    data-estado-url="{% url 'estado_reel' reel.id %}"
+    data-estado="{{ reel.estado }}"
+    data-progreso="{{ reel.progreso }}"
+    data-subtitulos="{% if reel.archivo_subtitulos %}true{% else %}false{% endif %}"
+    data-transcripcion="{% if reel.transcripcion %}true{% else %}false{% endif %}"
+    data-video-url="{% if reel.archivo_editado %}{{ reel.archivo_editado.url }}{% endif %}"
+    data-srt-url="{% if reel.archivo_subtitulos %}{{ reel.archivo_subtitulos.url }}{% endif %}"
+>
+
+    <!-- ========================================================
+         ENCABEZADO
+    ======================================================== -->
+
+    <div class="rc-encabezado">
+
+        <span class="rc-etiqueta">
+            PROCESAMIENTO AUTOMÁTICO
+        </span>
+
+        <h1 id="rc-titulo">
+            Edición automática
+        </h1>
+
+        <p id="rc-descripcion">
+            Estamos preparando tu vídeo con las herramientas
+            de RETORI-CUT.
+        </p>
+
+    </div>
+
+
+    <!-- ========================================================
+         PANEL PRINCIPAL
+    ======================================================== -->
+
+    <div class="rc-panel">
+
+        <!-- COLUMNA IZQUIERDA -->
+
+        <div class="rc-panel-izquierda">
+
+            <h2 class="rc-panel-titulo">
+                Preparando tu Reel
+            </h2>
+
+            <p class="rc-panel-descripcion">
+                Sigue el estado de cada fase del procesamiento.
+            </p>
+
+
+            <!-- FASES -->
+
+            <div class="rc-fases">
+
+                <div class="rc-fase" data-fase="analisis">
+
+                    <div class="rc-fase-icono">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="16" rx="3"/>
+                            <path d="M8 4v16M16 4v16M3 9h5M3 15h5M16 9h5M16 15h5"/>
+                        </svg>
+                    </div>
+
+                    <div class="rc-fase-contenido">
+                        <strong>Analizando vídeo</strong>
+                        <span>Características técnicas del archivo</span>
+                    </div>
+
+                    <span class="rc-fase-estado">✓</span>
+
+                </div>
+
+
+                <div class="rc-fase" data-fase="transcripcion">
+
+                    <div class="rc-fase-icono">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="9" y="2" width="6" height="13" rx="3"/>
+                            <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/>
+                        </svg>
+                    </div>
+
+                    <div class="rc-fase-contenido">
+                        <strong>Transcribiendo audio</strong>
+                        <span>Reconocimiento de voz con Whisper</span>
+                    </div>
+
+                    <span class="rc-fase-estado">✓</span>
+
+                </div>
+
+
+                <div class="rc-fase" data-fase="edicion">
+
+                    <div class="rc-fase-icono">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="6" cy="6" r="3"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <path d="M8.5 8.5L20 20M14 10l6-6M8.5 15.5l3-3"/>
+                        </svg>
+                    </div>
+
+                    <div class="rc-fase-contenido">
+                        <strong>Editando vídeo</strong>
+                        <span>Cortes y ajustes automáticos</span>
+                    </div>
+
+                    <span class="rc-fase-estado">✓</span>
+
+                </div>
+
+
+                <div class="rc-fase" data-fase="subtitulos">
+
+                    <div class="rc-fase-icono">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="5" width="20" height="14" rx="3"/>
+                            <path d="M6 11h5M6 15h8M15 11h3M17 15h1"/>
+                        </svg>
+                    </div>
+
+                    <div class="rc-fase-contenido">
+                        <strong>Generando subtítulos</strong>
+                        <span>Archivo SRT sincronizado con el audio</span>
+                    </div>
+
+                    <span class="rc-fase-estado">✓</span>
+
+                </div>
+
+
+                <div class="rc-fase" data-fase="estilo">
+
+                    <div class="rc-fase-icono">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 20L18 6M14 4l1-3M19 9l3 1M5 5L3 3M8 14l2 2"/>
+                            <path d="M16 3l5 5"/>
+                        </svg>
+                    </div>
+
+                    <div class="rc-fase-contenido">
+                        <strong>Aplicando estilo Retorika</strong>
+                        <span>Efectos y elementos visuales</span>
+                    </div>
+
+                    <span class="rc-fase-estado">✓</span>
+
+                </div>
+
+
+                <div class="rc-fase" data-fase="listo">
+
+                    <div class="rc-fase-icono">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M8 12l3 3 5-6"/>
+                        </svg>
+                    </div>
+
+                    <div class="rc-fase-contenido">
+                        <strong>¡Vídeo listo!</strong>
+                        <span>Preparado para revisar y descargar</span>
+                    </div>
+
+                    <span class="rc-fase-estado">✓</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================================
+                 INFORMACIÓN DEL ARCHIVO
+            ==================================================== -->
+
+            <div class="rc-informacion">
+
+                <div class="rc-archivo">
+
+                    <div class="rc-archivo-icono">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5 3h9l5 5v13H5z"/>
+                            <path d="M14 3v5h5"/>
+                            <path d="M8 13h8M8 17h6"/>
+                        </svg>
+                    </div>
+
+                    <div class="rc-archivo-datos">
+
+                        <strong title="{{ reel.nombre }}">
+                            {{ reel.nombre }}
+                        </strong>
+
+                        <span id="rc-metadatos">
+
+                            {% if reel.duracion %}
+                                {{ reel.duracion|floatformat:2 }} segundos
+                            {% else %}
+                                Analizando duración...
+                            {% endif %}
+
+                            {% if reel.ancho and reel.alto %}
+                                · {{ reel.ancho }} × {{ reel.alto }} px
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BARRA DE PROGRESO -->
+
+                <div class="rc-progreso-cabecera">
+
+                    <span>Progreso general</span>
+
+                    <strong id="rc-porcentaje">
+                        {{ reel.progreso }}%
+                    </strong>
+
+                </div>
+
+                <div class="rc-barra">
+
+                    <div
+                        class="rc-barra-interior"
+                        id="rc-barra-interior"
+                        role="progressbar"
+                        aria-label="Progreso del procesamiento"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="{{ reel.progreso }}"
+                    ></div>
+
+                </div>
+
+                <p class="rc-mensaje" id="rc-mensaje">
+                    {{ reel.mensaje_procesamiento }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             COLUMNA DERECHA - VÍDEO
+        ==================================================== -->
+
+        <div class="rc-panel-derecha">
+
+            <h3 class="rc-preview-titulo">
+                Vista previa de tu vídeo
+            </h3>
+
+            <div class="rc-preview">
+
+                <!-- MINIATURA ORIGINAL -->
+
+                <img
+                    id="rc-miniatura"
+                    {% if reel.miniatura %}
+                        src="{{ reel.miniatura.url }}"
+                    {% endif %}
+                    alt="Primer fotograma del vídeo"
+                    {% if not reel.miniatura %}
+                        hidden
+                    {% endif %}
+                >
+
+
+                <!-- REPRODUCTOR FINAL -->
+
+                <video
+                    id="rc-video"
+                    controls
+                    playsinline
+                    preload="metadata"
+                    hidden
+                >
+                    Tu navegador no admite la reproducción de vídeo.
+                </video>
+
+
+                <!-- OVERLAY DE PROGRESO -->
+
+                <div
+                    class="rc-preview-overlay"
+                    id="rc-preview-overlay"
+                >
+
+                    <div class="rc-circulo" id="rc-circulo">
+
+                        <strong id="rc-circulo-texto">
+                            {{ reel.progreso }}%
+                        </strong>
+
+                    </div>
+
+                    <span
+                        class="rc-preview-estado"
+                        id="rc-preview-estado"
+                    >
+                        Preparando vídeo...
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMACIÓN DE PREVISUALIZACIÓN -->
+
+            <div class="rc-preview-pie">
+
+                <span></span>
+
+                <span id="rc-preview-leyenda">
+                    Previsualización del archivo original
+                </span>
+
+            </div>
+
+
+            <!-- ====================================================
+                 BOTONES DE DESCARGA
+            ==================================================== -->
+
+            <div
+                class="rc-acciones"
+                id="rc-acciones"
+                hidden
+            >
+
+                <a
+                    id="rc-descargar-video"
+                    class="rc-descargar"
+                    href="#"
+                    download
+                >
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3v12"/>
+                        <path d="M7 10l5 5 5-5"/>
+                        <path d="M4 17v4h16v-4"/>
+                    </svg>
+
+                    Descargar vídeo
+
+                </a>
+
+
+                <a
+                    id="rc-descargar-srt"
+                    class="rc-descargar secundario"
+                    href="#"
+                    download
+                    hidden
+                >
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 3h9l5 5v13H5z"/>
+                        <path d="M14 3v5h5"/>
+                        <path d="M8 13h8M8 17h6"/>
+                    </svg>
+
+                    Descargar subtítulos SRT
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         AVISO INFERIOR
+    ======================================================== -->
+
+    <div
+        class="rc-aviso"
+        id="rc-aviso"
+        role="status"
+    >
+        RETORI-CUT está preparando tu vídeo.
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+(function () {
+
+    "use strict";
+
+    // ========================================================
+    // ELEMENTOS DE LA INTERFAZ
+    // ========================================================
+
+    const editor = document.getElementById("rc-editor");
+
+    if (!editor) {
+        return;
+    }
+
+    const urlEstado = editor.dataset.estadoUrl;
+
+    const titulo = document.getElementById("rc-titulo");
+    const descripcion = document.getElementById("rc-descripcion");
+
+    const porcentaje = document.getElementById("rc-porcentaje");
+    const barra = document.getElementById("rc-barra-interior");
+
+    const mensaje = document.getElementById("rc-mensaje");
+
+    const miniatura = document.getElementById("rc-miniatura");
+    const video = document.getElementById("rc-video");
+
+    const overlay = document.getElementById("rc-preview-overlay");
+
+    const circulo = document.getElementById("rc-circulo");
+    const circuloTexto = document.getElementById("rc-circulo-texto");
+
+    const previewEstado = document.getElementById("rc-preview-estado");
+    const previewLeyenda = document.getElementById("rc-preview-leyenda");
+
+    const metadatos = document.getElementById("rc-metadatos");
+    const aviso = document.getElementById("rc-aviso");
+
+    const acciones = document.getElementById("rc-acciones");
+
+    const descargarVideo = document.getElementById(
+        "rc-descargar-video"
+    );
+
+    const descargarSrt = document.getElementById(
+        "rc-descargar-srt"
+    );
+
+    const fases = {
+        analisis: document.querySelector('[data-fase="analisis"]'),
+        transcripcion: document.querySelector('[data-fase="transcripcion"]'),
+        edicion: document.querySelector('[data-fase="edicion"]'),
+        subtitulos: document.querySelector('[data-fase="subtitulos"]'),
+        estilo: document.querySelector('[data-fase="estilo"]'),
+        listo: document.querySelector('[data-fase="listo"]')
+    };
+
+    let temporizador = null;
+    let consultando = false;
+
+
+    // ========================================================
+    // ACTUALIZAR ESTADO VISUAL DE UNA FASE
+    // ========================================================
+
+    function establecerFase(nombre, estado) {
+
+        const elemento = fases[nombre];
+
+        if (!elemento) {
+            return;
+        }
+
+        elemento.classList.remove(
+            "activa",
+            "completada",
+            "error"
+        );
+
+        if (estado) {
+            elemento.classList.add(estado);
+        }
+
+    }
+
+
+    // ========================================================
+    // CONFIGURAR REPRODUCTOR Y DESCARGAS
+    // ========================================================
+
+    function configurarVideo(datos, listo) {
+
+        const urlVideo =
+            datos.archivo_editado ||
+            editor.dataset.videoUrl;
+
+        const urlSrt =
+            datos.archivo_subtitulos ||
+            editor.dataset.srtUrl;
+
+        if (listo && urlVideo) {
+
+            // Mostrar el MP4 exportado.
+
+            if (video.getAttribute("src") !== urlVideo) {
+
+                video.src = urlVideo;
+                video.load();
+
+            }
+
+            video.hidden = false;
+            miniatura.hidden = true;
+            overlay.hidden = true;
+
+            // Activar descargas.
+
+            acciones.hidden = false;
+
+            descargarVideo.href = urlVideo;
+
+            descargarVideo.setAttribute(
+                "download",
+                "reel_exportado.mp4"
+            );
+
+            previewLeyenda.textContent =
+                "Vídeo exportado con subtítulos";
+
+            if (urlSrt) {
+
+                descargarSrt.href = urlSrt;
+
+                descargarSrt.setAttribute(
+                    "download",
+                    "subtitulos.srt"
+                );
+
+                descargarSrt.hidden = false;
+
+            } else {
+
+                descargarSrt.hidden = true;
+
+            }
+
+        } else {
+
+            video.hidden = true;
+            overlay.hidden = false;
+            acciones.hidden = true;
+
+            previewLeyenda.textContent =
+                "Previsualización del archivo original";
+
+        }
+
+    }
+
+
+    // ========================================================
+    // ACTUALIZAR PANTALLA
+    // ========================================================
+
+    function actualizarPantalla(datos) {
+
+        const estado = datos.estado || "subido";
+
+        const progreso = Math.max(
+            0,
+            Math.min(
+                100,
+                Number(datos.progreso) || 0
+            )
+        );
+
+        const error = estado === "error";
+        const listo = estado === "listo";
+
+        const subtitulosGenerados =
+            datos.subtitulos_generados === true;
+
+        const transcripcionCompletada =
+            datos.transcripcion_completada === true ||
+            (progreso >= 60 && !error);
+
+
+        // ====================================================
+        // REINICIAR FASES
+        // ====================================================
+
+        Object.keys(fases).forEach(function (nombre) {
+            establecerFase(nombre, "");
+        });
+
+
+        // ====================================================
+        // ANÁLISIS
+        // ====================================================
+
+        if (progreso >= 25 || listo) {
+
+            establecerFase("analisis", "completada");
+
+        } else if (!error) {
+
+            establecerFase("analisis", "activa");
+
+        }
+
+
+        // ====================================================
+        // TRANSCRIPCIÓN
+        // ====================================================
+
+        if (transcripcionCompletada || listo) {
+
+            establecerFase("transcripcion", "completada");
+
+        } else if (
+            estado === "transcribiendo" ||
+            progreso >= 35
+        ) {
+
+            if (!error) {
+                establecerFase("transcripcion", "activa");
+            }
+
+        }
+
+
+        // ====================================================
+        // SUBTÍTULOS
+        // ====================================================
+
+        if (subtitulosGenerados) {
+
+            establecerFase("subtitulos", "completada");
+
+        } else if (
+            !error &&
+            !listo &&
+            estado === "transcribiendo" &&
+            progreso >= 60
+        ) {
+
+            establecerFase("subtitulos", "activa");
+
+        }
+
+
+        // ====================================================
+        // EDICIÓN Y EXPORTACIÓN
+        // ====================================================
+
+        if (listo) {
+
+            establecerFase("edicion", "completada");
+            establecerFase("estilo", "completada");
+            establecerFase("listo", "completada");
+
+        } else if (!error && estado === "editando") {
+
+            establecerFase("edicion", "activa");
+
+        }
+
+
+        // ====================================================
+        // ERROR
+        // ====================================================
+
+        if (error) {
+
+            aviso.classList.add("error");
+
+        } else {
+
+            aviso.classList.remove("error");
+
+        }
+
+
+        // ====================================================
+        // PROGRESO
+        // ====================================================
+
+        porcentaje.textContent = progreso + "%";
+
+        barra.style.width = progreso + "%";
+
+        barra.setAttribute(
+            "aria-valuenow",
+            progreso
+        );
+
+        circuloTexto.textContent = progreso + "%";
+
+        circulo.style.background =
+            "conic-gradient(" +
+            "#60a5fa 0%," +
+            "#60a5fa " + progreso + "%," +
+            "rgba(255,255,255,.25) " + progreso + "%," +
+            "rgba(255,255,255,.25) 100%)";
+
+
+        // ====================================================
+        // MENSAJE
+        // ====================================================
+
+        mensaje.textContent =
+            datos.mensaje || "Preparando vídeo...";
+
+
+        // ====================================================
+        // MINIATURA
+        // ====================================================
+
+        if (datos.miniatura) {
+
+            if (
+                miniatura.getAttribute("src") !==
+                datos.miniatura
+            ) {
+
+                miniatura.src = datos.miniatura;
+
+            }
+
+            miniatura.hidden = false;
+
+        }
+
+
+        // ====================================================
+        // METADATOS
+        // ====================================================
+
+        if (
+            datos.duracion !== null &&
+            datos.duracion !== undefined
+        ) {
+
+            let texto =
+                Number(datos.duracion).toFixed(2) +
+                " segundos";
+
+            if (datos.ancho && datos.alto) {
+
+                texto +=
+                    " · " +
+                    datos.ancho +
+                    " × " +
+                    datos.alto +
+                    " px";
+
+            }
+
+            metadatos.textContent = texto;
+
+        }
+
+
+        // ====================================================
+        // REPRODUCTOR Y DESCARGAS
+        // ====================================================
+
+        configurarVideo(datos, listo);
+
+
+        // ====================================================
+        // MENSAJES DE ESTADO
+        // ====================================================
+
+        if (error) {
+
+            titulo.textContent =
+                "Error al procesar el vídeo";
+
+            descripcion.textContent =
+                "No hemos podido completar el procesamiento.";
+
+            previewEstado.textContent =
+                "Error de procesamiento";
+
+            aviso.textContent =
+                datos.mensaje ||
+                "Consulta la terminal para conocer el error.";
+
+        } else if (listo) {
+
+            titulo.textContent =
+                "¡Tu Reel está listo!";
+
+            descripcion.textContent =
+                "El procesamiento del vídeo ha finalizado.";
+
+            previewEstado.textContent =
+                "Procesamiento completado";
+
+            aviso.textContent =
+                datos.archivo_editado ||
+                editor.dataset.videoUrl
+                    ? "Tu vídeo está listo para reproducir y descargar."
+                    : "El procesamiento ha terminado, pero no se ha encontrado la URL del vídeo exportado.";
+
+        } else if (subtitulosGenerados) {
+
+            titulo.textContent =
+                "Subtítulos generados";
+
+            descripcion.textContent =
+                "La transcripción y los subtítulos se han completado.";
+
+            previewEstado.textContent =
+                "Preparando exportación";
+
+            aviso.textContent =
+                "Estamos preparando el vídeo con los subtítulos.";
+
+        } else if (transcripcionCompletada) {
+
+            titulo.textContent =
+                "Generando subtítulos";
+
+            descripcion.textContent =
+                "Whisper ha terminado de transcribir el audio.";
+
+            previewEstado.textContent =
+                "Preparando archivo SRT";
+
+            aviso.textContent =
+                "Estamos generando los subtítulos sincronizados.";
+
+        } else if (estado === "transcribiendo") {
+
+            titulo.textContent =
+                "Transcribiendo audio";
+
+            descripcion.textContent =
+                "Whisper está reconociendo el contenido hablado.";
+
+            previewEstado.textContent =
+                "Transcribiendo audio";
+
+            aviso.textContent =
+                "Estamos generando la transcripción del vídeo.";
+
+        } else if (estado === "editando") {
+
+            titulo.textContent =
+                "Exportando vídeo";
+
+            descripcion.textContent =
+                "Estamos generando el archivo MP4.";
+
+            previewEstado.textContent =
+                "Exportando vídeo";
+
+            aviso.textContent =
+                "RETORI-CUT está preparando el vídeo final.";
+
+        } else {
+
+            titulo.textContent =
+                "Analizando vídeo";
+
+            descripcion.textContent =
+                "Estamos comprobando las características del archivo.";
+
+            previewEstado.textContent =
+                "Analizando vídeo";
+
+            aviso.textContent =
+                "RETORI-CUT está preparando tu vídeo.";
+
+        }
+
+        return listo || error;
+
+    }
+
+
+    // ========================================================
+    // CONSULTAR ESTADO EN DJANGO
+    // ========================================================
+
+    async function consultarEstado() {
+
+        if (consultando) {
+            return;
+        }
+
+        consultando = true;
+
+        try {
+
+            const respuesta = await fetch(urlEstado, {
+
+                cache: "no-store",
+
+                headers: {
+                    "Accept": "application/json"
+                }
+
+            });
+
+            if (!respuesta.ok) {
+
+                throw new Error(
+                    "Error HTTP " + respuesta.status
+                );
+
+            }
+
+            const datos = await respuesta.json();
+
+            const terminado = actualizarPantalla(datos);
+
+            if (terminado && temporizador) {
+
+                clearInterval(temporizador);
+                temporizador = null;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "No se pudo consultar el estado del Reel:",
+                error
+            );
+
+            aviso.textContent =
+                "No se ha podido consultar el estado del vídeo.";
+
+        } finally {
+
+            consultando = false;
+
+        }
+
+    }
+
+
+    // ========================================================
+    // INICIALIZACIÓN
+    // ========================================================
+
+    actualizarPantalla({
+
+        estado: editor.dataset.estado,
+
+        progreso: Number(editor.dataset.progreso),
+
+        mensaje: mensaje.textContent.trim(),
+
+        miniatura: miniatura.getAttribute("src"),
+
+        subtitulos_generados:
+            editor.dataset.subtitulos === "true",
+
+        transcripcion_completada:
+            editor.dataset.transcripcion === "true",
+
+        archivo_editado:
+            editor.dataset.videoUrl,
+
+        archivo_subtitulos:
+            editor.dataset.srtUrl
+
+    });
+
+
+    // Primera consulta inmediata.
+
+    consultarEstado();
+
+
+    // Consultar progreso cada 1,5 segundos.
+
+    temporizador = setInterval(
+        consultarEstado,
+        1500
+    );
+
+
+    // Detener consultas al abandonar la página.
+
+    window.addEventListener("pagehide", function () {
+
+        if (temporizador) {
+            clearInterval(temporizador);
+        }
+
+    });
+
+})();
+
+</script>
+
+{% endblock %}
