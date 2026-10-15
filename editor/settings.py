@@ -1,6 +1,5 @@
 
 import os
-
 from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
@@ -18,22 +17,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ============================================================
 
 def obtener_booleano(nombre, valor_por_defecto=False):
-
     valor = os.environ.get(nombre)
 
     if valor is None:
         return valor_por_defecto
 
-    return valor.strip().lower() in (
-        "1",
-        "true",
-        "yes",
-        "on",
-    )
+    return valor.strip().lower() in ("1", "true", "yes", "on")
 
 
 def obtener_lista(nombre):
-
     valor = os.environ.get(nombre, "")
 
     return [
@@ -44,7 +36,7 @@ def obtener_lista(nombre):
 
 
 # ============================================================
-# CONFIGURACIÓN GENERAL
+# SEGURIDAD Y ENTORNO
 # ============================================================
 
 EN_RENDER = bool(os.environ.get("RENDER"))
@@ -57,36 +49,28 @@ DEBUG = obtener_booleano(
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 if not SECRET_KEY:
-
     if DEBUG:
         SECRET_KEY = "django-insecure-editor-retorika-desarrollo"
     else:
         raise ImproperlyConfigured(
-            "Debes configurar SECRET_KEY en las variables "
-            "de entorno de Render."
+            "Debes configurar SECRET_KEY en las variables de entorno."
         )
 
 
 ALLOWED_HOSTS = obtener_lista("ALLOWED_HOSTS")
 
 if EN_RENDER:
-
-    render_hostname = os.environ.get(
-        "RENDER_EXTERNAL_HOSTNAME"
-    )
+    render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
     if render_hostname:
         ALLOWED_HOSTS.append(render_hostname)
 
-
 if DEBUG:
-
     ALLOWED_HOSTS.extend([
         "localhost",
         "127.0.0.1",
         "[::1]",
     ])
-
 
 ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS))
 
@@ -96,16 +80,12 @@ ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS))
 # ============================================================
 
 INSTALLED_APPS = [
-
-    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    # RETORI-CUT
     "reels",
 ]
 
@@ -116,10 +96,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
-    # Archivos estáticos en producción
     "whitenoise.middleware.WhiteNoiseMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -130,26 +107,18 @@ MIDDLEWARE = [
 
 
 # ============================================================
-# URLS
+# URLS Y PLANTILLAS
 # ============================================================
 
 ROOT_URLCONF = "editor.urls"
 
-
-# ============================================================
-# PLANTILLAS
-# ============================================================
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-
         "DIRS": [
             BASE_DIR / "templates",
         ],
-
         "APP_DIRS": True,
-
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
@@ -159,11 +128,6 @@ TEMPLATES = [
         },
     },
 ]
-
-
-# ============================================================
-# WSGI
-# ============================================================
 
 WSGI_APPLICATION = "editor.wsgi.application"
 
@@ -199,11 +163,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": (
-            "django.contrib.auth.password.validation."
+            "django.contrib.auth.password_validation."
             "CommonPasswordValidator"
-        ).replace(
-            "password.validation",
-            "password_validation",
         ),
     },
     {
@@ -230,7 +191,6 @@ USE_TZ = True
 
 # ============================================================
 # ARCHIVOS ESTÁTICOS
-# CSS, JAVASCRIPT, IMÁGENES...
 # ============================================================
 
 STATIC_URL = "/static/"
@@ -242,19 +202,8 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": (
-            "whitenoise.storage."
-            "CompressedManifestStaticFilesStorage"
-        ),
-    },
-}
-
-
 # ============================================================
 # ARCHIVOS MULTIMEDIA
-# Vídeos, miniaturas, subtítulos, exportaciones...
 # ============================================================
 
 MEDIA_URL = "/media/"
@@ -268,7 +217,29 @@ MEDIA_ROOT = Path(
 
 
 # ============================================================
-# CONFIGURACIÓN DE SUBIDA DE VÍDEOS
+# ALMACENAMIENTO DE ARCHIVOS
+# ============================================================
+# default: vídeos, imágenes y archivos subidos.
+# staticfiles: CSS, JavaScript e imágenes estáticas.
+#
+# IMPORTANTE:
+# Django necesita ambas configuraciones.
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": (
+            "whitenoise.storage."
+            "CompressedManifestStaticFilesStorage"
+        ),
+    },
+}
+
+
+# ============================================================
+# LÍMITES DE SUBIDA
 # ============================================================
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024
@@ -277,7 +248,7 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 
 
 # ============================================================
-# SEGURIDAD EN PRODUCCIÓN
+# CSRF
 # ============================================================
 
 CSRF_TRUSTED_ORIGINS = obtener_lista(
@@ -285,20 +256,20 @@ CSRF_TRUSTED_ORIGINS = obtener_lista(
 )
 
 if EN_RENDER:
-
     render_hostname = os.environ.get(
         "RENDER_EXTERNAL_HOSTNAME"
     )
 
     if render_hostname:
-
-        origen_render = (
-            f"https://{render_hostname}"
-        )
+        origen_render = f"https://{render_hostname}"
 
         if origen_render not in CSRF_TRUSTED_ORIGINS:
             CSRF_TRUSTED_ORIGINS.append(origen_render)
 
+
+# ============================================================
+# CONFIGURACIÓN HTTPS Y SEGURIDAD
+# ============================================================
 
 SECURE_PROXY_SSL_HEADER = (
     "HTTP_X_FORWARDED_PROTO",
@@ -315,7 +286,7 @@ X_FRAME_OPTIONS = "DENY"
 
 
 # ============================================================
-# CLAVE PRIMARIA
+# CLAVES PRIMARIAS
 # ============================================================
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
