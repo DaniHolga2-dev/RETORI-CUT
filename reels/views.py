@@ -1,25 +1,49 @@
-
 import logging
+import subprocess
 import threading
 from pathlib import Path
 
+from django import forms
 from django.contrib import messages
+from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.files import File
 from django.db import close_old_connections
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_http_methods, require_POST
 
-from .forms import ReelUploadForm, ConfiguracionMarcaForm, PlantillaForm
-from .models import Reel, ConfiguracionMarca, Plantilla
+from .forms import (
+    ReelUploadForm,
+    ConfiguracionMarcaForm,
+    PlantillaForm,
+    RegistroUsuarioForm,
+)
+
+from .models import (
+    Reel,
+    ConfiguracionMarca,
+    Plantilla,
+    PreferenciasUsuario,
+)
+
 from .transcription_utils import (
     transcribir_video,
     guardar_subtitulos_srt,
+    guardar_subtitulos_ass,
+    VozNoDetectadaError,
+    aplicar_formato_subtitulos,
 )
+
 from .video_utils import (
     analizar_video,
+    video_tiene_audio,
     extraer_primer_fotograma,
     incrustar_subtitulos_video,
+    obtener_filtros_exportacion,
+    obtener_argumentos_codificacion,
 )
 
 
@@ -27,10 +51,428 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================
+# AUTENTICACIÓN MEDIANTE CORREO ELECTRÓNICO
+# ============================================================
+
+class AutenticacionCorreoForm(AuthenticationForm):
+
+    """
+    Permite iniciar sesión utilizando el correo electrónico.
+    """
+
+    def clean(self):
+
+        correo = self.cleaned_data.get(
+            "username", ""
+        ).strip()
+
+        if correo:
+
+            modelo_usuario = get_user_model()
+
+            coincidencias = modelo_usuario._default_manager.filter(
+                email__iexact=correo
+            )
+
+            if coincidencias.count() == 1:
+
+                usuario = coincidencias.first()
+
+                self.cleaned_data["username"] = (
+                    usuario.get_username()
+                )
+
+        return super().clean()
+
+
+# ============================================================
+# REDIRECCIÓN SEGURA DESPUÉS DE INICIAR SESIÓN
+# ============================================================
+
+def redireccion_segura(request, destino="nuevo_reel"):
+
+    siguiente = (
+        request.POST.get("next")
+        or request.GET.get("next")
+    )
+
+    if siguiente and url_has_allowed_host_and_scheme(
+        url=siguiente,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+
+        return redirect(siguiente)
+
+    return redirect(destino)
+
+
+# ============================================================
+# REGISTRO DE USUARIOS
+# ============================================================
+
+@require_http_methods(["GET", "POST"])
+def registro(request):
+
+    if request.user.is_authenticated:
+        return redirect("nuevo_reel")
+
+    if request.method == "POST":
+
+        formulario = RegistroUsuarioForm(
+            request.POST
+        )
+
+        if formulario.is_valid():
+
+            usuario = formulario.save()
+
+            login(
+                request,
+                usuario,
+                backend="django.contrib.auth.backends.ModelBackend",
+            )
+
+            messages.success(
+                request,
+                "Tu cuenta se ha creado correctamente.",
+            )
+
+            return redirect("nuevo_reel")
+
+    else:
+
+        formulario = RegistroUsuarioForm()
+
+    return render(
+        request,
+        "reels/registro.html",
+        {
+            "formulario": formulario,
+        },
+    )
+
+
+# ============================================================
+# INICIAR SESIÓN
+# ============================================================
+
+@require_http_methods(["GET", "POST"])
+def iniciar_sesion(request):
+
+    if request.user.is_authenticated:
+        return redirect("nuevo_reel")
+
+    if request.method == "POST":
+
+        formulario = AutenticacionCorreoForm(
+            request,
+            data=request.POST,
+        )
+
+        if formulario.is_valid():
+
+            usuario = formulario.get_user()
+
+            login(request, usuario)
+
+            messages.success(
+                request,
+                "Has iniciado sesión correctamente.",
+            )
+
+            return redireccion_segura(request)
+
+    else:
+
+        formulario = AutenticacionCorreoForm(
+            request
+        )
+
+    return render(
+        request,
+        "reels/iniciar_sesion.html",
+        {
+            "formulario": formulario,
+            "next": request.POST.get(
+                "next",
+                request.GET.get("next", ""),
+            ),
+        },
+    )
+
+
+# ============================================================
+# CERRAR SESIÓN
+# ============================================================
+
+@login_required(login_url="iniciar_sesion")
+@require_POST
+def cerrar_sesion(request):
+
+    logout(request)
+
+    messages.success(
+        request,
+        "Has cerrado sesión correctamente.",
+    )
+
+    return redirect("iniciar_sesion")
+
+
+# ============================================================
+# FORMULARIO DE MI PERFIL
+# ============================================================
+
+class MiPerfilForm(forms.Form):
+
+    nombre = forms.CharField(
+        label="Nombre",
+        max_length=150,
+        required=False,
+    )
+
+    apellidos = forms.CharField(
+        label="Apellidos",
+        max_length=150,
+        required=False,
+    )
+
+    email = forms.EmailField(
+        label="Correo electrónico",
+        max_length=254,
+    )
+
+    def __init__(
+        self,
+        *args,
+        usuario=None,
+        **kwargs
+    ):
+
+        super().__init__(*args, **kwargs)
+
+        self.usuario = usuario
+
+        if usuario is not None and not self.is_bound:
+
+            self.initial.update({
+                "nombre": usuario.first_name,
+                "apellidos": usuario.last_name,
+                "email": usuario.email,
+            })
+
+    def clean_email(self):
+
+        email = self.cleaned_data[
+            "email"
+        ].strip()
+
+        if self.usuario is not None:
+
+            modelo = get_user_model()
+
+            if modelo._default_manager.filter(
+                email__iexact=email
+            ).exclude(
+                pk=self.usuario.pk
+            ).exists():
+
+                raise forms.ValidationError(
+                    "Este correo ya está registrado."
+                )
+
+        return email
+
+    def guardar(self):
+
+        usuario = self.usuario
+
+        usuario.first_name = (
+            self.cleaned_data["nombre"].strip()
+        )
+
+        usuario.last_name = (
+            self.cleaned_data["apellidos"].strip()
+        )
+
+        usuario.email = (
+            self.cleaned_data["email"]
+        )
+
+        usuario.save(
+            update_fields=[
+                "first_name",
+                "last_name",
+                "email",
+            ]
+        )
+
+        return usuario
+
+
+# ============================================================
+# MI PERFIL
+# ============================================================
+
+@login_required(login_url="iniciar_sesion")
+@require_http_methods(["GET", "POST"])
+def mi_perfil(request):
+
+    if request.method == "POST":
+
+        formulario = MiPerfilForm(
+            request.POST,
+            usuario=request.user,
+        )
+
+        if formulario.is_valid():
+
+            formulario.guardar()
+
+            messages.success(
+                request,
+                "Tu perfil se ha actualizado correctamente.",
+            )
+
+            return redirect("mi_perfil")
+
+    else:
+
+        formulario = MiPerfilForm(
+            usuario=request.user
+        )
+
+    return render(
+        request,
+        "reels/mi_perfil.html",
+        {
+            "formulario": formulario,
+            "usuario": request.user,
+        },
+    )
+
+
+# ============================================================
+# MIS VÍDEOS
+# ============================================================
+
+@login_required(login_url="iniciar_sesion")
+@require_http_methods(["GET"])
+def mis_videos(request):
+
+    reels = list(
+        Reel.objects
+        .filter(usuario=request.user)
+        .select_related("plantilla")
+        .order_by("-fecha_creacion")
+    )
+
+    for reel in reels:
+        # El aviso solo aparece si Whisper registró ausencia de voz.
+        # No se presupone que todos los errores antiguos sean por este motivo.
+        reel.sin_voz = (
+            reel.estado == Reel.ESTADO_ERROR
+            and "voz reconocible" in (reel.mensaje_procesamiento or "").lower()
+        )
+
+    return render(
+        request,
+        "reels/mis_videos.html",
+        {
+            "reels": reels,
+        },
+    )
+
+
+# ============================================================
+# ELIMINAR REEL PROPIO Y SUS ARCHIVOS
+# ============================================================
+
+@login_required(login_url="iniciar_sesion")
+@require_POST
+def eliminar_reel(request, reel_id):
+
+    reel = get_object_or_404(
+        Reel,
+        pk=reel_id,
+        usuario=request.user,
+    )
+
+    # No eliminar mientras se está procesando.
+
+    if reel.estado not in (
+        Reel.ESTADO_LISTO,
+        Reel.ESTADO_ERROR,
+    ):
+
+        messages.error(
+            request,
+            "Espera a que termine el procesamiento "
+            "antes de eliminar el vídeo.",
+        )
+
+        return redirect("mis_videos")
+
+    archivos = []
+
+    for campo in (
+        "archivo_original",
+        "archivo_editado",
+        "miniatura",
+        "archivo_subtitulos",
+    ):
+
+        archivo = getattr(
+            reel,
+            campo,
+            None,
+        )
+
+        if archivo and archivo.name:
+
+            archivos.append((
+                archivo.storage,
+                archivo.name,
+            ))
+
+    nombre = reel.nombre
+
+    reel.delete()
+
+    for almacenamiento, ruta in archivos:
+
+        try:
+
+            almacenamiento.delete(ruta)
+
+        except Exception:
+
+            logger.exception(
+                "No se pudo eliminar el archivo %s "
+                "del reel %s",
+                ruta,
+                reel_id,
+            )
+
+    messages.success(
+        request,
+        f"El vídeo «{nombre}» se ha eliminado.",
+    )
+
+    return redirect("mis_videos")
+
+
+# ============================================================
 # ACTUALIZAR ESTADO DEL PROCESAMIENTO
 # ============================================================
 
-def actualizar_progreso(reel, estado, progreso, mensaje):
+def actualizar_progreso(
+    reel,
+    estado,
+    progreso,
+    mensaje,
+):
 
     reel.estado = estado
     reel.progreso = progreso
@@ -46,18 +488,160 @@ def actualizar_progreso(reel, estado, progreso, mensaje):
 
 
 # ============================================================
+# OBTENER PLANTILLA OFICIAL RETORIKA
+# ============================================================
+
+def obtener_plantilla_oficial():
+
+    plantilla, _ = Plantilla.objects.get_or_create(
+        tipo="oficial",
+        defaults={
+            "nombre": "Retorika",
+            "descripcion": (
+                "Plantilla corporativa de Retorika."
+            ),
+            "activa": True,
+        },
+    )
+
+    return plantilla
+
+
+# ============================================================
+# COMPROBAR ARCHIVO ASS GENERADO
+# ============================================================
+
+def comprobar_archivo_ass(ruta_ass):
+
+    ruta_ass = Path(ruta_ass)
+
+    if not ruta_ass.is_file():
+
+        raise FileNotFoundError(
+            f"No se ha generado el archivo ASS: {ruta_ass}"
+        )
+
+    if ruta_ass.stat().st_size == 0:
+
+        raise ValueError(
+            "El archivo ASS generado está vacío."
+        )
+
+    contenido = ruta_ass.read_text(
+        encoding="utf-8-sig"
+    )
+
+    if "[Events]" not in contenido:
+
+        raise ValueError(
+            "El archivo ASS no contiene la sección [Events]."
+        )
+
+    lineas_dialogo = [
+        linea
+        for linea in contenido.splitlines()
+        if linea.strip().startswith("Dialogue:")
+    ]
+
+    if not lineas_dialogo:
+
+        raise ValueError(
+            "El archivo ASS no contiene líneas de subtítulos."
+        )
+
+    logger.info(
+        "ASS generado: %s | %s líneas de diálogo | %s bytes",
+        ruta_ass,
+        len(lineas_dialogo),
+        ruta_ass.stat().st_size,
+    )
+
+    print(
+        f"\n[RETORI-CUT] Archivo ASS: {ruta_ass}\n"
+        f"[RETORI-CUT] Diálogos encontrados: "
+        f"{len(lineas_dialogo)}\n"
+    )
+
+    return len(lineas_dialogo)
+# ============================================================
 # PROCESAR REEL EN SEGUNDO PLANO
 # ============================================================
 
 def procesar_reel_segundo_plano(reel_id):
 
-    # Cada hilo utiliza su propia conexión a la base de datos.
-
     close_old_connections()
 
     try:
 
-        reel = Reel.objects.get(id=reel_id)
+        reel = Reel.objects.select_related(
+            "plantilla",
+            "usuario",
+        ).get(
+            id=reel_id
+        )
+
+        # ====================================================
+        # RECUPERAR PLANTILLA SELECCIONADA
+        # ====================================================
+
+        plantilla = reel.plantilla
+
+        if plantilla is None:
+
+            plantilla = obtener_plantilla_oficial()
+
+            reel.plantilla = plantilla
+
+            reel.save(
+                update_fields=["plantilla"]
+            )
+
+        # ====================================================
+        # RECUPERAR PREFERENCIAS DEL USUARIO
+        # ====================================================
+
+        preferencias = None
+
+        if reel.usuario_id is not None:
+
+            preferencias, _ = (
+                PreferenciasUsuario.objects.get_or_create(
+                    usuario=reel.usuario
+                )
+            )
+
+            logger.info(
+                "Reel %s | Exportación: %sp, %s FPS, "
+                "calidad %s",
+                reel.id,
+                preferencias.resolucion,
+                preferencias.fps,
+                preferencias.calidad,
+            )
+
+        # ====================================================
+        # APLICAR CONFIGURACIÓN DE LA PLANTILLA
+        # ====================================================
+
+        reel.subtitulos_activos = (
+            plantilla.subtitulos_activos
+        )
+
+        reel.efectos_activos = (
+            plantilla.efectos_activos
+        )
+
+        reel.intensidad_efectos = (
+            plantilla.intensidad_efectos
+        )
+
+        reel.save(
+            update_fields=[
+                "subtitulos_activos",
+                "efectos_activos",
+                "intensidad_efectos",
+            ]
+        )
 
         ruta_video = Path(
             reel.archivo_original.path
@@ -90,6 +674,7 @@ def procesar_reel_segundo_plano(reel_id):
         reel.peso = reel.archivo_original.size
 
         reel.progreso = 25
+
         reel.mensaje_procesamiento = (
             "Análisis técnico completado."
         )
@@ -151,6 +736,28 @@ def procesar_reel_segundo_plano(reel_id):
                 ruta_temporal.unlink()
 
         # ====================================================
+        # DETECTAR VÍDEOS SIN PISTA DE AUDIO
+        # ====================================================
+
+        if not video_tiene_audio(ruta_video):
+
+            actualizar_progreso(
+                reel,
+                Reel.ESTADO_ERROR,
+                100,
+                "Error: este vídeo no se ha procesado porque no contiene "
+                "voz reconocible para generar subtítulos.",
+            )
+
+            logger.info(
+                "Reel %s subido correctamente, "
+                "sin pista de audio.",
+                reel.id,
+            )
+
+            return
+
+        # ====================================================
         # FASE 3: TRANSCRIPCIÓN CON WHISPER
         # ====================================================
 
@@ -168,6 +775,7 @@ def procesar_reel_segundo_plano(reel_id):
         reel.transcripcion = resultado["texto"]
 
         reel.progreso = 60
+
         reel.mensaje_procesamiento = (
             "Transcripción completada. "
             "Generando subtítulos sincronizados..."
@@ -192,11 +800,15 @@ def procesar_reel_segundo_plano(reel_id):
             "Generando archivo de subtítulos SRT...",
         )
 
+        segmentos = aplicar_formato_subtitulos(
+            resultado["segmentos"],
+            getattr(plantilla, "formato_subtitulos", "mayusculas"),
+        )
+
         if reel.subtitulos_activos:
 
-            segmentos = resultado["segmentos"]
-
             if not segmentos:
+
                 raise ValueError(
                     "Whisper no ha detectado fragmentos "
                     "de voz para generar subtítulos."
@@ -218,7 +830,10 @@ def procesar_reel_segundo_plano(reel_id):
                     ruta_srt_temporal,
                 )
 
-                with open(ruta_srt_temporal, "rb") as archivo:
+                with open(
+                    ruta_srt_temporal,
+                    "rb",
+                ) as archivo:
 
                     reel.archivo_subtitulos.save(
                         nombre_srt,
@@ -245,24 +860,17 @@ def procesar_reel_segundo_plano(reel_id):
             70,
             (
                 "Subtítulos preparados. "
-                "Iniciando exportación del vídeo..."
+                "Aplicando plantilla y preparando exportación..."
                 if reel.subtitulos_activos
                 else
                 "Transcripción completada. "
-                "Iniciando exportación del vídeo..."
+                "Preparando exportación sin subtítulos..."
             ),
         )
 
         # ====================================================
         # FASE 6: EXPORTAR VÍDEO
         # ====================================================
-
-        actualizar_progreso(
-            reel,
-            Reel.ESTADO_EDITANDO,
-            80,
-            "Exportando vídeo MP4 con FFmpeg...",
-        )
 
         nombre_exportado = (
             f"reel_{reel.id}_exportado.mp4"
@@ -273,29 +881,86 @@ def procesar_reel_segundo_plano(reel_id):
             / nombre_exportado
         )
 
+        ruta_ass_temporal = (
+            ruta_video.parent
+            / f"reel_{reel.id}_animado.ass"
+        )
+
         try:
 
             if reel.subtitulos_activos:
 
-                # Utilizamos la ruta real del SRT guardado
-                # por Django en MEDIA_ROOT.
+                # ============================================
+                # GENERAR SUBTÍTULOS ASS ANIMADOS
+                # ============================================
 
-                ruta_srt = Path(
-                    reel.archivo_subtitulos.path
+                actualizar_progreso(
+                    reel,
+                    Reel.ESTADO_EDITANDO,
+                    75,
+                    "Generando subtítulos animados ASS...",
+                )
+
+                guardar_subtitulos_ass(
+                    segmentos=segmentos,
+                    ruta_destino=ruta_ass_temporal,
+                    plantilla=plantilla,
+                    ancho=reel.ancho or 1080,
+                    alto=reel.alto or 1920,
+                    palabras_destacadas=reel.palabras_destacadas,
+                )
+
+                # ============================================
+                # COMPROBAR ARCHIVO ASS
+                # ============================================
+
+                comprobar_archivo_ass(
+                    ruta_ass_temporal
+                )
+
+                # ============================================
+                # INCRUSTAR SUBTÍTULOS Y EXPORTAR
+                # ============================================
+
+                actualizar_progreso(
+                    reel,
+                    Reel.ESTADO_EDITANDO,
+                    80,
+                    "Exportando vídeo con subtítulos ASS...",
                 )
 
                 incrustar_subtitulos_video(
                     ruta_video,
-                    ruta_srt,
+                    ruta_ass_temporal,
                     ruta_exportacion_temporal,
+                    plantilla=plantilla,
+                    preferencias=preferencias,
                 )
 
             else:
 
-                # Si los subtítulos están desactivados,
-                # generamos un MP4 sin incrustarlos.
+                # ============================================
+                # EXPORTAR SIN SUBTÍTULOS
+                # ============================================
 
-                import subprocess
+                actualizar_progreso(
+                    reel,
+                    Reel.ESTADO_EDITANDO,
+                    80,
+                    "Exportando vídeo sin subtítulos...",
+                )
+
+                filtro_video = (
+                    obtener_filtros_exportacion(
+                        preferencias=preferencias
+                    )
+                )
+
+                argumentos_codificacion = (
+                    obtener_argumentos_codificacion(
+                        preferencias=preferencias
+                    )
+                )
 
                 comando = [
                     "ffmpeg",
@@ -305,35 +970,50 @@ def procesar_reel_segundo_plano(reel_id):
                     "-i", str(ruta_video),
                     "-map", "0:v:0",
                     "-map", "0:a?",
-                    "-c:v", "libx264",
-                    "-preset", "medium",
-                    "-crf", "20",
-                    "-pix_fmt", "yuv420p",
-                    "-c:a", "aac",
-                    "-b:a", "192k",
-                    "-movflags", "+faststart",
+                    "-vf", filtro_video,
+                    *argumentos_codificacion,
                     str(ruta_exportacion_temporal),
                 ]
 
-                subprocess.run(
-                    comando,
-                    capture_output=True,
-                    text=True,
-                    check=True,
-                    timeout=1800,
-                )
+                try:
+
+                    subprocess.run(
+                        comando,
+                        capture_output=True,
+                        text=True,
+                        check=True,
+                        timeout=1800,
+                    )
+
+                except subprocess.CalledProcessError as error:
+
+                    detalle = (
+                        error.stderr
+                        or "FFmpeg no ha indicado el motivo."
+                    )
+
+                    raise RuntimeError(
+                        "Error al exportar el vídeo "
+                        "sin subtítulos:\n"
+                        + detalle
+                    ) from error
+
+            # ================================================
+            # COMPROBAR VÍDEO EXPORTADO
+            # ================================================
 
             if (
                 not ruta_exportacion_temporal.is_file()
                 or ruta_exportacion_temporal.stat().st_size == 0
             ):
+
                 raise RuntimeError(
                     "No se ha generado el vídeo exportado."
                 )
 
-            # ====================================================
+            # ================================================
             # GUARDAR MP4 EN EL MODELO
-            # ====================================================
+            # ================================================
 
             actualizar_progreso(
                 reel,
@@ -359,7 +1039,21 @@ def procesar_reel_segundo_plano(reel_id):
 
         finally:
 
+            # Mantener el archivo ASS temporal
+            # para facilitar el diagnóstico.
+
+            if ruta_ass_temporal.exists():
+
+                logger.info(
+                    "Archivo ASS conservado para diagnóstico: %s",
+                    ruta_ass_temporal,
+                )
+
+            # Eliminar únicamente el MP4 temporal,
+            # no el archivo exportado guardado.
+
             if ruta_exportacion_temporal.exists():
+
                 ruta_exportacion_temporal.unlink()
 
         # ====================================================
@@ -372,7 +1066,7 @@ def procesar_reel_segundo_plano(reel_id):
             100,
             (
                 "Vídeo exportado correctamente "
-                "con subtítulos incrustados."
+                "con subtítulos y plantilla aplicada."
                 if reel.subtitulos_activos
                 else
                 "Vídeo exportado correctamente."
@@ -382,6 +1076,25 @@ def procesar_reel_segundo_plano(reel_id):
         logger.info(
             "Reel %s: procesamiento y exportación completados.",
             reel.id,
+        )
+
+    # ========================================================
+    # CONTROL GENERAL DE ERRORES
+    # ========================================================
+
+    except VozNoDetectadaError as error:
+        logger.info("Reel %s sin voz reconocible: %s", reel_id, error)
+        Reel.objects.filter(id=reel_id).update(
+            estado=Reel.ESTADO_ERROR,
+            progreso=100,
+            mensaje_procesamiento=str(error),
+        )
+
+    except Reel.DoesNotExist:
+
+        logger.warning(
+            "El reel %s ya no existe.",
+            reel_id,
         )
 
     except Exception:
@@ -420,15 +1133,17 @@ def procesar_reel_segundo_plano(reel_id):
 # SUBIR NUEVO REEL
 # ============================================================
 
+@login_required(login_url="iniciar_sesion")
 def nuevo_reel(request):
 
-    obtener_plantilla_oficial()
+    plantilla_oficial = obtener_plantilla_oficial()
 
     if request.method == "POST":
 
         formulario = ReelUploadForm(
             request.POST,
             request.FILES,
+            usuario=request.user,
         )
 
         if formulario.is_valid():
@@ -436,6 +1151,12 @@ def nuevo_reel(request):
             reel = formulario.save(
                 commit=False
             )
+
+            reel.usuario = request.user
+
+            if reel.plantilla_id is None:
+
+                reel.plantilla = plantilla_oficial
 
             reel.estado = Reel.ESTADO_ANALIZANDO
             reel.progreso = 5
@@ -445,8 +1166,6 @@ def nuevo_reel(request):
             )
 
             reel.save()
-
-            # Procesamiento en segundo plano para desarrollo local.
 
             hilo = threading.Thread(
                 target=procesar_reel_segundo_plano,
@@ -484,7 +1203,9 @@ def nuevo_reel(request):
 
     else:
 
-        formulario = ReelUploadForm()
+        formulario = ReelUploadForm(
+            usuario=request.user,
+        )
 
     return render(
         request,
@@ -499,11 +1220,13 @@ def nuevo_reel(request):
 # PANTALLA DE PROCESAMIENTO
 # ============================================================
 
+@login_required(login_url="iniciar_sesion")
 def procesando_reel(request, reel_id):
 
     reel = get_object_or_404(
         Reel,
         id=reel_id,
+        usuario=request.user,
     )
 
     return render(
@@ -519,31 +1242,25 @@ def procesando_reel(request, reel_id):
 # CONSULTAR PROGRESO EN TIEMPO REAL
 # ============================================================
 
+@login_required(login_url="iniciar_sesion")
 def estado_reel(request, reel_id):
 
     reel = get_object_or_404(
         Reel,
         id=reel_id,
+        usuario=request.user,
     )
 
     return JsonResponse({
 
         "id": reel.id,
-
         "nombre": reel.nombre,
-
         "estado": reel.estado,
-
         "progreso": reel.progreso,
-
         "mensaje": reel.mensaje_procesamiento,
-
         "duracion": reel.duracion,
-
         "ancho": reel.ancho,
-
         "alto": reel.alto,
-
         "formato": reel.formato,
 
         "miniatura": (
@@ -590,19 +1307,13 @@ def estado_reel(request, reel_id):
 # CONFIGURACIÓN DE MARCA RETORIKA
 # ============================================================
 
+@login_required(login_url="iniciar_sesion")
 @require_http_methods(["GET", "POST"])
 def configuracion_marca(request):
-
-    # Recuperar la configuración global.
-    # Si no existe todavía, crearla con los valores iniciales.
 
     configuracion = (
         ConfiguracionMarca.obtener_configuracion()
     )
-
-    # ========================================================
-    # GUARDAR CAMBIOS
-    # ========================================================
 
     if request.method == "POST":
 
@@ -626,19 +1337,11 @@ def configuracion_marca(request):
                 "configuracion_marca"
             )
 
-    # ========================================================
-    # MOSTRAR CONFIGURACIÓN ACTUAL
-    # ========================================================
-
     else:
 
         formulario = ConfiguracionMarcaForm(
             instance=configuracion
         )
-
-    # ========================================================
-    # RENDERIZAR PANTALLA
-    # ========================================================
 
     return render(
         request,
@@ -651,38 +1354,29 @@ def configuracion_marca(request):
 
 
 # ============================================================
-# PLANTILLA OFICIAL RETORIKA
-# ============================================================
-
-def obtener_plantilla_oficial():
-
-    # Crea la plantilla oficial una sola vez.
-    # No sobrescribe sus valores si ya existe.
-
-    plantilla, _ = Plantilla.objects.get_or_create(
-        tipo="oficial",
-        defaults={
-            "nombre": "Retorika",
-            "descripcion": "Plantilla corporativa de Retorika.",
-            "activa": True,
-        },
-    )
-
-    return plantilla
-
-
-# ============================================================
 # LISTADO DE PLANTILLAS
 # ============================================================
 
+@login_required(login_url="iniciar_sesion")
 @require_http_methods(["GET"])
 def mis_plantillas(request):
 
     obtener_plantilla_oficial()
 
-    plantillas = Plantilla.objects.all().order_by(
+    plantillas = (
+        Plantilla.objects.filter(
+            tipo="oficial",
+        )
+        |
+        Plantilla.objects.filter(
+            tipo="personalizada",
+            usuario=request.user,
+        )
+    )
+
+    plantillas = plantillas.order_by(
         "tipo",
-        "nombre"
+        "nombre",
     )
 
     return render(
@@ -698,6 +1392,7 @@ def mis_plantillas(request):
 # CREAR PLANTILLA PERSONALIZADA
 # ============================================================
 
+@login_required(login_url="iniciar_sesion")
 @require_http_methods(["GET", "POST"])
 def crear_plantilla(request):
 
@@ -708,11 +1403,18 @@ def crear_plantilla(request):
 
     if request.method == "POST" and formulario.is_valid():
 
-        formulario.save()
+        plantilla = formulario.save(
+            commit=False
+        )
+
+        plantilla.usuario = request.user
+        plantilla.tipo = "personalizada"
+
+        plantilla.save()
 
         messages.success(
             request,
-            "Plantilla creada correctamente."
+            "Plantilla creada correctamente.",
         )
 
         return redirect("mis_plantillas")
@@ -731,6 +1433,7 @@ def crear_plantilla(request):
 # EDITAR PLANTILLA PERSONALIZADA
 # ============================================================
 
+@login_required(login_url="iniciar_sesion")
 @require_http_methods(["GET", "POST"])
 def editar_plantilla(request, plantilla_id):
 
@@ -738,6 +1441,7 @@ def editar_plantilla(request, plantilla_id):
         Plantilla,
         pk=plantilla_id,
         tipo="personalizada",
+        usuario=request.user,
     )
 
     formulario = PlantillaForm(
@@ -752,7 +1456,7 @@ def editar_plantilla(request, plantilla_id):
 
         messages.success(
             request,
-            "Plantilla actualizada correctamente."
+            "Plantilla actualizada correctamente.",
         )
 
         return redirect("mis_plantillas")
@@ -772,20 +1476,29 @@ def editar_plantilla(request, plantilla_id):
 # ELIMINAR PLANTILLA PERSONALIZADA
 # ============================================================
 
-@require_http_methods(["POST"])
+@login_required(login_url="iniciar_sesion")
+@require_POST
 def eliminar_plantilla(request, plantilla_id):
 
     plantilla = get_object_or_404(
         Plantilla,
         pk=plantilla_id,
         tipo="personalizada",
+        usuario=request.user,
     )
 
     plantilla.delete()
 
     messages.success(
         request,
-        "Plantilla eliminada correctamente."
+        "Plantilla eliminada correctamente.",
     )
 
     return redirect("mis_plantillas")
+
+
+# ============================================================
+# CONFIGURACIÓN GENERAL DEL USUARIO
+# ============================================================
+
+from .configuracion_views import configuracion

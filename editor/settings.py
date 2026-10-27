@@ -57,10 +57,16 @@ if not SECRET_KEY:
         )
 
 
+# ============================================================
+# HOSTS PERMITIDOS
+# ============================================================
+
 ALLOWED_HOSTS = obtener_lista("ALLOWED_HOSTS")
 
 if EN_RENDER:
-    render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+    render_hostname = os.environ.get(
+        "RENDER_EXTERNAL_HOSTNAME"
+    )
 
     if render_hostname:
         ALLOWED_HOSTS.append(render_hostname)
@@ -70,6 +76,7 @@ if DEBUG:
         "localhost",
         "127.0.0.1",
         "[::1]",
+        "192.168.1.36",
     ])
 
 ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS))
@@ -217,13 +224,28 @@ MEDIA_ROOT = Path(
 
 
 # ============================================================
-# ALMACENAMIENTO DE ARCHIVOS
+# MODO TEMPORAL DE PRUEBAS MULTIMEDIA
 # ============================================================
-# default: vídeos, imágenes y archivos subidos.
-# staticfiles: CSS, JavaScript e imágenes estáticas.
+#
+# Permite identificar cuándo queremos probar los archivos
+# multimedia en un entorno de desarrollo con DEBUG=False.
 #
 # IMPORTANTE:
-# Django necesita ambas configuraciones.
+# Esta variable NO publica los archivos por sí sola.
+# La ruta de pruebas debe configurarse también en urls.py.
+#
+# No utilizar en Render ni en producción.
+# ============================================================
+
+SERVIR_MEDIA_PRUEBAS = (
+    obtener_booleano("SERVIR_MEDIA_PRUEBAS", False)
+    and not EN_RENDER
+)
+
+
+# ============================================================
+# ALMACENAMIENTO DE ARCHIVOS
+# ============================================================
 
 STORAGES = {
     "default": {

@@ -1,0 +1,33 @@
+[Script Info]
+Title: RETORI-CUT
+ScriptType: v4.00+
+PlayResX: 720
+PlayResY: 1280
+ScaledBorderAndShadow: yes
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,53,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,5,1,5,56,56,289,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+Dialogue: 0,0:00:00.00,0:00:00.32,Default,,0,0,0,,YO
+Dialogue: 0,0:00:00.32,0:00:00.44,Default,,0,0,0,,YO MIRE
+Dialogue: 0,0:00:00.44,0:00:00.70,Default,,0,0,0,,YO MIRE DICIENDO
+Dialogue: 0,0:00:00.70,0:00:00.86,Default,,0,0,0,,QUE
+Dialogue: 0,0:00:00.86,0:00:01.00,Default,,0,0,0,,QUE ESTÁ
+Dialogue: 0,0:00:01.00,0:00:01.36,Default,,0,0,0,,QUE ESTÁ SOLTERA
+Dialogue: 0,0:00:01.36,0:00:01.60,Default,,0,0,0,,PORQUE
+Dialogue: 0,0:00:01.60,0:00:01.80,Default,,0,0,0,,PORQUE NADIE
+Dialogue: 0,0:00:01.80,0:00:02.02,Default,,0,0,0,,PORQUE NADIE PUEDE
+Dialogue: 0,0:00:02.02,0:00:02.20,Default,,0,0,0,,CON
+Dialogue: 0,0:00:02.20,0:00:02.44,Default,,0,0,0,,CON TANTO.
+Dialogue: 0,0:00:03.26,0:00:03.76,Default,,0,0,0,,SÍ,
+Dialogue: 0,0:00:04.52,0:00:04.82,Default,,0,0,0,,CON
+Dialogue: 0,0:00:04.82,0:00:04.98,Default,,0,0,0,,CON TANTO
+Dialogue: 0,0:00:04.98,0:00:05.50,Default,,0,0,0,,CON TANTO TRASTORNO
+Dialogue: 0,0:00:05.50,0:00:05.80,Default,,0,0,0,,PORQUE
+Dialogue: 0,0:00:05.80,0:00:06.00,Default,,0,0,0,,PORQUE ESA
+Dialogue: 0,0:00:06.00,0:00:06.62,Default,,0,0,0,,PORQUE ESA CABEZA...

@@ -1,299 +1,307 @@
-
-{% extends "base.html" %}
+{% extends "reels/base.html" %}
 
 {% block title %}{{ titulo }} | RETORI-CUT{% endblock %}
-
 {% block nav_plantillas %}active{% endblock %}
 
 {% block content %}
 
 <style>
-    .editor-plantilla {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 10px 0 50px;
-    }
+.editor-plantilla {
+    --ep-texto: #19243a;
+    --ep-secundario: #7a8495;
+    --ep-card: #ffffff;
+    --ep-borde: #e6eaf1;
+    --ep-input: #ffffff;
+    --ep-input-texto: #26344a;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 0 50px;
+}
 
-    .editor-heading {
-        margin-bottom: 30px;
-    }
+html[data-theme="oscuro"] .editor-plantilla {
+    --ep-texto: #f1f5ff;
+    --ep-secundario: #a3b1c8;
+    --ep-card: #192437;
+    --ep-borde: #304057;
+    --ep-input: #24354d;
+    --ep-input-texto: #f1f5ff;
+}
 
-    .editor-back {
-        display: inline-block;
-        text-decoration: none;
-        color: #156fe7;
-        font-size: 13px;
-        font-weight: 700;
-        margin-bottom: 16px;
-    }
+.editor-plantilla * {
+    box-sizing: border-box;
+}
 
-    .editor-heading h1 {
-        font-size: 30px;
-        font-weight: 800;
-        margin: 0 0 8px;
-        letter-spacing: -1px;
-    }
+.editor-heading {
+    margin-bottom: 30px;
+}
 
-    .editor-heading p {
-        color: #7a8495;
-        font-size: 14px;
-        margin: 0;
-    }
+.editor-back {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: #156fe7;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
 
+.editor-heading h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--ep-texto);
+}
+
+.editor-heading p {
+    margin: 0;
+    color: var(--ep-secundario);
+    font-size: 14px;
+}
+
+.editor-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
+    gap: 25px;
+    align-items: start;
+}
+
+.editor-card {
+    padding: 25px;
+    margin-bottom: 22px;
+    background: var(--ep-card);
+    border: 1px solid var(--ep-borde);
+    border-radius: 18px;
+    box-shadow: 0 6px 25px rgba(15,35,70,.035);
+}
+
+.editor-card h2 {
+    margin: 0 0 22px;
+    color: var(--ep-texto);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.editor-field {
+    min-width: 0;
+    margin-bottom: 20px;
+}
+
+.editor-field:last-child {
+    margin-bottom: 0;
+}
+
+.editor-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ep-texto);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.editor-field input:not([type="checkbox"]),
+.editor-field select,
+.editor-field textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 13px;
+    border: 1px solid var(--ep-borde);
+    border-radius: 10px;
+    background: var(--ep-input);
+    color: var(--ep-input-texto);
+    font: inherit;
+    font-size: 13px;
+}
+
+.editor-field input[type="color"] {
+    height: 46px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.editor-field input:focus,
+.editor-field select:focus,
+.editor-field textarea:focus {
+    outline: none;
+    border-color: #156fe7;
+    box-shadow: 0 0 0 3px rgba(21,111,231,.1);
+}
+
+.editor-field .helptext {
+    display: block;
+    margin-top: 6px;
+    color: var(--ep-secundario);
+    font-size: 11px;
+}
+
+.editor-field .errorlist,
+.editor-card .errorlist {
+    color: #d8354f;
+    font-size: 12px;
+    padding-left: 18px;
+    margin: 7px 0;
+}
+
+.editor-two-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+}
+
+.editor-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 0;
+    color: var(--ep-texto);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.editor-checkbox input {
+    width: 17px;
+    height: 17px;
+    accent-color: #156fe7;
+}
+
+.editor-checkbox label {
+    cursor: pointer;
+}
+
+.editor-preview {
+    position: sticky;
+    top: 25px;
+}
+
+.editor-video-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 9 / 16;
+    max-height: 470px;
+    margin: 0 auto;
+    border-radius: 15px;
+    overflow: hidden;
+    background: linear-gradient(155deg, #15213d, #31466d);
+}
+
+.editor-video-preview::before {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.04);
+    top: 10%;
+    left: -90px;
+}
+
+.editor-subtitle-preview {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    right: 8%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-family: Montserrat, Arial, sans-serif;
+    font-size: 19px;
+    font-weight: 900;
+    line-height: 1.35;
+    color: #ffffff;
+    text-transform: none;
+    text-shadow: 0 2px 5px rgba(0,0,0,.5);
+    transition: .2s;
+}
+
+.editor-subtitle-preview span {
+    background: #156fe7;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+.editor-preview-caption {
+    margin-top: 15px;
+    color: var(--ep-secundario);
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.editor-save {
+    padding: 14px 22px;
+    border: none;
+    border-radius: 11px;
+    background: #156fe7;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.editor-save:hover {
+    background: #095ac4;
+}
+
+.editor-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 22px;
+    border: 1px solid var(--ep-borde);
+    border-radius: 11px;
+    color: var(--ep-texto);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+@media (max-width: 850px) {
     .editor-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
-        gap: 25px;
-        align-items: start;
+        grid-template-columns: 1fr;
     }
-
-    .editor-card {
-        background: white;
-        border: 1px solid #e6eaf1;
-        border-radius: 18px;
-        padding: 25px;
-        margin-bottom: 22px;
-        box-shadow: 0 6px 25px rgba(15, 35, 70, 0.035);
-    }
-
-    .editor-card h2 {
-        font-size: 16px;
-        font-weight: 800;
-        margin: 0 0 22px;
-        color: #19243a;
-    }
-
-    .editor-field {
-        margin-bottom: 20px;
-    }
-
-    .editor-field:last-child {
-        margin-bottom: 0;
-    }
-
-    .editor-field label {
-        display: block;
-        margin-bottom: 8px;
-        font-size: 12px;
-        font-weight: 700;
-        color: #36435a;
-    }
-
-    .editor-field input:not([type="checkbox"]),
-    .editor-field select,
-    .editor-field textarea {
-        width: 100%;
-        max-width: 100%;
-        padding: 12px 13px;
-        border: 1px solid #dfe5ee;
-        border-radius: 10px;
-        background: #fff;
-        color: #26344a;
-        font: inherit;
-        font-size: 13px;
-        box-sizing: border-box;
-    }
-
-    .editor-field input[type="color"] {
-        height: 46px;
-        padding: 5px;
-        cursor: pointer;
-    }
-
-    .editor-field input:focus,
-    .editor-field select:focus,
-    .editor-field textarea:focus {
-        outline: none;
-        border-color: #156fe7;
-        box-shadow: 0 0 0 3px rgba(21,111,231,0.1);
-    }
-
-    .editor-field .helptext {
-        display: block;
-        margin-top: 6px;
-        color: #8490a2;
-        font-size: 11px;
-    }
-
-    .editor-field .errorlist {
-        color: #d8354f;
-        font-size: 12px;
-        padding-left: 18px;
-        margin: 7px 0;
-    }
-
-    .editor-two-columns {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 17px;
-    }
-
-    .editor-checkbox {
-        display: flex;
-        align-items: center;
-        gap: 11px;
-        padding: 12px 0;
-        font-size: 13px;
-        font-weight: 600;
-        color: #36435a;
-    }
-
-    .editor-checkbox input {
-        width: 17px;
-        height: 17px;
-        accent-color: #156fe7;
-    }
-
-    .editor-checkbox label {
-        cursor: pointer;
-    }
-
     .editor-preview {
-        position: sticky;
-        top: 25px;
+        position: static;
     }
-
     .editor-video-preview {
-        aspect-ratio: 9 / 16;
-        max-height: 470px;
-        margin: 0 auto;
-        border-radius: 15px;
-        background: linear-gradient(155deg, #15213d, #31466d);
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: min(100%, 270px);
     }
+}
 
-    .editor-video-preview::before {
-        content: "";
-        position: absolute;
-        width: 250px;
-        height: 250px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.04);
-        top: 10%;
-        left: -90px;
+@media (max-width: 550px) {
+    .editor-card {
+        padding: 18px;
     }
-
-    .editor-subtitle-preview {
-        position: absolute;
-        top: 50%;
-        left: 8%;
-        right: 8%;
-        transform: translateY(-50%);
-        text-align: center;
-        font-family: Montserrat, Arial, sans-serif;
-        font-size: 19px;
-        font-weight: 900;
-        line-height: 1.35;
-        color: white;
-        text-transform: uppercase;
-        text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        transition: 0.2s;
+    .editor-two-columns {
+        grid-template-columns: 1fr;
     }
-
-    .editor-subtitle-preview span {
-        background: #156fe7;
-        padding: 2px 5px;
-        border-radius: 3px;
+    .editor-heading h1 {
+        font-size: 25px;
     }
-
-    .editor-preview-caption {
-        font-size: 11px;
-        color: #8a94a5;
-        text-align: center;
-        margin-top: 15px;
-        line-height: 1.6;
-    }
-
     .editor-actions {
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-        padding-top: 8px;
+        flex-direction: column;
     }
-
-    .editor-save {
-        background: #156fe7;
-        color: white;
-        border: none;
-        border-radius: 11px;
-        padding: 14px 22px;
-        font-weight: 800;
-        font-size: 13px;
-        cursor: pointer;
-    }
-
-    .editor-save:hover {
-        background: #095ac4;
-    }
-
-    .editor-cancel {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        color: #48566e;
-        border: 1px solid #e0e5ed;
-        border-radius: 11px;
-        padding: 14px 22px;
-        font-weight: 700;
-        font-size: 13px;
-    }
-
-    @media (max-width: 850px) {
-        .editor-layout {
-            grid-template-columns: 1fr;
-        }
-
-        .editor-preview {
-            position: static;
-        }
-
-        .editor-video-preview {
-            width: min(100%, 270px);
-        }
-    }
-
-    @media (max-width: 550px) {
-        .editor-card {
-            padding: 18px;
-        }
-
-        .editor-two-columns {
-            grid-template-columns: 1fr;
-        }
-
-        .editor-heading h1 {
-            font-size: 25px;
-        }
-
-        .editor-actions {
-            flex-direction: column;
-        }
-    }
+}
 </style>
 
 <div class="editor-plantilla">
 
     <div class="editor-heading">
-
         <a href="{% url 'mis_plantillas' %}" class="editor-back">
             ← Volver a mis plantillas
         </a>
 
         <h1>{{ titulo }}</h1>
-
-        <p>
-            Personaliza la apariencia de tus vídeos.
-        </p>
-
+        <p>Personaliza la apariencia de tus vídeos.</p>
     </div>
 
     <form method="post" enctype="multipart/form-data">
-
         {% csrf_token %}
 
         {% if formulario.non_field_errors %}
@@ -306,8 +314,9 @@
 
             <div>
 
-                <section class="editor-card">
+                <!-- INFORMACIÓN GENERAL -->
 
+                <section class="editor-card">
                     <h2>Información general</h2>
 
                     <div class="editor-field">
@@ -325,19 +334,11 @@
                         {{ formulario.descripcion }}
                         {{ formulario.descripcion.errors }}
                     </div>
-
-                    <div class="editor-field">
-                        <label for="{{ formulario.logo.id_for_label }}">
-                            Logotipo
-                        </label>
-                        {{ formulario.logo }}
-                        {{ formulario.logo.errors }}
-                    </div>
-
                 </section>
 
-                <section class="editor-card">
+                <!-- COLORES -->
 
+                <section class="editor-card">
                     <h2>Colores de marca</h2>
 
                     <div class="editor-two-columns">
@@ -375,11 +376,11 @@
                         </div>
 
                     </div>
-
                 </section>
 
-                <section class="editor-card">
+                <!-- TIPOGRAFÍA -->
 
+                <section class="editor-card">
                     <h2>Tipografía</h2>
 
                     <div class="editor-field">
@@ -397,11 +398,11 @@
                         {{ formulario.archivo_tipografia }}
                         {{ formulario.archivo_tipografia.errors }}
                     </div>
-
                 </section>
 
-                <section class="editor-card">
+                <!-- SUBTÍTULOS -->
 
+                <section class="editor-card">
                     <h2>Subtítulos</h2>
 
                     <div class="editor-checkbox">
@@ -409,6 +410,14 @@
                         <label for="{{ formulario.subtitulos_activos.id_for_label }}">
                             Activar subtítulos
                         </label>
+                    </div>
+
+                    <div class="editor-field">
+                        <label for="{{ formulario.formato_subtitulos.id_for_label }}">
+                            Formato de los subtítulos
+                        </label>
+                        {{ formulario.formato_subtitulos }}
+                        {{ formulario.formato_subtitulos.errors }}
                     </div>
 
                     <div class="editor-two-columns">
@@ -454,11 +463,11 @@
                         </div>
 
                     </div>
-
                 </section>
 
-                <section class="editor-card">
+                <!-- ANIMACIONES -->
 
+                <section class="editor-card">
                     <h2>Animaciones</h2>
 
                     <div class="editor-two-columns">
@@ -495,11 +504,11 @@
                         {{ formulario.color_destacado }}
                         {{ formulario.color_destacado.errors }}
                     </div>
-
                 </section>
 
-                <section class="editor-card">
+                <!-- EFECTOS -->
 
+                <section class="editor-card">
                     <h2>Efectos</h2>
 
                     <div class="editor-checkbox">
@@ -516,58 +525,56 @@
                         {{ formulario.intensidad_efectos }}
                         {{ formulario.intensidad_efectos.errors }}
                     </div>
-
                 </section>
 
-                <div class="editor-actions">
+                <!-- ACCIONES -->
 
-                    <a href="{% url 'mis_plantillas' %}"
-                       class="editor-cancel">
+                <div class="editor-actions">
+                    <a href="{% url 'mis_plantillas' %}" class="editor-cancel">
                         Cancelar
                     </a>
 
                     <button type="submit" class="editor-save">
                         Guardar plantilla
                     </button>
-
                 </div>
 
             </div>
 
-            <aside class="editor-preview">
+            <!-- VISTA PREVIA -->
 
+            <aside class="editor-preview">
                 <div class="editor-card">
 
                     <h2>Vista previa</h2>
 
                     <div class="editor-video-preview">
-
-                        <div id="subtitlePreview"
-                             class="editor-subtitle-preview">
+                        <div
+                            id="subtitlePreview"
+                            class="editor-subtitle-preview"
+                        >
                             CREA TU
                             <span id="highlightPreview">ESTILO</span>
                         </div>
-
                     </div>
 
                     <p class="editor-preview-caption">
                         Representación aproximada del estilo.
-                        Las animaciones se aplicarán durante
-                        la exportación cuando estén implementadas.
+                        Los colores y el formato se actualizan
+                        al modificar la plantilla.
                     </p>
 
                 </div>
-
             </aside>
 
         </div>
-
     </form>
-
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
+    "use strict";
 
     const subtitle = document.getElementById("subtitlePreview");
     const highlight = document.getElementById("highlightPreview");
@@ -579,15 +586,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const position = document.getElementById("id_posicion_subtitulos");
     const enabled = document.getElementById("id_subtitulos_activos");
     const highlightEnabled = document.getElementById("id_destacar_palabras");
+    const format = document.getElementById("id_formato_subtitulos");
 
     function updatePreview() {
 
+        const minusculas = format && format.value === "minusculas";
+
+        subtitle.firstChild.textContent = minusculas
+            ? "Crea tu "
+            : "CREA TU ";
+
+        highlight.textContent = minusculas
+            ? "estilo"
+            : "ESTILO";
+
         if (colorText) {
             subtitle.style.color = colorText.value;
+            highlight.style.color = colorText.value;
         }
 
         if (colorHighlight) {
-            highlight.style.backgroundColor = colorHighlight.value;
+            highlight.style.backgroundColor = (
+                highlightEnabled && !highlightEnabled.checked
+            ) ? "transparent" : colorHighlight.value;
         }
 
         if (font) {
@@ -602,7 +623,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (position) {
-
             if (position.value === "superior") {
                 subtitle.style.top = "20%";
             } else if (position.value === "inferior") {
@@ -616,13 +636,6 @@ document.addEventListener("DOMContentLoaded", function () {
             subtitle.style.display =
                 enabled.checked ? "block" : "none";
         }
-
-        if (highlightEnabled) {
-            highlight.style.backgroundColor =
-                highlightEnabled.checked && colorHighlight
-                    ? colorHighlight.value
-                    : "transparent";
-        }
     }
 
     [
@@ -632,9 +645,9 @@ document.addEventListener("DOMContentLoaded", function () {
         size,
         position,
         enabled,
-        highlightEnabled
+        highlightEnabled,
+        format
     ].forEach(function (field) {
-
         if (field) {
             field.addEventListener("input", updatePreview);
             field.addEventListener("change", updatePreview);
@@ -642,7 +655,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     updatePreview();
-
 });
 </script>
 

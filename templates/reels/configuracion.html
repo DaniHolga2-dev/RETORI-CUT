@@ -1,0 +1,774 @@
+
+{% extends "reels/base.html" %}
+
+{% block title %}Configuración | RETORI-CUT{% endblock %}
+{% block nav_configuracion %}active{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* ============================================================
+   CONFIGURACIÓN - VARIABLES DE APARIENCIA
+============================================================ */
+
+.configuracion-page {
+    --cfg-fondo: #ffffff;
+    --cfg-texto: #101b38;
+    --cfg-secundario: #8290a6;
+    --cfg-borde: #e8edf5;
+    --cfg-campo: #fbfcff;
+    --cfg-azul-suave: #edf5ff;
+    --cfg-aviso: #f3f8ff;
+    --cfg-aviso-texto: #52749f;
+    --cfg-estadistica: #f8fbff;
+
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 0 60px;
+    color: var(--cfg-texto);
+}
+
+html[data-theme="oscuro"] .configuracion-page {
+    --cfg-fondo: #192437;
+    --cfg-texto: #f1f5ff;
+    --cfg-secundario: #a3b1c8;
+    --cfg-borde: #304057;
+    --cfg-campo: #121d2e;
+    --cfg-azul-suave: #243b60;
+    --cfg-aviso: #192f4b;
+    --cfg-aviso-texto: #b6d4ff;
+    --cfg-estadistica: #152235;
+}
+
+.configuracion-page * {
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   CABECERA
+============================================================ */
+
+.configuracion-cabecera {
+    margin-bottom: 32px;
+}
+
+.configuracion-etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 13px;
+    color: #398cff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.configuracion-etiqueta::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #156fe7;
+    box-shadow: 0 0 0 4px rgba(21,111,231,.15);
+}
+
+.configuracion-cabecera h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -.8px;
+    color: var(--cfg-texto);
+}
+
+.configuracion-cabecera p {
+    margin: 12px 0 0;
+    color: var(--cfg-secundario);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ============================================================
+   TARJETAS
+============================================================ */
+
+.configuracion-tarjeta {
+    margin-bottom: 22px;
+    padding: 28px;
+    border: 1px solid var(--cfg-borde);
+    border-radius: 19px;
+    background: var(--cfg-fondo);
+    box-shadow: 0 5px 22px rgba(0,0,0,.035);
+}
+
+.configuracion-tarjeta-cabecera {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 27px;
+    padding-bottom: 23px;
+    border-bottom: 1px solid var(--cfg-borde);
+}
+
+.configuracion-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    color: #398cff;
+    background: var(--cfg-azul-suave);
+}
+
+.configuracion-icono svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.configuracion-tarjeta-titulo h2 {
+    margin: 1px 0 6px;
+    color: var(--cfg-texto);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.configuracion-tarjeta-titulo p {
+    margin: 0;
+    color: var(--cfg-secundario);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* ============================================================
+   FORMULARIOS
+============================================================ */
+
+.configuracion-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 24px;
+}
+
+.configuracion-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+}
+
+.configuracion-campo label {
+    color: var(--cfg-texto);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.configuracion-campo select {
+    width: 100%;
+    min-height: 47px;
+    padding: 0 14px;
+    border: 1px solid var(--cfg-borde);
+    border-radius: 10px;
+    background: var(--cfg-campo);
+    color: var(--cfg-texto);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+}
+
+.configuracion-campo select:focus {
+    border-color: #398cff;
+    box-shadow: 0 0 0 3px rgba(21,111,231,.14);
+}
+
+.configuracion-campo select:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+}
+
+html[data-theme="oscuro"] .configuracion-campo select {
+    color-scheme: dark;
+}
+
+.configuracion-ayuda {
+    color: var(--cfg-secundario);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.configuracion-error {
+    color: #e77889;
+    font-size: 12px;
+}
+
+/* ============================================================
+   ALMACENAMIENTO
+============================================================ */
+
+.configuracion-estadisticas {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 16px;
+    margin-bottom: 26px;
+}
+
+.configuracion-estadistica {
+    padding: 23px;
+    border: 1px solid var(--cfg-borde);
+    border-radius: 14px;
+    background: var(--cfg-estadistica);
+}
+
+.configuracion-estadistica strong {
+    display: block;
+    color: var(--cfg-texto);
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.configuracion-estadistica span {
+    display: block;
+    margin-top: 5px;
+    color: var(--cfg-secundario);
+    font-size: 12px;
+}
+
+/* ============================================================
+   INTERRUPTORES
+============================================================ */
+
+.configuracion-opcion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 19px 0;
+    border-bottom: 1px solid var(--cfg-borde);
+}
+
+.configuracion-opcion:last-child {
+    border-bottom: 0;
+}
+
+.configuracion-opcion-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.configuracion-opcion-info strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--cfg-texto);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.configuracion-opcion-info p {
+    margin: 0;
+    color: var(--cfg-secundario);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.configuracion-switch {
+    position: relative;
+    display: inline-flex;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.configuracion-switch input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.configuracion-switch-pista {
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    background: #66758a;
+    transition: background .25s;
+}
+
+.configuracion-switch-pista::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    transition: transform .25s;
+}
+
+.configuracion-switch input:checked + .configuracion-switch-pista {
+    background: #156fe7;
+}
+
+.configuracion-switch input:checked + .configuracion-switch-pista::after {
+    transform: translateX(20px);
+}
+
+.configuracion-switch input:focus-visible + .configuracion-switch-pista {
+    outline: 3px solid #80b6ff;
+    outline-offset: 3px;
+}
+
+/* ============================================================
+   SECCIONES Y AVISOS
+============================================================ */
+
+.configuracion-subseccion {
+    margin-top: 25px;
+    padding-top: 24px;
+    border-top: 1px solid var(--cfg-borde);
+}
+
+.configuracion-subseccion h3 {
+    margin: 0 0 18px;
+    color: var(--cfg-texto);
+    font-size: 13px;
+}
+
+.configuracion-aviso {
+    display: flex;
+    gap: 11px;
+    margin-top: 23px;
+    padding: 15px 17px;
+    border: 1px solid var(--cfg-borde);
+    border-radius: 11px;
+    background: var(--cfg-aviso);
+    color: var(--cfg-aviso-texto);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.configuracion-aviso svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    fill: none;
+    stroke: #398cff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ============================================================
+   GUARDAR
+============================================================ */
+
+.configuracion-acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 27px;
+}
+
+.configuracion-acciones-texto {
+    color: var(--cfg-secundario);
+    font-size: 11px;
+}
+
+.configuracion-guardar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 47px;
+    padding: 0 25px;
+    border: 0;
+    border-radius: 11px;
+    background: linear-gradient(110deg,#156fe7,#2785ff,#156fe7);
+    color: white;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 9px 24px rgba(21,111,231,.22);
+}
+
+.configuracion-guardar:hover {
+    background: #105cb1;
+    transform: translateY(-1px);
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media(max-width:700px) {
+    .configuracion-page {
+        padding: 5px 0 35px;
+    }
+
+    .configuracion-cabecera h1 {
+        font-size: 25px;
+    }
+
+    .configuracion-tarjeta {
+        padding: 20px;
+    }
+
+    .configuracion-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .configuracion-estadisticas {
+        gap: 10px;
+    }
+
+    .configuracion-estadistica {
+        padding: 16px;
+    }
+
+    .configuracion-estadistica strong {
+        font-size: 22px;
+    }
+
+    .configuracion-acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .configuracion-guardar {
+        width: 100%;
+    }
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="configuracion-page">
+
+    <header class="configuracion-cabecera">
+
+        <span class="configuracion-etiqueta">
+            PERSONALIZACIÓN
+        </span>
+
+        <h1>Configuración</h1>
+
+        <p>
+            Personaliza RETORI-CUT y administra las
+            preferencias de tu espacio de trabajo.
+        </p>
+
+    </header>
+
+    <form method="post" action="{% url 'configuracion' %}">
+
+        {% csrf_token %}
+
+        {% if formulario.non_field_errors %}
+            <div class="configuracion-aviso" role="alert">
+                {{ formulario.non_field_errors }}
+            </div>
+        {% endif %}
+
+
+        <!-- ====================================================
+             EXPORTACIÓN
+        ===================================================== -->
+
+        <section class="configuracion-tarjeta">
+
+            <div class="configuracion-tarjeta-cabecera">
+
+                <div class="configuracion-icono">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 16V3"/>
+                        <path d="m7 8 5-5 5 5"/>
+                        <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+                    </svg>
+                </div>
+
+                <div class="configuracion-tarjeta-titulo">
+                    <h2>Exportación</h2>
+                    <p>Define las preferencias de salida de tus vídeos.</p>
+                </div>
+
+            </div>
+
+            <div class="configuracion-grid">
+
+                <div class="configuracion-campo">
+                    <label for="{{ formulario.resolucion.id_for_label }}">
+                        Resolución
+                    </label>
+                    {{ formulario.resolucion }}
+                    {% for error in formulario.resolucion.errors %}
+                        <span class="configuracion-error">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="configuracion-campo">
+                    <label for="{{ formulario.fps.id_for_label }}">
+                        Fotogramas por segundo
+                    </label>
+                    {{ formulario.fps }}
+                    {% for error in formulario.fps.errors %}
+                        <span class="configuracion-error">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="configuracion-campo">
+                    <label for="{{ formulario.calidad.id_for_label }}">
+                        Calidad de exportación
+                    </label>
+                    {{ formulario.calidad }}
+                    {% for error in formulario.calidad.errors %}
+                        <span class="configuracion-error">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="configuracion-campo">
+                    <label for="formato-video">Formato de vídeo</label>
+                    <select id="formato-video" disabled>
+                        <option>MP4 (H.264)</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="configuracion-aviso">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 11v5"/>
+                    <path d="M12 7h.01"/>
+                </svg>
+                <span>
+                    Las preferencias de exportación se guardan,
+                    pero todavía deben conectarse con el motor
+                    de procesamiento para modificar el vídeo final.
+                </span>
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             ALMACENAMIENTO
+        ===================================================== -->
+
+        <section class="configuracion-tarjeta">
+
+            <div class="configuracion-tarjeta-cabecera">
+
+                <div class="configuracion-icono">
+                    <svg viewBox="0 0 24 24">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                        <path d="M3 5v7c0 1.7 4 3 9 3s9-1.3 9-3V5"/>
+                        <path d="M3 12v7c0 1.7 4 3 9 3s9-1.3 9-3v-7"/>
+                    </svg>
+                </div>
+
+                <div class="configuracion-tarjeta-titulo">
+                    <h2>Almacenamiento</h2>
+                    <p>Consulta tus archivos y preferencias de limpieza.</p>
+                </div>
+
+            </div>
+
+            <div class="configuracion-estadisticas">
+
+                <div class="configuracion-estadistica">
+                    <strong>{{ cantidad_videos|default:0 }}</strong>
+                    <span>Vídeos en tu biblioteca</span>
+                </div>
+
+                <div class="configuracion-estadistica">
+                    <strong>{{ espacio_originales_mb|default:0 }} MB</strong>
+                    <span>Tamaño registrado de originales</span>
+                </div>
+
+            </div>
+
+
+            <!-- LIMPIEZA AUTOMÁTICA -->
+
+            <div class="configuracion-opcion">
+
+                <div class="configuracion-opcion-info">
+                    <strong>Limpieza automática</strong>
+                    <p>
+                        Preferencia para eliminar archivos
+                        temporales antiguos.
+                    </p>
+                </div>
+
+                <label class="configuracion-switch">
+                    {{ formulario.limpieza_automatica }}
+                    <span class="configuracion-switch-pista"></span>
+                </label>
+
+            </div>
+
+
+            <!-- FRECUENCIA DE LIMPIEZA -->
+
+            <div class="configuracion-subseccion">
+
+                <h3>Frecuencia de limpieza</h3>
+
+                <div class="configuracion-grid">
+
+                    <div class="configuracion-campo">
+                        <label for="{{ formulario.dias_limpieza.id_for_label }}">
+                            Antigüedad de los archivos
+                        </label>
+                        {{ formulario.dias_limpieza }}
+                        {% for error in formulario.dias_limpieza.errors %}
+                            <span class="configuracion-error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="configuracion-aviso">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 11v5"/>
+                    <path d="M12 7h.01"/>
+                </svg>
+                <span>
+                    La limpieza automática todavía no ejecuta
+                    eliminaciones. Estas opciones únicamente
+                    guardan tus preferencias.
+                </span>
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             PREFERENCIAS GENERALES
+        ===================================================== -->
+
+        <section class="configuracion-tarjeta">
+
+            <div class="configuracion-tarjeta-cabecera">
+
+                <div class="configuracion-icono">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 2"/>
+                    </svg>
+                </div>
+
+                <div class="configuracion-tarjeta-titulo">
+                    <h2>Preferencias generales</h2>
+                    <p>Personaliza la apariencia y el comportamiento.</p>
+                </div>
+
+            </div>
+
+            <div class="configuracion-grid">
+
+                <div class="configuracion-campo">
+
+                    <label for="{{ formulario.tema.id_for_label }}">
+                        Apariencia de la aplicación
+                    </label>
+
+                    {{ formulario.tema }}
+
+                    <span class="configuracion-ayuda">
+                        Cambia entre modo claro y oscuro.
+                        La selección se previsualiza al instante.
+                    </span>
+
+                    {% for error in formulario.tema.errors %}
+                        <span class="configuracion-error">{{ error }}</span>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <div class="configuracion-subseccion">
+
+                <h3>Comportamiento de la aplicación</h3>
+
+                <div class="configuracion-opcion">
+
+                    <div class="configuracion-opcion-info">
+                        <strong>Ir a Mis vídeos al finalizar</strong>
+                        <p>
+                            Preferencia para abrir tu biblioteca
+                            cuando termine un Reel.
+                        </p>
+                    </div>
+
+                    <label class="configuracion-switch">
+                        {{ formulario.ir_a_mis_videos }}
+                        <span class="configuracion-switch-pista"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="configuracion-aviso">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 11v5"/>
+                    <path d="M12 7h.01"/>
+                </svg>
+                <span>
+                    La apariencia se aplicará a las páginas que
+                    utilizan el tema global. La navegación automática
+                    a Mis vídeos todavía está pendiente de integración.
+                </span>
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             GUARDAR
+        ===================================================== -->
+
+        <div class="configuracion-acciones">
+
+            <span class="configuracion-acciones-texto">
+                Los cambios se guardarán en tu cuenta.
+            </span>
+
+            <button type="submit" class="configuracion-guardar">
+                Guardar configuración
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,51 +1,869 @@
-{% extends "base.html" %}
 
+{% extends "reels/base.html" %}
 
-{% block title %}
-Nuevo Reel | RETORI-CUT
-{% endblock %}
-
-
+{% block title %}Nuevo Reel | RETORI-CUT{% endblock %}
 {% block nav_nuevo %}activo{% endblock %}
-
-
-{% block header_title %}
-Nuevo Reel
-{% endblock %}
-
+{% block header_title %}Nuevo Reel{% endblock %}
 
 {% block content %}
 
+<style>
+/* ==========================================================
+   RETORI-CUT · NUEVO REEL
+========================================================== */
+
+.nuevo-reel {
+    --rc-blue: #156fe7;
+    --rc-pink: #e82d77;
+    --rc-dark: #101b38;
+    --rc-muted: #68758d;
+    --rc-card: #ffffff;
+    --rc-border: #e2eaf5;
+    --rc-header: linear-gradient(105deg, #eff6ff, #fff 78%);
+    --rc-field: linear-gradient(90deg, #f5f9ff, #fff);
+    --rc-field-border: #d5e1f0;
+    --rc-label: #263651;
+    --rc-help: #7b89a0;
+    --rc-line: #dce5f1;
+    --rc-file-icon: #edf5ff;
+    --rc-change-bg: #ffffff;
+    --rc-change-border: #dce6f3;
+    --rc-error-bg: #fff7f7;
+    --rc-error-border: #f1c6c6;
+    --rc-error-text: #a13c3c;
+
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+html[data-theme="oscuro"] .nuevo-reel,
+html[data-theme="dark"] .nuevo-reel,
+body.tema-oscuro .nuevo-reel,
+body.dark-mode .nuevo-reel,
+html.dark .nuevo-reel {
+    --rc-blue: #398cff;
+    --rc-dark: #f3f6ff;
+    --rc-muted: #a5b4cb;
+    --rc-card: #192437;
+    --rc-border: #304057;
+    --rc-header: linear-gradient(105deg, #202e44, #192437 78%);
+    --rc-field: linear-gradient(90deg, #172439, #202d43);
+    --rc-field-border: #3b4d66;
+    --rc-label: #dbe5f5;
+    --rc-help: #9dacc3;
+    --rc-line: #35465e;
+    --rc-file-icon: #263b59;
+    --rc-change-bg: #263b59;
+    --rc-change-border: #405878;
+    --rc-error-bg: #40252d;
+    --rc-error-border: #854653;
+    --rc-error-text: #ffb3c0;
+}
+
+.nuevo-reel *,
+.nuevo-reel *::before,
+.nuevo-reel *::after {
+    box-sizing: border-box;
+}
+
+.nuevo-reel svg {
+    display: block;
+    flex-shrink: 0;
+    max-width: 100%;
+}
+
+.nuevo-reel button,
+.nuevo-reel select,
+.nuevo-reel textarea {
+    font-family: inherit;
+}
+
+/* ==========================================================
+   CABECERA
+========================================================== */
+
+.nuevo-reel .nuevo-reel-cabecera {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    text-align: center;
+}
+
+.nuevo-reel .seccion-etiqueta {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--rc-blue);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+}
+
+.nuevo-reel .nuevo-reel-cabecera h1 {
+    margin: 0 0 12px;
+    color: var(--rc-dark);
+    font-size: clamp(30px, 4vw, 43px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.15;
+}
+
+.nuevo-reel .nuevo-reel-cabecera p {
+    max-width: 610px;
+    margin: 0 auto;
+    color: var(--rc-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ==========================================================
+   ZONA DE SUBIDA
+========================================================== */
+
+.nuevo-reel .zona-subida {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 355px;
+    padding: 35px 25px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 23px;
+    background: linear-gradient(
+        115deg,
+        #156fe7 0%,
+        #287fee 55%,
+        #65b7ff 100%
+    );
+    box-shadow: 0 18px 40px rgba(21,111,231,.17);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.nuevo-reel .zona-subida:hover {
+    box-shadow: 0 22px 48px rgba(21,111,231,.24);
+}
+
+.nuevo-reel .zona-subida.arrastrando {
+    transform: translateY(-2px);
+    box-shadow:
+        0 0 0 5px rgba(21,111,231,.14),
+        0 22px 48px rgba(21,111,231,.24);
+}
+
+html[data-theme="oscuro"] .nuevo-reel .zona-subida,
+html[data-theme="dark"] .nuevo-reel .zona-subida,
+body.tema-oscuro .nuevo-reel .zona-subida,
+body.dark-mode .nuevo-reel .zona-subida,
+html.dark .nuevo-reel .zona-subida {
+    background: #192437;
+    border-color: #304057;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+}
+
+/* ==========================================================
+   CÍRCULOS DECORATIVOS
+========================================================== */
+
+.nuevo-reel .subida-circulos {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.nuevo-reel .subida-circulos span {
+    position: absolute;
+    top: -240px;
+    right: -145px;
+    width: 460px;
+    height: 460px;
+    border: 1px solid rgba(255,255,255,.29);
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+}
+
+.nuevo-reel .subida-circulos span:nth-child(2) {
+    top: -300px;
+    right: -205px;
+    width: 580px;
+    height: 580px;
+    border-color: rgba(255,255,255,.19);
+    background: rgba(255,255,255,.035);
+}
+
+.nuevo-reel .subida-circulos span:nth-child(3) {
+    top: -365px;
+    right: -270px;
+    width: 710px;
+    height: 710px;
+    border-color: rgba(255,255,255,.12);
+    background: transparent;
+}
+
+/* ==========================================================
+   INPUT DE ARCHIVOS
+========================================================== */
+
+.nuevo-reel .input-video-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+.nuevo-reel .subida-vacia {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+.nuevo-reel .subida-vacia[hidden],
+.nuevo-reel .archivo-seleccionado[hidden] {
+    display: none !important;
+}
+
+.nuevo-reel .subida-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,.38);
+    border-radius: 21px;
+    background: rgba(255,255,255,.17);
+    color: #fff;
+    box-shadow: 0 9px 24px rgba(0,45,110,.12);
+}
+
+.nuevo-reel .subida-icono svg {
+    width: 36px !important;
+    height: 36px !important;
+}
+
+.nuevo-reel .subida-vacia h2 {
+    margin: 0 0 9px;
+    color: #fff;
+    font-size: clamp(21px, 3vw, 27px);
+    font-weight: 800;
+    letter-spacing: -.7px;
+}
+
+.nuevo-reel .subida-vacia > p {
+    margin: 0 0 23px;
+    color: rgba(255,255,255,.88);
+    font-size: 14px;
+}
+
+/* ==========================================================
+   BOTÓN SUBIR VÍDEO
+========================================================== */
+
+.nuevo-reel .boton-subir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 158px;
+    min-height: 46px;
+    padding: 13px 25px;
+    border: 0;
+    border-radius: 11px;
+    background: #fff;
+    color: #156fe7;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(8,55,130,.17);
+    transition: transform .2s, background .2s;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.nuevo-reel .boton-subir:hover {
+    transform: translateY(-2px);
+    background: #eef6ff;
+}
+
+.nuevo-reel .boton-subir:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 4px;
+}
+
+.nuevo-reel .formatos-admitidos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 23px;
+}
+
+.nuevo-reel .formatos-admitidos span {
+    padding: 6px 11px;
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 7px;
+    background: rgba(255,255,255,.13);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .4px;
+}
+
+/* ==========================================================
+   ARCHIVO SELECCIONADO
+========================================================== */
+
+.nuevo-reel .archivo-seleccionado {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    max-width: 720px;
+    padding: 24px;
+    border: 1px solid var(--rc-border);
+    border-radius: 17px;
+    background: var(--rc-card);
+    box-shadow: 0 16px 35px rgba(5,43,103,.15);
+}
+
+.nuevo-reel .archivo-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: var(--rc-file-icon);
+    color: var(--rc-blue);
+}
+
+.nuevo-reel .archivo-icono svg {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.nuevo-reel .archivo-informacion {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.nuevo-reel .archivo-etiqueta {
+    margin-bottom: 6px;
+    color: var(--rc-blue);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.nuevo-reel .archivo-informacion strong {
+    overflow: hidden;
+    color: var(--rc-dark);
+    font-size: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nuevo-reel .archivo-datos {
+    display: flex;
+    gap: 8px;
+    margin-top: 7px;
+    color: var(--rc-muted);
+    font-size: 12px;
+}
+
+.nuevo-reel .boton-cambiar-video {
+    flex-shrink: 0;
+    padding: 11px 14px;
+    border: 1px solid var(--rc-change-border);
+    border-radius: 9px;
+    background: var(--rc-change-bg);
+    color: var(--rc-blue);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==========================================================
+   PERSONALIZACIÓN
+========================================================== */
+
+.nuevo-reel .seleccion-plantilla {
+    margin-top: 28px;
+    overflow: hidden;
+    border: 1px solid var(--rc-border);
+    border-radius: 21px;
+    background: var(--rc-card);
+    box-shadow: 0 12px 34px rgba(20,49,91,.055);
+}
+
+.nuevo-reel .seleccion-plantilla-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 29px 32px;
+    border-bottom: 1px solid var(--rc-border);
+    background: var(--rc-header);
+}
+
+.nuevo-reel .plantilla-cabecera-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 17px;
+    background: linear-gradient(135deg, #156fe7, #55aaff);
+    color: #fff;
+    box-shadow: 0 9px 20px rgba(21,111,231,.18);
+}
+
+.nuevo-reel .plantilla-cabecera-icono svg {
+    width: 29px !important;
+    height: 29px !important;
+}
+
+.nuevo-reel .plantilla-cabecera-texto {
+    flex: 1;
+    min-width: 0;
+}
+
+.nuevo-reel .seleccion-plantilla .seccion-etiqueta {
+    margin-bottom: 7px;
+}
+
+.nuevo-reel .seleccion-plantilla h2 {
+    margin: 0 0 8px;
+    color: var(--rc-dark);
+    font-size: clamp(20px, 2.5vw, 25px);
+    font-weight: 800;
+    letter-spacing: -.6px;
+}
+
+.nuevo-reel .seleccion-plantilla-cabecera p {
+    max-width: 740px;
+    margin: 0;
+    color: var(--rc-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.nuevo-reel .seleccion-plantilla-campo {
+    padding: 26px 32px 28px;
+}
+
+.nuevo-reel .seleccion-plantilla-campo label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--rc-label);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.nuevo-reel .plantilla-select-contenedor {
+    position: relative;
+    width: 100%;
+}
+
+.nuevo-reel .plantilla-select-contenedor::before {
+    content: "✦";
+    position: absolute;
+    top: 50%;
+    left: 18px;
+    z-index: 1;
+    transform: translateY(-50%);
+    color: var(--rc-blue);
+    font-size: 21px;
+    pointer-events: none;
+}
+
+.nuevo-reel .plantilla-select-contenedor select {
+    display: block;
+    width: 100%;
+    min-height: 56px;
+    padding: 0 50px 0 51px;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--rc-field-border);
+    border-radius: 13px;
+    background: var(--rc-field);
+    color: var(--rc-dark);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.nuevo-reel .plantilla-select-contenedor select:focus {
+    border-color: var(--rc-blue);
+    box-shadow: 0 0 0 4px rgba(21,111,231,.11);
+}
+
+.nuevo-reel .plantilla-select-contenedor select option {
+    background: var(--rc-card);
+    color: var(--rc-dark);
+}
+
+.nuevo-reel .plantilla-select-flecha {
+    position: absolute;
+    top: 50%;
+    right: 19px;
+    width: 19px !important;
+    height: 19px !important;
+    transform: translateY(-50%);
+    color: var(--rc-blue);
+    pointer-events: none;
+}
+
+.nuevo-reel .seleccion-plantilla-ayuda {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 13px 0 0;
+    color: var(--rc-help);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.nuevo-reel .seleccion-plantilla-ayuda svg {
+    width: 16px !important;
+    height: 16px !important;
+    margin-top: 1px;
+    color: var(--rc-blue);
+    flex-shrink: 0;
+}
+
+/* ==========================================================
+   PALABRAS A DESTACAR
+========================================================== */
+
+.nuevo-reel .palabras-destacadas-bloque {
+    margin-top: 25px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rc-border);
+}
+
+.nuevo-reel .palabras-destacadas-bloque textarea {
+    display: block;
+    width: 100%;
+    min-height: 88px;
+    padding: 15px 18px;
+    resize: vertical;
+    border: 1px solid var(--rc-field-border);
+    border-radius: 13px;
+    background: var(--rc-field);
+    color: var(--rc-dark);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.nuevo-reel .palabras-destacadas-bloque textarea:focus {
+    border-color: var(--rc-blue);
+    box-shadow: 0 0 0 4px rgba(21,111,231,.11);
+}
+
+.nuevo-reel .palabras-destacadas-bloque textarea::placeholder {
+    color: var(--rc-help);
+}
+
+.nuevo-reel .palabras-opcional {
+    color: var(--rc-muted);
+    font-weight: 400;
+}
+
+/* ==========================================================
+   TRES PASOS
+========================================================== */
+
+.nuevo-reel .informacion-proceso {
+    display: grid;
+    grid-template-columns:
+        minmax(0,1fr)
+        60px
+        minmax(0,1fr)
+        60px
+        minmax(0,1fr);
+    align-items: center;
+    gap: 10px;
+    margin: 29px 0 27px;
+    padding: 0 14px;
+}
+
+.nuevo-reel .informacion-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+    text-align: left;
+}
+
+.nuevo-reel .informacion-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--rc-pink);
+}
+
+.nuevo-reel .informacion-icono svg {
+    width: 26px !important;
+    height: 26px !important;
+}
+
+.nuevo-reel .informacion-texto {
+    min-width: 0;
+}
+
+.nuevo-reel .informacion-item strong {
+    display: block;
+    margin: 0 0 4px;
+    color: var(--rc-dark);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.nuevo-reel .informacion-item p {
+    margin: 0;
+    color: var(--rc-muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.nuevo-reel .informacion-linea {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 24px;
+    overflow: hidden;
+}
+
+.nuevo-reel .informacion-linea::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--rc-line);
+}
+
+.nuevo-reel .informacion-linea::after {
+    content: "";
+    position: absolute;
+    top: 11px;
+    left: -45%;
+    width: 45%;
+    height: 2px;
+    border-radius: 20px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #156fe7,
+        transparent
+    );
+    animation: flujo-retorika 2.4s ease-in-out infinite;
+}
+
+@keyframes flujo-retorika {
+    0% {
+        left: -45%;
+        opacity: 0;
+    }
+
+    15%, 85% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+/* ==========================================================
+   BOTÓN CREAR REEL
+========================================================== */
+
+.nuevo-reel .nuevo-reel-acciones {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 12px;
+}
+
+.nuevo-reel .boton-crear-reel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 255px;
+    min-height: 52px;
+    padding: 13px 25px;
+    border: 0;
+    border-radius: 12px;
+    background: #156fe7;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 9px 24px rgba(21,111,231,.22);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.nuevo-reel .boton-crear-reel svg {
+    width: 19px !important;
+    height: 19px !important;
+}
+
+.nuevo-reel .boton-crear-reel:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 12px 30px rgba(21,111,231,.4),
+        0 0 25px rgba(21,111,231,.3);
+}
+
+.nuevo-reel .boton-crear-reel:disabled {
+    background: #cbd5e3;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* ==========================================================
+   ERRORES
+========================================================== */
+
+.nuevo-reel .errores-formulario {
+    margin-top: 14px;
+    padding: 13px 16px;
+    border: 1px solid var(--rc-error-border);
+    border-radius: 10px;
+    background: var(--rc-error-bg);
+    color: var(--rc-error-text);
+    font-size: 13px;
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 900px) {
+    .nuevo-reel .informacion-proceso {
+        grid-template-columns:
+            minmax(0,1fr)
+            35px
+            minmax(0,1fr)
+            35px
+            minmax(0,1fr);
+        gap: 6px;
+        padding: 0;
+    }
+
+    .nuevo-reel .informacion-item {
+        gap: 8px;
+    }
+
+    .nuevo-reel .informacion-icono {
+        flex-basis: 27px;
+        width: 27px;
+        height: 27px;
+    }
+}
+
+@media (max-width: 600px) {
+    .nuevo-reel .zona-subida {
+        min-height: 340px;
+        padding: 26px 17px;
+    }
+
+    .nuevo-reel .seleccion-plantilla-cabecera {
+        align-items: flex-start;
+        gap: 13px;
+        padding: 22px 18px;
+    }
+
+    .nuevo-reel .plantilla-cabecera-icono {
+        width: 45px;
+        height: 45px;
+    }
+
+    .nuevo-reel .seleccion-plantilla-campo {
+        padding: 22px 18px;
+    }
+
+    .nuevo-reel .informacion-proceso {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin: 25px 0;
+        padding: 0 10px;
+    }
+
+    .nuevo-reel .informacion-linea {
+        display: none !important;
+    }
+
+    .nuevo-reel .archivo-seleccionado {
+        flex-wrap: wrap;
+    }
+
+    .nuevo-reel .boton-cambiar-video {
+        width: 100%;
+    }
+
+    .nuevo-reel .boton-crear-reel {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nuevo-reel .informacion-linea::after {
+        animation: none;
+    }
+}
+</style>
 
 <section class="nuevo-reel">
 
-
-    <!-- ========================================================
-         CABECERA DE LA PÁGINA
-    ========================================================= -->
+    <!-- CABECERA -->
 
     <div class="nuevo-reel-cabecera">
-
         <span class="seccion-etiqueta">
             NUEVO PROYECTO
         </span>
 
-        <h1>
-            Crea un nuevo Reel
-        </h1>
+        <h1>Crea un nuevo Reel</h1>
 
         <p>
-            Sube el vídeo original y RETORI-CUT se encargará
-            de prepararlo con el estilo de Retorika.
+            Sube el vídeo original, selecciona una plantilla
+            y RETORI-CUT se encargará de prepararlo
+            con el estilo elegido.
         </p>
-
     </div>
 
-
-
-    <!-- ========================================================
-         FORMULARIO
-    ========================================================= -->
+    <!-- FORMULARIO -->
 
     <form
         method="POST"
@@ -53,44 +871,38 @@ Nuevo Reel
         id="formulario-reel"
         class="formulario-reel"
     >
-
         {% csrf_token %}
 
+        <!-- ZONA DE SUBIDA -->
 
-        <!-- ====================================================
-             ZONA DE SUBIDA
-        ===================================================== -->
+        <div class="zona-subida" id="zona-subida">
 
-        <div
-            class="zona-subida"
-            id="zona-subida"
-        >
-
+            <div
+                class="subida-circulos"
+                aria-hidden="true"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
             <!-- INPUT REAL -->
 
             <div class="input-video-oculto">
-
                 {{ formulario.archivo_original }}
-
             </div>
 
+            <!-- SIN ARCHIVO -->
 
-            <!-- ESTADO SIN ARCHIVO -->
-
-            <div
-                class="subida-vacia"
-                id="subida-vacia"
-            >
+            <div class="subida-vacia" id="subida-vacia">
 
                 <div class="subida-icono">
-
                     <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
                     >
                         <path
-                            d="M12 16V4M12 4L7.5 8.5M12 4L16.5 8.5M5 14.5V18C5 19.1 5.9 20 7 20H17C18.1 20 19 19.1 19 18V14.5"
+                            d="M12 16V4M12 4L7.5 8.5M12 4L16.5 8.5M5 14.5V18C5 19.1 5.9 20 7 20H17C18.1 20 19 19 19 18V14.5"
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.8"
@@ -98,69 +910,41 @@ Nuevo Reel
                             stroke-linejoin="round"
                         />
                     </svg>
-
                 </div>
 
-
-                <h2>
-                    Arrastra tu vídeo aquí
-                </h2>
-
+                <h2>Arrastra tu vídeo aquí</h2>
 
                 <p>
-                    o selecciona un archivo desde tu equipo
+                    o selecciona un archivo desde tu dispositivo
                 </p>
 
-
-                <button
-                    type="button"
+                <label
+                    for="{{ formulario.archivo_original.id_for_label }}"
                     class="boton-subir"
                     id="boton-seleccionar-video"
+                    role="button"
+                    tabindex="0"
                 >
                     Subir vídeo
-                </button>
-
+                </label>
 
                 <div class="formatos-admitidos">
-
-                    <span>
-                        MP4
-                    </span>
-
-                    <span>
-                        MOV
-                    </span>
-
-                    <span>
-                        M4V
-                    </span>
-
-                    <span>
-                        WEBM
-                    </span>
-
-                    <span>
-                        MXF
-                    </span>
-
+                    <span>MP4</span>
+                    <span>MOV</span>
+                    <span>M4V</span>
+                    <span>WEBM</span>
+                    <span>MXF</span>
                 </div>
-
             </div>
 
-
-
-            <!-- =================================================
-                 ESTADO CON ARCHIVO SELECCIONADO
-            ================================================== -->
+            <!-- ARCHIVO SELECCIONADO -->
 
             <div
                 class="archivo-seleccionado"
                 id="archivo-seleccionado"
                 hidden
             >
-
                 <div class="archivo-icono">
-
                     <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
@@ -172,26 +956,20 @@ Nuevo Reel
                             stroke-width="1.7"
                             stroke-linejoin="round"
                         />
-
                         <path
                             d="M14 3V8H19"
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.7"
-                            stroke-linejoin="round"
                         />
-
                         <path
                             d="M10 12.5L15 15.5L10 18.5V12.5Z"
                             fill="currentColor"
                         />
                     </svg>
-
                 </div>
 
-
                 <div class="archivo-informacion">
-
                     <span class="archivo-etiqueta">
                         VÍDEO SELECCIONADO
                     </span>
@@ -201,7 +979,6 @@ Nuevo Reel
                     </strong>
 
                     <div class="archivo-datos">
-
                         <span id="archivo-formato">
                             MP4
                         </span>
@@ -213,11 +990,8 @@ Nuevo Reel
                         <span id="archivo-peso">
                             0 MB
                         </span>
-
                     </div>
-
                 </div>
-
 
                 <button
                     type="button"
@@ -226,118 +1000,276 @@ Nuevo Reel
                 >
                     Cambiar vídeo
                 </button>
-
             </div>
-
         </div>
 
-
-
-        <!-- ====================================================
-             ERRORES
-        ===================================================== -->
+        <!-- ERRORES DEL VÍDEO -->
 
         {% if formulario.archivo_original.errors %}
-
             <div class="errores-formulario">
-
                 {% for error in formulario.archivo_original.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- PERSONALIZACIÓN -->
+
+        <section
+            class="seleccion-plantilla"
+            aria-labelledby="titulo-plantilla"
+        >
+
+            <div class="seleccion-plantilla-cabecera">
+
+                <div
+                    class="plantilla-cabecera-icono"
+                    aria-hidden="true"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    >
+                        <path d="M4 7h16M4 17h16"/>
+                        <circle cx="9" cy="7" r="2.5"/>
+                        <circle cx="15" cy="17" r="2.5"/>
+                    </svg>
+                </div>
+
+                <div class="plantilla-cabecera-texto">
+                    <span class="seccion-etiqueta">
+                        PERSONALIZACIÓN
+                    </span>
+
+                    <h2 id="titulo-plantilla">
+                        Elige el estilo de tu Reel
+                    </h2>
 
                     <p>
-                        {{ error }}
+                        Selecciona la plantilla que quieres aplicar
+                        al vídeo. Puedes utilizar el estilo oficial
+                        de Retorika o una de tus plantillas
+                        personalizadas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="seleccion-plantilla-campo">
+
+                <!-- PLANTILLA -->
+
+                <label
+                    for="{{ formulario.plantilla.id_for_label }}"
+                >
+                    Plantilla de edición
+                </label>
+
+                <div class="plantilla-select-contenedor">
+
+                    {{ formulario.plantilla }}
+
+                    <svg
+                        class="plantilla-select-flecha"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                    >
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </div>
+
+                <p class="seleccion-plantilla-ayuda">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        aria-hidden="true"
+                    >
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 11v5M12 7.5h.01"/>
+                    </svg>
+
+                    Si no seleccionas ninguna, se utilizará
+                    la plantilla oficial de Retorika.
+                </p>
+
+                <!-- PALABRAS A DESTACAR -->
+
+                <div class="palabras-destacadas-bloque">
+
+                    <label
+                        for="{{ formulario.palabras_destacadas.id_for_label }}"
+                    >
+                        Palabras a destacar
+                        <span class="palabras-opcional">
+                            (Opcional)
+                        </span>
+                    </label>
+
+                    {{ formulario.palabras_destacadas }}
+
+                    <p class="seleccion-plantilla-ayuda">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            aria-hidden="true"
+                        >
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M12 11v5M12 7.5h.01"/>
+                        </svg>
+
+                        Separa las palabras o expresiones con comas.
+                        Se destacarán cuando aparezcan en el vídeo,
+                        utilizando el color de la plantilla seleccionada,
+                        siempre que esté activada la opción de destacar
+                        palabras.
                     </p>
 
-                {% endfor %}
+                    {% if formulario.palabras_destacadas.errors %}
+                        <div class="errores-formulario">
+                            {% for error in formulario.palabras_destacadas.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
 
             </div>
 
+            <!-- ERRORES DE PLANTILLA -->
+
+            {% if formulario.plantilla.errors %}
+                <div class="errores-formulario">
+                    {% for error in formulario.plantilla.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </section>
+
+        <!-- ERRORES GENERALES -->
+
+        {% if formulario.non_field_errors %}
+            <div class="errores-formulario">
+                {% for error in formulario.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
         {% endif %}
 
-
-
-        <!-- ====================================================
-             INFORMACIÓN
-        ===================================================== -->
+        <!-- PROCESO DE TRES PASOS -->
 
         <div class="informacion-proceso">
 
+            <!-- PASO 1 -->
 
             <div class="informacion-item">
 
-                <div class="informacion-numero">
-                    1
+                <div
+                    class="informacion-icono"
+                    aria-hidden="true"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M12 3v12"/>
+                        <path d="m7 10 5 5 5-5"/>
+                        <path d="M4 17v3h16v-3"/>
+                    </svg>
                 </div>
 
-                <div>
-
-                    <strong>
-                        Sube el vídeo
-                    </strong>
-
+                <div class="informacion-texto">
+                    <strong>Sube tu vídeo</strong>
                     <p>
-                        Selecciona el archivo original.
+                        Selecciona el archivo que quieres editar.
                     </p>
-
                 </div>
-
             </div>
 
+            <div
+                class="informacion-linea"
+                aria-hidden="true"
+            ></div>
 
-            <div class="informacion-linea"></div>
-
+            <!-- PASO 2 -->
 
             <div class="informacion-item">
 
-                <div class="informacion-numero">
-                    2
+                <div
+                    class="informacion-icono"
+                    aria-hidden="true"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 2"/>
+                    </svg>
                 </div>
 
-                <div>
-
-                    <strong>
-                        RETORI-CUT lo prepara
-                    </strong>
-
+                <div class="informacion-texto">
+                    <strong>Edición automática</strong>
                     <p>
-                        Transcripción, subtítulos y efectos Retorika.
+                        RETORI-CUT procesa el vídeo y sus subtítulos.
                     </p>
-
                 </div>
-
             </div>
 
+            <div
+                class="informacion-linea"
+                aria-hidden="true"
+            ></div>
 
-            <div class="informacion-linea"></div>
-
+            <!-- PASO 3 -->
 
             <div class="informacion-item">
 
-                <div class="informacion-numero">
-                    3
+                <div
+                    class="informacion-icono"
+                    aria-hidden="true"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="m8 12 2.5 2.5L16 9"/>
+                    </svg>
                 </div>
 
-                <div>
-
-                    <strong>
-                        Revisa y exporta
-                    </strong>
-
+                <div class="informacion-texto">
+                    <strong>Revisa y exporta</strong>
                     <p>
-                        Corrige lo necesario y descarga el Reel.
+                        Comprueba el resultado y descarga el Reel.
                     </p>
-
                 </div>
-
             </div>
-
-
         </div>
 
-
-
-        <!-- ====================================================
-             ACCIÓN PRINCIPAL
-        ===================================================== -->
+        <!-- CREAR REEL -->
 
         <div class="nuevo-reel-acciones">
 
@@ -347,34 +1279,314 @@ Nuevo Reel
                 id="boton-crear-reel"
                 disabled
             >
-
-                <span>
-                    Crear mi Reel
-                </span>
+                <span>Crear mi Reel</span>
 
                 <svg
                     viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                     aria-hidden="true"
                 >
-                    <path
-                        d="M5 12H19M19 12L14 7M19 12L14 17"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
+                    <path d="M5 12H19M19 12L14 7M19 12L14 17"/>
                 </svg>
-
             </button>
-
         </div>
 
-
     </form>
-
-
 </section>
 
+<!-- ==========================================================
+     JAVASCRIPT · SUBIDA DE VÍDEOS
+========================================================== -->
+
+<script>
+(function () {
+    "use strict";
+
+    function iniciarSubida() {
+
+        const formulario = document.getElementById(
+            "formulario-reel"
+        );
+
+        const zona = document.getElementById(
+            "zona-subida"
+        );
+
+        const input = formulario
+            ? formulario.querySelector('input[type="file"]')
+            : null;
+
+        const vacia = document.getElementById(
+            "subida-vacia"
+        );
+
+        const seleccionada = document.getElementById(
+            "archivo-seleccionado"
+        );
+
+        const nombre = document.getElementById(
+            "archivo-nombre"
+        );
+
+        const formato = document.getElementById(
+            "archivo-formato"
+        );
+
+        const peso = document.getElementById(
+            "archivo-peso"
+        );
+
+        const cambiar = document.getElementById(
+            "boton-cambiar-video"
+        );
+
+        const crear = document.getElementById(
+            "boton-crear-reel"
+        );
+
+        const etiqueta = document.getElementById(
+            "boton-seleccionar-video"
+        );
+
+        if (!formulario || !input || !zona || !crear) {
+            return;
+        }
+
+        // COMPATIBILIDAD CON SELECTOR NATIVO
+
+        if (!input.id) {
+            input.id = "id_archivo_original";
+        }
+
+        if (etiqueta) {
+
+            etiqueta.setAttribute(
+                "for",
+                input.id
+            );
+
+            etiqueta.addEventListener(
+                "keydown",
+                function (evento) {
+
+                    if (
+                        evento.key === "Enter" ||
+                        evento.key === " "
+                    ) {
+                        evento.preventDefault();
+                        input.click();
+                    }
+                }
+            );
+        }
+
+        // MOSTRAR INFORMACIÓN DEL ARCHIVO
+
+        function actualizarArchivo() {
+
+            const archivo = (
+                input.files &&
+                input.files.length > 0
+            )
+                ? input.files[0]
+                : null;
+
+            if (!archivo) {
+                vacia.hidden = false;
+                seleccionada.hidden = true;
+                crear.disabled = true;
+                return;
+            }
+
+            // COMPROBAR FORMATO
+
+            const extension = archivo.name
+                .split(".")
+                .pop()
+                .toUpperCase();
+
+            const formatosPermitidos = [
+                "MP4",
+                "MOV",
+                "M4V",
+                "WEBM",
+                "MXF"
+            ];
+
+            if (!formatosPermitidos.includes(extension)) {
+
+                alert(
+                    "Selecciona un vídeo MP4, MOV, M4V, WEBM o MXF."
+                );
+
+                input.value = "";
+                actualizarArchivo();
+                return;
+            }
+
+            // COMPROBAR TAMAÑO
+
+            const limite = 1024 * 1024 * 1024;
+
+            if (archivo.size > limite) {
+
+                alert(
+                    "El vídeo no puede superar 1 GB."
+                );
+
+                input.value = "";
+                actualizarArchivo();
+                return;
+            }
+
+            // ACTUALIZAR INTERFAZ
+
+            nombre.textContent = archivo.name;
+            formato.textContent = extension;
+
+            peso.textContent = (
+                archivo.size / (1024 * 1024)
+            ).toFixed(1) + " MB";
+
+            vacia.hidden = true;
+            seleccionada.hidden = false;
+            crear.disabled = false;
+        }
+
+        // SELECCIÓN DE ARCHIVO
+
+        input.addEventListener(
+            "change",
+            actualizarArchivo
+        );
+
+        // CAMBIAR VÍDEO
+
+        if (cambiar) {
+            cambiar.addEventListener(
+                "click",
+                function () {
+                    input.click();
+                }
+            );
+        }
+
+        // ARRASTRAR Y SOLTAR
+
+        [
+            "dragenter",
+            "dragover"
+        ].forEach(function (tipo) {
+
+            zona.addEventListener(
+                tipo,
+                function (evento) {
+                    evento.preventDefault();
+
+                    zona.classList.add(
+                        "arrastrando"
+                    );
+                }
+            );
+        });
+
+        [
+            "dragleave",
+            "drop"
+        ].forEach(function (tipo) {
+
+            zona.addEventListener(
+                tipo,
+                function (evento) {
+                    evento.preventDefault();
+
+                    zona.classList.remove(
+                        "arrastrando"
+                    );
+                }
+            );
+        });
+
+        zona.addEventListener(
+            "drop",
+            function (evento) {
+
+                if (
+                    !evento.dataTransfer ||
+                    !evento.dataTransfer.files.length
+                ) {
+                    return;
+                }
+
+                try {
+                    const transferencia = new DataTransfer();
+
+                    transferencia.items.add(
+                        evento.dataTransfer.files[0]
+                    );
+
+                    input.files = transferencia.files;
+
+                    actualizarArchivo();
+
+                } catch (error) {
+
+                    console.warn(
+                        "No se ha podido añadir el archivo arrastrado.",
+                        error
+                    );
+                }
+            }
+        );
+
+        // ENVÍO DEL FORMULARIO
+
+        formulario.addEventListener(
+            "submit",
+            function (evento) {
+
+                if (
+                    !input.files ||
+                    input.files.length === 0
+                ) {
+                    evento.preventDefault();
+                    actualizarArchivo();
+                    return;
+                }
+
+                crear.disabled = true;
+
+                const texto = crear.querySelector(
+                    "span"
+                );
+
+                if (texto) {
+                    texto.textContent = "Subiendo vídeo...";
+                }
+            }
+        );
+
+        // ESTADO INICIAL
+
+        actualizarArchivo();
+    }
+
+    if (document.readyState === "loading") {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            iniciarSubida
+        );
+
+    } else {
+        iniciarSubida();
+    }
+
+})();
+</script>
 
 {% endblock %}

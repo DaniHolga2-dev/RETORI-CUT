@@ -1,0 +1,149 @@
+[Script Info]
+Title: RETORI-CUT
+ScriptType: v4.00+
+PlayResX: 720
+PlayResY: 1280
+ScaledBorderAndShadow: yes
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,53,&H00FFBD52,&H00FFBD52,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,5,1,2,56,56,289,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+Dialogue: 0,0:00:00.00,0:00:00.16,Default,,0,0,0,,Mira
+Dialogue: 0,0:00:00.16,0:00:00.78,Default,,0,0,0,,Mira esto,
+Dialogue: 0,0:00:00.78,0:00:01.12,Default,,0,0,0,,Mira esto, nigiris
+Dialogue: 0,0:00:01.12,0:00:01.20,Default,,0,0,0,,de
+Dialogue: 0,0:00:01.20,0:00:01.84,Default,,0,0,0,,de socarrán.
+Dialogue: 0,0:00:01.84,0:00:02.02,Default,,0,0,0,,de socarrán. No
+Dialogue: 0,0:00:02.02,0:00:02.12,Default,,0,0,0,,sé
+Dialogue: 0,0:00:02.12,0:00:02.22,Default,,0,0,0,,sé si
+Dialogue: 0,0:00:02.22,0:00:02.30,Default,,0,0,0,,sé si los
+Dialogue: 0,0:00:02.30,0:00:02.78,Default,,0,0,0,,japoneses
+Dialogue: 0,0:00:02.78,0:00:03.28,Default,,0,0,0,,japoneses aprobarían
+Dialogue: 0,0:00:03.28,0:00:03.54,Default,,0,0,0,,japoneses aprobarían esto,
+Dialogue: 0,0:00:03.64,0:00:03.76,Default,,0,0,0,,pero
+Dialogue: 0,0:00:03.76,0:00:03.98,Default,,0,0,0,,pero bueno,
+Dialogue: 0,0:00:03.98,0:00:04.16,Default,,0,0,0,,pero bueno, está
+Dialogue: 0,0:00:04.16,0:00:04.28,Default,,0,0,0,,que
+Dialogue: 0,0:00:04.28,0:00:04.82,Default,,0,0,0,,que flipas.
+Dialogue: 0,0:00:04.82,0:00:05.06,Default,,0,0,0,,que flipas. Primero
+Dialogue: 0,0:00:05.06,0:00:05.20,Default,,0,0,0,,vamos
+Dialogue: 0,0:00:05.20,0:00:05.26,Default,,0,0,0,,vamos a
+Dialogue: 0,0:00:05.26,0:00:05.42,Default,,0,0,0,,vamos a hacer
+Dialogue: 0,0:00:05.42,0:00:05.54,Default,,0,0,0,,un
+Dialogue: 0,0:00:05.54,0:00:05.62,Default,,0,0,0,,un buen
+Dialogue: 0,0:00:05.62,0:00:05.98,Default,,0,0,0,,un buen sofrito
+Dialogue: 0,0:00:05.98,0:00:06.22,Default,,0,0,0,,con
+Dialogue: 0,0:00:06.22,0:00:06.60,Default,,0,0,0,,con tomate
+Dialogue: 0,0:00:06.60,0:00:06.74,Default,,0,0,0,,con tomate y
+Dialogue: 0,0:00:06.74,0:00:07.32,Default,,0,0,0,,ajo.
+Dialogue: 0,0:00:07.32,0:00:07.48,Default,,0,0,0,,ajo. Hoy
+Dialogue: 0,0:00:07.48,0:00:07.62,Default,,0,0,0,,ajo. Hoy vamos
+Dialogue: 0,0:00:07.62,0:00:07.74,Default,,0,0,0,,a
+Dialogue: 0,0:00:07.74,0:00:07.96,Default,,0,0,0,,a utilizar
+Dialogue: 0,0:00:07.96,0:00:08.26,Default,,0,0,0,,a utilizar el
+Dialogue: 0,0:00:08.26,0:00:08.46,Default,,0,0,0,,arroz
+Dialogue: 0,0:00:08.46,0:00:08.78,Default,,0,0,0,,arroz bomba
+Dialogue: 0,0:00:08.78,0:00:08.88,Default,,0,0,0,,arroz bomba de
+Dialogue: 0,0:00:08.88,0:00:09.14,Default,,0,0,0,,nomen.
+Dialogue: 0,0:00:09.74,0:00:10.10,Default,,0,0,0,,Sofreiremos
+Dialogue: 0,0:00:10.10,0:00:10.22,Default,,0,0,0,,Sofreiremos un
+Dialogue: 0,0:00:10.22,0:00:10.38,Default,,0,0,0,,Sofreiremos un poco
+Dialogue: 0,0:00:10.38,0:00:10.52,Default,,0,0,0,,el
+Dialogue: 0,0:00:10.52,0:00:10.76,Default,,0,0,0,,el arroz
+Dialogue: 0,0:00:10.76,0:00:10.90,Default,,0,0,0,,el arroz y
+Dialogue: 0,0:00:10.90,0:00:11.40,Default,,0,0,0,,añadiremos
+Dialogue: 0,0:00:11.40,0:00:11.56,Default,,0,0,0,,añadiremos el
+Dialogue: 0,0:00:11.56,0:00:11.84,Default,,0,0,0,,añadiremos el caldo.
+Dialogue: 0,0:00:11.90,0:00:11.94,Default,,0,0,0,,Y
+Dialogue: 0,0:00:11.94,0:00:12.00,Default,,0,0,0,,Y en
+Dialogue: 0,0:00:12.00,0:00:12.16,Default,,0,0,0,,Y en este
+Dialogue: 0,0:00:12.16,0:00:12.40,Default,,0,0,0,,caso
+Dialogue: 0,0:00:12.40,0:00:12.56,Default,,0,0,0,,caso le
+Dialogue: 0,0:00:12.56,0:00:12.60,Default,,0,0,0,,caso le he
+Dialogue: 0,0:00:12.60,0:00:12.68,Default,,0,0,0,,puesto
+Dialogue: 0,0:00:12.68,0:00:13.06,Default,,0,0,0,,puesto seis
+Dialogue: 0,0:00:13.06,0:00:13.34,Default,,0,0,0,,puesto seis partes
+Dialogue: 0,0:00:13.34,0:00:13.58,Default,,0,0,0,,de
+Dialogue: 0,0:00:13.58,0:00:13.88,Default,,0,0,0,,de caldo
+Dialogue: 0,0:00:13.88,0:00:14.06,Default,,0,0,0,,de caldo por
+Dialogue: 0,0:00:14.06,0:00:14.20,Default,,0,0,0,,uno
+Dialogue: 0,0:00:14.20,0:00:14.36,Default,,0,0,0,,uno de
+Dialogue: 0,0:00:14.36,0:00:14.48,Default,,0,0,0,,uno de arroz.
+Dialogue: 0,0:00:14.54,0:00:14.62,Default,,0,0,0,,Y
+Dialogue: 0,0:00:14.62,0:00:14.76,Default,,0,0,0,,Y para
+Dialogue: 0,0:00:14.76,0:00:14.90,Default,,0,0,0,,Y para hacer
+Dialogue: 0,0:00:14.90,0:00:15.02,Default,,0,0,0,,el
+Dialogue: 0,0:00:15.02,0:00:15.58,Default,,0,0,0,,el aliolio,
+Dialogue: 0,0:00:15.58,0:00:15.59,Default,,0,0,0,,el aliolio, vamos
+Dialogue: 0,0:00:15.58,0:00:15.70,Default,,0,0,0,,a
+Dialogue: 0,0:00:15.70,0:00:15.98,Default,,0,0,0,,a confitar
+Dialogue: 0,0:00:15.98,0:00:16.18,Default,,0,0,0,,a confitar unos
+Dialogue: 0,0:00:16.18,0:00:16.42,Default,,0,0,0,,dientes
+Dialogue: 0,0:00:16.42,0:00:16.66,Default,,0,0,0,,dientes de
+Dialogue: 0,0:00:16.66,0:00:16.90,Default,,0,0,0,,dientes de ajo
+Dialogue: 0,0:00:16.90,0:00:17.12,Default,,0,0,0,,con
+Dialogue: 0,0:00:17.12,0:00:17.32,Default,,0,0,0,,con unas
+Dialogue: 0,0:00:17.32,0:00:17.66,Default,,0,0,0,,con unas ramitas
+Dialogue: 0,0:00:17.66,0:00:17.84,Default,,0,0,0,,de
+Dialogue: 0,0:00:17.84,0:00:18.24,Default,,0,0,0,,de romero.
+Dialogue: 0,0:00:18.24,0:00:18.32,Default,,0,0,0,,de romero. Y
+Dialogue: 0,0:00:18.32,0:00:18.40,Default,,0,0,0,,ya
+Dialogue: 0,0:00:18.40,0:00:18.66,Default,,0,0,0,,ya sabes,
+Dialogue: 0,0:00:18.66,0:00:18.78,Default,,0,0,0,,ya sabes, para
+Dialogue: 0,0:00:18.78,0:00:19.20,Default,,0,0,0,,confitar
+Dialogue: 0,0:00:19.20,0:00:19.56,Default,,0,0,0,,confitar siempre
+Dialogue: 0,0:00:19.56,0:00:19.78,Default,,0,0,0,,confitar siempre a
+Dialogue: 0,0:00:19.78,0:00:19.94,Default,,0,0,0,,fuego
+Dialogue: 0,0:00:19.94,0:00:20.18,Default,,0,0,0,,fuego o
+Dialogue: 0,0:00:20.18,0:00:20.34,Default,,0,0,0,,fuego o lento.
+Dialogue: 0,0:00:20.54,0:00:20.90,Default,,0,0,0,,Rematamos
+Dialogue: 0,0:00:20.90,0:00:21.06,Default,,0,0,0,,Rematamos el
+Dialogue: 0,0:00:21.06,0:00:21.36,Default,,0,0,0,,Rematamos el aliolio
+Dialogue: 0,0:00:21.36,0:00:21.48,Default,,0,0,0,,con
+Dialogue: 0,0:00:21.48,0:00:21.60,Default,,0,0,0,,con los
+Dialogue: 0,0:00:21.60,0:00:21.74,Default,,0,0,0,,con los ajos
+Dialogue: 0,0:00:21.74,0:00:22.30,Default,,0,0,0,,confitados
+Dialogue: 0,0:00:22.30,0:00:22.48,Default,,0,0,0,,confitados y
+Dialogue: 0,0:00:22.48,0:00:22.60,Default,,0,0,0,,confitados y un
+Dialogue: 0,0:00:22.60,0:00:22.78,Default,,0,0,0,,poquito
+Dialogue: 0,0:00:22.78,0:00:23.00,Default,,0,0,0,,poquito de
+Dialogue: 0,0:00:23.00,0:00:23.16,Default,,0,0,0,,poquito de heli.
+Dialogue: 0,0:00:23.32,0:00:23.68,Default,,0,0,0,,Cortaremos
+Dialogue: 0,0:00:23.68,0:00:23.86,Default,,0,0,0,,Cortaremos la
+Dialogue: 0,0:00:23.86,0:00:24.14,Default,,0,0,0,,Cortaremos la lubina
+Dialogue: 0,0:00:24.14,0:00:24.32,Default,,0,0,0,,bien
+Dialogue: 0,0:00:24.32,0:00:24.80,Default,,0,0,0,,bien finita
+Dialogue: 0,0:00:24.80,0:00:25.24,Default,,0,0,0,,bien finita y
+Dialogue: 0,0:00:25.24,0:00:25.62,Default,,0,0,0,,volearemos
+Dialogue: 0,0:00:25.62,0:00:25.88,Default,,0,0,0,,volearemos los
+Dialogue: 0,0:00:25.88,0:00:26.32,Default,,0,0,0,,volearemos los nigiris
+Dialogue: 0,0:00:26.32,0:00:26.46,Default,,0,0,0,,con
+Dialogue: 0,0:00:26.46,0:00:26.58,Default,,0,0,0,,con la
+Dialogue: 0,0:00:26.58,0:00:26.72,Default,,0,0,0,,con la ayuda
+Dialogue: 0,0:00:26.72,0:00:26.90,Default,,0,0,0,,de
+Dialogue: 0,0:00:26.90,0:00:27.06,Default,,0,0,0,,de las
+Dialogue: 0,0:00:27.06,0:00:27.28,Default,,0,0,0,,de las manos.
+Dialogue: 0,0:00:27.28,0:00:27.70,Default,,0,0,0,,Y
+Dialogue: 0,0:00:27.70,0:00:27.80,Default,,0,0,0,,Y ya
+Dialogue: 0,0:00:27.80,0:00:27.98,Default,,0,0,0,,Y ya solo
+Dialogue: 0,0:00:27.98,0:00:28.24,Default,,0,0,0,,queda
+Dialogue: 0,0:00:28.24,0:00:28.98,Default,,0,0,0,,queda montar.
+Dialogue: 0,0:00:28.98,0:00:29.42,Default,,0,0,0,,queda montar. Lubina
+Dialogue: 0,0:00:29.42,0:00:30.20,Default,,0,0,0,,flambeada,
+Dialogue: 0,0:00:30.20,0:00:30.30,Default,,0,0,0,,flambeada, un
+Dialogue: 0,0:00:30.30,0:00:30.56,Default,,0,0,0,,flambeada, un poquito
+Dialogue: 0,0:00:30.56,0:00:30.82,Default,,0,0,0,,de
+Dialogue: 0,0:00:30.82,0:00:31.10,Default,,0,0,0,,de alioli
+Dialogue: 0,0:00:31.10,0:00:31.28,Default,,0,0,0,,de alioli de
+Dialogue: 0,0:00:31.28,0:00:31.98,Default,,0,0,0,,romero,
+Dialogue: 0,0:00:31.98,0:00:32.46,Default,,0,0,0,,romero, eneldo
+Dialogue: 0,0:00:32.46,0:00:32.82,Default,,0,0,0,,romero, eneldo y
+Dialogue: 0,0:00:32.82,0:00:33.64,Default,,0,0,0,,limarrallada.
+Dialogue: 0,0:00:33.64,0:00:33.84,Default,,0,0,0,,limarrallada. Y
+Dialogue: 0,0:00:33.84,0:00:33.94,Default,,0,0,0,,limarrallada. Y a
+Dialogue: 0,0:00:33.94,0:00:34.16,Default,,0,0,0,,comer.

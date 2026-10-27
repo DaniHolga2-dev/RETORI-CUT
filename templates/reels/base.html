@@ -1,0 +1,1275 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html
+    lang="es"
+    data-theme="{% if user.is_authenticated and user.preferencias_retori_cut.tema == 'oscuro' %}oscuro{% else %}claro{% endif %}"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="RETORI-CUT - Edición automática de Reels de Retorika"
+    >
+
+    <title>{% block title %}RETORI-CUT{% endblock %}</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{% static 'reels/img/logotipo.png' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'reels/css/style.css' %}?v=dark3"
+    >
+
+    <style>
+
+        /* ====================================================
+           BARRA LATERAL
+        ==================================================== */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: #ffffff;
+            border-right: 1px solid #e8edf5;
+            z-index: 100;
+        }
+
+        .sidebar-marca {
+            flex-shrink: 0;
+            padding-bottom: 19px;
+            margin-bottom: 23px;
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .sidebar-marca .marca-enlace {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .sidebar-marca .marca-logotipo {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .sidebar-marca .marca-texto {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .sidebar-marca .marca-texto strong {
+            display: block;
+            color: #101b38;
+            font-weight: 800;
+            letter-spacing: -.4px;
+            white-space: nowrap;
+        }
+
+        .sidebar-marca .marca-texto small {
+            display: block;
+            color: #8592a8;
+        }
+
+        .sidebar-seccion-titulo {
+            margin: 0 0 15px;
+            padding: 0 12px;
+            color: #96a1b3;
+            font-size: 10px;
+            line-height: 1.5;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* ====================================================
+           NAVEGACIÓN
+        ==================================================== */
+
+        .sidebar-navegacion {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-navegacion .nav-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 43px;
+            padding: 11px 13px;
+            overflow: hidden;
+            isolation: isolate;
+            border-radius: 11px;
+            color: #64748b;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition:
+                background .25s ease,
+                color .25s ease,
+                box-shadow .25s ease,
+                transform .25s ease;
+        }
+
+        .sidebar-navegacion .nav-item > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar-navegacion .nav-item::before {
+            content: "";
+            position: absolute;
+            z-index: 0;
+            top: -50%;
+            left: -85%;
+            width: 50%;
+            height: 200%;
+            transform: rotate(25deg);
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,.55),
+                transparent
+            );
+            pointer-events: none;
+        }
+
+        .sidebar-navegacion .nav-item:hover::before {
+            animation: retori-brillo-menu .8s ease-out;
+        }
+
+        @keyframes retori-brillo-menu {
+            from { left: -85%; }
+            to { left: 150%; }
+        }
+
+        .sidebar-navegacion .nav-icono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: inherit;
+            transition: transform .25s ease;
+        }
+
+        .sidebar-navegacion .nav-icono svg {
+            width: 19px;
+            height: 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.9;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .sidebar-navegacion .nav-item:hover .nav-icono {
+            transform: translateX(2px);
+        }
+
+        .sidebar-navegacion .nav-item:not(.nav-item-principal):hover {
+            background: #eef5ff;
+            color: #156fe7;
+        }
+
+        .sidebar-navegacion .nav-item:not(.nav-item-principal).active {
+            background: #eaf2ff;
+            color: #156fe7;
+            font-weight: 700;
+        }
+
+        .sidebar-navegacion .nav-item-principal {
+            background: linear-gradient(
+                110deg,
+                #156fe7,
+                #2079f2 55%,
+                #156fe7
+            );
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow:
+                0 5px 14px rgba(21,111,231,.15),
+                inset 0 1px 0 rgba(255,255,255,.15);
+        }
+
+        .sidebar-navegacion .nav-item-principal:hover {
+            background: linear-gradient(
+                110deg,
+                #0d5cc9,
+                #3b91ff 55%,
+                #0d5cc9
+            );
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(21,111,231,.24);
+        }
+
+        .sidebar-navegacion .nav-item-principal.active {
+            color: #ffffff;
+        }
+
+        .sidebar-zona-inferior {
+            margin-top: auto;
+            flex-shrink: 0;
+            padding-top: 26px;
+        }
+
+        /* ====================================================
+           RÍO ANIMADO
+        ==================================================== */
+
+        .retori-rio {
+            position: relative;
+            width: 100%;
+            height: 110px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: .95;
+        }
+
+        .retori-rio svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .retori-fluido-cinta {
+            fill: none;
+            stroke-linecap: round;
+            stroke-dasharray: 35 20;
+            filter: drop-shadow(
+                0 0 2px rgba(21,111,231,.25)
+            );
+        }
+
+        /* ====================================================
+           NUEVO PERFIL INFERIOR
+        ==================================================== */
+
+        .sidebar-perfil {
+            border-top: 1px solid #edf1f6;
+            padding-top: 15px;
+            padding-bottom: 8px;
+        }
+
+        .sidebar-perfil-enlace {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            width: 100%;
+            min-width: 0;
+            padding: 11px 10px;
+            border: 1px solid transparent;
+            border-radius: 13px;
+            background: transparent;
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            transition:
+                background .25s ease,
+                border-color .25s ease,
+                box-shadow .25s ease,
+                transform .25s ease;
+        }
+
+        .sidebar-perfil-enlace:hover {
+            background: #eef5ff;
+            border-color: #dbe9ff;
+            box-shadow: 0 5px 16px rgba(21,111,231,.06);
+        }
+
+        .sidebar-perfil-enlace:focus-visible {
+            outline: 3px solid #80b6ff;
+            outline-offset: 3px;
+        }
+
+        .sidebar-perfil-enlace.active {
+            background: #eaf2ff;
+            border-color: #dbe9ff;
+        }
+
+        /* Avatar corporativo */
+
+        .perfil-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 41px;
+            height: 41px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #156fe7,
+                #64afff
+            );
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: -.3px;
+            box-shadow: 0 3px 10px rgba(21,111,231,.15);
+            transition: transform .25s ease;
+        }
+
+        .sidebar-perfil-enlace:hover .perfil-avatar {
+            transform: scale(1.05);
+        }
+
+        /* Información del usuario */
+
+        .perfil-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .perfil-info strong {
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            color: #101b38;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.35;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .perfil-info small {
+            display: block;
+            overflow: hidden;
+            color: #8290a6;
+            font-size: 10px;
+            font-weight: 500;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Flecha de acceso, no desplegable */
+
+        .perfil-acceso-icono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 19px;
+            height: 19px;
+            flex-shrink: 0;
+            color: #8798ae;
+            transition:
+                color .25s ease,
+                transform .25s ease;
+        }
+
+        .perfil-acceso-icono svg {
+            width: 19px;
+            height: 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .sidebar-perfil-enlace:hover .perfil-acceso-icono {
+            color: #156fe7;
+            transform: translate(2px,-2px);
+        }
+
+        /* ====================================================
+           MENSAJES
+        ==================================================== */
+
+        .mensaje-sistema {
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border: 1px solid #ccebd8;
+            border-radius: 12px;
+            background: #eaf7ef;
+            color: #17633b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .mensaje-sistema.error {
+            background: #fff0f2;
+            color: #a82a40;
+            border-color: #f4cbd3;
+        }
+
+        .mensaje-sistema.warning {
+            background: #fff8e8;
+            color: #946312;
+            border-color: #f5e3b5;
+        }
+
+        /* ====================================================
+           ACCESO PÚBLICO
+        ==================================================== */
+
+        .accesos-publicos {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px 0;
+        }
+
+        .acceso-enlace {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .acceso-iniciar {
+            color: #156fe7;
+            background: #eaf2ff;
+        }
+
+        .acceso-registro {
+            color: white;
+            background: #156fe7;
+        }
+
+        .aplicacion {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        .aplicacion > .contenido {
+            padding-top: 36px;
+        }
+
+        /* ====================================================
+           MODO OSCURO - VARIABLES GENERALES
+        ==================================================== */
+
+        html[data-theme="oscuro"] {
+            color-scheme: dark;
+
+            --azul-retorika: #398cff;
+            --azul-profundo: #2675d7;
+            --azul-muy-claro: #203656;
+            --azul-claro: #263d60;
+            --blanco: #192437;
+            --texto: #f1f5ff;
+            --texto-secundario: #a3b1c8;
+            --texto-suave: #8b9bb3;
+            --borde: #304057;
+            --borde-azul: #41689e;
+            --fondo: #0d1423;
+            --fondo-sidebar: #111b2b;
+            --sombra-suave: 0 8px 30px rgba(0,0,0,.15);
+            --sombra: 0 14px 40px rgba(0,0,0,.22);
+        }
+
+        html[data-theme="oscuro"] body {
+            background: #0d1423;
+            color: #f1f5ff;
+        }
+
+        html[data-theme="oscuro"] .sidebar {
+            background: #111b2b;
+            border-color: #304057;
+        }
+
+        html[data-theme="oscuro"] .sidebar-marca,
+        html[data-theme="oscuro"] .sidebar-perfil {
+            border-color: #304057;
+        }
+
+        html[data-theme="oscuro"] .sidebar-marca .marca-texto strong {
+            color: #f1f5ff;
+        }
+
+        html[data-theme="oscuro"] .sidebar-marca .marca-texto small,
+        html[data-theme="oscuro"] .sidebar-seccion-titulo {
+            color: #a3b1c8;
+        }
+
+        html[data-theme="oscuro"] .sidebar-navegacion .nav-item:not(.nav-item-principal) {
+            color: #a3b1c8;
+        }
+
+        html[data-theme="oscuro"] .sidebar-navegacion .nav-item:not(.nav-item-principal):hover,
+        html[data-theme="oscuro"] .sidebar-navegacion .nav-item:not(.nav-item-principal).active {
+            background: #203656;
+            color: #8dbdff;
+        }
+
+        /* ====================================================
+           MODO OSCURO - PERFIL
+        ==================================================== */
+
+        html[data-theme="oscuro"] .sidebar-perfil-enlace {
+            background: transparent;
+            border-color: transparent;
+        }
+
+        html[data-theme="oscuro"] .sidebar-perfil-enlace:hover {
+            background: #192c46;
+            border-color: #304c71;
+            box-shadow: 0 5px 18px rgba(0,0,0,.12);
+        }
+
+        html[data-theme="oscuro"] .sidebar-perfil-enlace.active {
+            background: #203656;
+            border-color: #304c71;
+        }
+
+        html[data-theme="oscuro"] .perfil-avatar {
+            background: linear-gradient(
+                135deg,
+                #156fe7,
+                #398cff
+            );
+            color: #ffffff;
+            box-shadow: 0 3px 12px rgba(21,111,231,.2);
+        }
+
+        html[data-theme="oscuro"] .perfil-info strong {
+            color: #f1f5ff;
+        }
+
+        html[data-theme="oscuro"] .perfil-info small {
+            color: #a3b1c8;
+        }
+
+        html[data-theme="oscuro"] .perfil-acceso-icono {
+            color: #8da3c0;
+        }
+
+        html[data-theme="oscuro"] .sidebar-perfil-enlace:hover .perfil-acceso-icono {
+            color: #8dbdff;
+        }
+
+        /* ====================================================
+           MODO OSCURO - MENSAJES
+        ==================================================== */
+
+        html[data-theme="oscuro"] .mensaje-sistema {
+            background: #173c31;
+            border-color: #28644d;
+            color: #a5e9c4;
+        }
+
+        html[data-theme="oscuro"] .mensaje-sistema.error {
+            background: #42232f;
+            border-color: #754054;
+            color: #ffb8c6;
+        }
+
+        html[data-theme="oscuro"] .mensaje-sistema.warning {
+            background: #40331d;
+            border-color: #70572c;
+            color: #f7d58c;
+        }
+
+        /* ====================================================
+           MODO OSCURO - EDITOR
+        ==================================================== */
+
+        html[data-theme="oscuro"] .zona-subida,
+        html[data-theme="oscuro"] .archivo-seleccionado,
+        html[data-theme="oscuro"] .procesando-tarjeta {
+            background-color: #192437;
+            border-color: #304057;
+            color: #f1f5ff;
+        }
+
+        html[data-theme="oscuro"] .formatos-admitidos span,
+        html[data-theme="oscuro"] .boton-cambiar-video {
+            background: #192437;
+            border-color: #304057;
+            color: #a3b1c8;
+        }
+
+        html[data-theme="oscuro"] .fase-icono {
+            background: #26364d;
+            color: #b4c4db;
+        }
+
+        html[data-theme="oscuro"] .procesando-icono {
+            background: #173c31;
+        }
+
+        html[data-theme="oscuro"] .errores-formulario {
+            background: #42232f;
+            border-color: #754054;
+            color: #ffb8c6;
+        }
+
+        html[data-theme="oscuro"] input:not([type="checkbox"]):not([type="file"]),
+        html[data-theme="oscuro"] select,
+        html[data-theme="oscuro"] textarea {
+            color-scheme: dark;
+        }
+
+        /* ====================================================
+           RESPONSIVE
+        ==================================================== */
+
+        @media (max-width: 768px) {
+
+            .sidebar-marca .marca-logotipo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .retori-rio {
+                display: none;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: 0;
+            }
+
+            .aplicacion {
+                margin-left: 0;
+            }
+
+            .aplicacion > .contenido {
+                padding-top: 20px;
+            }
+
+            .accesos-publicos {
+                padding: 12px 16px 0;
+            }
+
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .retori-fluido-cinta {
+                filter: none;
+            }
+
+            .sidebar-navegacion .nav-item::before {
+                animation: none !important;
+            }
+
+            .sidebar-perfil-enlace,
+            .perfil-avatar,
+            .perfil-acceso-icono {
+                transition: none;
+            }
+
+        }
+
+    </style>
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+
+<!-- ============================================================
+     BARRA LATERAL
+============================================================ -->
+
+<aside class="sidebar">
+
+    <!-- MARCA -->
+
+    <div class="sidebar-marca">
+
+        <a href="{% url 'nuevo_reel' %}" class="marca-enlace">
+
+            <img
+                src="{% static 'reels/img/logotipo.png' %}"
+                alt="Logotipo RETORI-CUT"
+                class="marca-logotipo"
+            >
+
+            <div class="marca-texto">
+                <strong>RETORI-CUT</strong>
+                <small>by Retorika</small>
+            </div>
+
+        </a>
+
+    </div>
+
+
+    {% if user.is_authenticated %}
+
+        <p class="sidebar-seccion-titulo">
+            ESPACIO DE TRABAJO
+        </p>
+
+        <nav
+            class="sidebar-navegacion"
+            aria-label="Navegación principal"
+        >
+
+            <!-- NUEVO REEL -->
+
+            <a
+                href="{% url 'nuevo_reel' %}"
+                class="nav-item nav-item-principal {% block nav_nuevo %}{% endblock %}"
+            >
+
+                <span class="nav-icono">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 8v8"/>
+                        <path d="M8 12h8"/>
+                    </svg>
+                </span>
+
+                <span>Nuevo Reel</span>
+
+            </a>
+
+
+            <!-- MIS VÍDEOS -->
+
+            <a
+                href="{% url 'mis_videos' %}"
+                class="nav-item {% block nav_videos %}{% endblock %}"
+            >
+
+                <span class="nav-icono">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="16" rx="3"/>
+                        <path d="M7 4v16"/>
+                        <path d="M17 4v16"/>
+                        <path d="M3 9h4"/>
+                        <path d="M3 15h4"/>
+                        <path d="M17 9h4"/>
+                        <path d="M17 15h4"/>
+                        <path d="m10 9 5 3-5 3z"/>
+                    </svg>
+                </span>
+
+                <span>Mis vídeos</span>
+
+            </a>
+
+
+            <!-- PLANTILLAS -->
+
+            <a
+                href="{% url 'mis_plantillas' %}"
+                class="nav-item {% block nav_plantillas %}{% endblock %}"
+            >
+
+                <span class="nav-icono">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="13" height="13" rx="2"/>
+                        <path d="M8 20h10a2 2 0 0 0 2-2V8"/>
+                        <path d="M7 8h5"/>
+                        <path d="M7 12h3"/>
+                    </svg>
+                </span>
+
+                <span>Plantillas</span>
+
+            </a>
+
+
+            <!-- CONFIGURACIÓN -->
+
+            <a
+                href="{% url 'configuracion' %}"
+                class="nav-item {% block nav_configuracion %}{% endblock %}"
+            >
+
+                <span class="nav-icono">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V21h-3v-.78A1.7 1.7 0 0 0 10.66 18.66a1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.56-1.04H4.5v-3h.94A1.7 1.7 0 0 0 7 9.92a1.7 1.7 0 0 0-.34-1.88L6.6 7.98l2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.7 4.7V4h3v.7a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.04h.54v3h-.54A1.7 1.7 0 0 0 19.4 15Z"/>
+                    </svg>
+                </span>
+
+                <span>Configuración</span>
+
+            </a>
+
+        </nav>
+
+    {% endif %}
+
+
+    <!-- ========================================================
+         ZONA INFERIOR
+    ========================================================= -->
+
+    <div class="sidebar-zona-inferior">
+
+        <!-- RÍO ANIMADO -->
+
+        <div
+            class="retori-rio"
+            id="retori-rio"
+            aria-hidden="true"
+        >
+
+            <svg
+                id="retori-rio-svg"
+                viewBox="0 0 220 110"
+                preserveAspectRatio="xMidYMid meet"
+            >
+
+                <defs>
+
+                    <linearGradient
+                        id="retori-rio-gradiente"
+                        x1="0"
+                        y1="0"
+                        x2="1"
+                        y2="0"
+                    >
+
+                        <stop
+                            offset="0%"
+                            stop-color="#156fe7"
+                            stop-opacity=".08"
+                        />
+
+                        <stop
+                            offset="45%"
+                            stop-color="#156fe7"
+                            stop-opacity="1"
+                        />
+
+                        <stop
+                            offset="70%"
+                            stop-color="#70d7ff"
+                            stop-opacity=".95"
+                        />
+
+                        <stop
+                            offset="100%"
+                            stop-color="#156fe7"
+                            stop-opacity=".08"
+                        />
+
+                    </linearGradient>
+
+                </defs>
+
+                <path
+                    class="retori-fluido-cinta"
+                    data-cinta="0"
+                    stroke="url(#retori-rio-gradiente)"
+                    stroke-width="1.8"
+                />
+
+                <path
+                    class="retori-fluido-cinta"
+                    data-cinta="1"
+                    stroke="url(#retori-rio-gradiente)"
+                    stroke-width="3"
+                />
+
+                <path
+                    class="retori-fluido-cinta"
+                    data-cinta="2"
+                    stroke="url(#retori-rio-gradiente)"
+                    stroke-width="1.8"
+                />
+
+            </svg>
+
+        </div>
+
+
+        <!-- ====================================================
+             PERFIL DEL USUARIO
+             ACCESO DIRECTO, SIN DESPLEGABLE
+        ===================================================== -->
+
+        {% if user.is_authenticated %}
+
+            <div class="sidebar-perfil">
+
+                <a
+                    href="{% url 'mi_perfil' %}"
+                    class="sidebar-perfil-enlace {% block nav_perfil %}{% endblock %}"
+                    aria-label="Ir a mi perfil"
+                    title="Ver mi perfil"
+                >
+
+                    <!-- AVATAR CON INICIALES -->
+
+                    <span class="perfil-avatar" aria-hidden="true">
+                        {{ user.first_name|default:user.email|first|upper }}{{ user.last_name|first|upper }}
+                    </span>
+
+
+                    <!-- NOMBRE COMPLETO -->
+
+                    <span class="perfil-info">
+
+                        <strong>
+                            {% if user.first_name or user.last_name %}
+                                {{ user.get_full_name|default:user.username }}
+                            {% else %}
+                                {{ user.email|default:user.username }}
+                            {% endif %}
+                        </strong>
+
+                        <small>Mi cuenta</small>
+
+                    </span>
+
+
+                    <!-- FLECHA DE ACCESO -->
+
+                    <span class="perfil-acceso-icono" aria-hidden="true">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 17 17 7"/>
+                            <path d="M8 7h9v9"/>
+                        </svg>
+
+                    </span>
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</aside>
+
+
+<!-- ============================================================
+     CONTENIDO
+============================================================ -->
+
+<div class="aplicacion">
+
+    {% if not user.is_authenticated %}
+
+        <nav
+            class="accesos-publicos"
+            aria-label="Acceso a la cuenta"
+        >
+
+            <a
+                href="{% url 'iniciar_sesion' %}"
+                class="acceso-enlace acceso-iniciar"
+            >
+                Iniciar sesión
+            </a>
+
+            <a
+                href="{% url 'registro' %}"
+                class="acceso-enlace acceso-registro"
+            >
+                Crear cuenta
+            </a>
+
+        </nav>
+
+    {% endif %}
+
+
+    <main class="contenido">
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div
+                    class="mensaje-sistema {% if message.tags %}{{ message.tags }}{% endif %}"
+                    role="status"
+                >
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</div>
+
+
+<!-- ============================================================
+     JAVASCRIPT GENERAL
+============================================================ -->
+
+<script src="{% static 'reels/js/editor.js' %}"></script>
+
+
+<!-- ============================================================
+     PREVISUALIZACIÓN DEL TEMA
+============================================================ -->
+
+<script>
+(function () {
+    "use strict";
+
+    const selector = document.getElementById("id_tema");
+
+    if (!selector) {
+        return;
+    }
+
+    const temaInicial = document.documentElement.dataset.theme;
+
+    selector.addEventListener("change", function () {
+
+        document.documentElement.dataset.theme =
+            selector.value === "oscuro"
+                ? "oscuro"
+                : "claro";
+
+    });
+
+    const formulario = selector.closest("form");
+
+    if (formulario) {
+
+        formulario.addEventListener("reset", function () {
+
+            document.documentElement.dataset.theme =
+                temaInicial;
+
+        });
+
+    }
+
+})();
+</script>
+
+
+<!-- ============================================================
+     RÍO INTERACTIVO
+============================================================ -->
+
+<script>
+(function () {
+
+    "use strict";
+
+    const svg = document.getElementById("retori-rio-svg");
+
+    if (!svg) {
+        return;
+    }
+
+    const cintas = Array.from(
+        svg.querySelectorAll(".retori-fluido-cinta")
+    );
+
+    const reducirMovimiento = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    );
+
+    const ancho = 220;
+    const centro = 55;
+    const posiciones = [-7, 0, 7];
+
+    let tiempoAnterior = 0;
+    let tiempo = 0;
+
+    let expansion = 0;
+    let velocidadExpansion = 0;
+
+    let desplazamiento = 0;
+    let velocidadDesplazamiento = 0;
+
+    const amplitudBase = 10;
+    const amplitudMaxima = 24;
+
+    function crearTrayectoria(indice) {
+
+        const separacion = posiciones[indice];
+
+        const amplitud =
+            amplitudBase +
+            expansion * amplitudMaxima;
+
+        const fase =
+            tiempo * .75 +
+            indice * .52;
+
+        const pasos = 48;
+
+        let trayectoria = "";
+
+        for (let i = 0; i <= pasos; i++) {
+
+            const x = (i / pasos) * ancho;
+
+            const ondaPrincipal = Math.sin(
+                x * .035 - fase
+            );
+
+            const ondaSecundaria = Math.sin(
+                x * .066 + fase * .65
+            ) * .18;
+
+            const onda = ondaPrincipal + ondaSecundaria;
+
+            const torsion = Math.sin(
+                tiempo * 1.15 + x * .024
+            );
+
+            const separacionDinamica =
+                separacion * (1 + expansion * 1.1);
+
+            const y =
+                centro +
+                separacionDinamica +
+                onda * amplitud +
+                torsion * expansion * 3 +
+                desplazamiento;
+
+            trayectoria +=
+                (i === 0 ? "M" : " L") +
+                x.toFixed(2) +
+                " " +
+                y.toFixed(2);
+
+        }
+
+        return trayectoria;
+    }
+
+    function dibujar() {
+
+        cintas.forEach(function (cinta, indice) {
+
+            cinta.setAttribute(
+                "d",
+                crearTrayectoria(indice)
+            );
+
+        });
+
+    }
+
+    function animar(marcaTiempo) {
+
+        if (!tiempoAnterior) {
+            tiempoAnterior = marcaTiempo;
+        }
+
+        const delta = Math.min(
+            (marcaTiempo - tiempoAnterior) / 1000,
+            .05
+        );
+
+        tiempoAnterior = marcaTiempo;
+        tiempo += delta;
+
+        velocidadExpansion +=
+            (-expansion * 13 - velocidadExpansion * 7) *
+            delta;
+
+        expansion += velocidadExpansion * delta;
+
+        velocidadDesplazamiento +=
+            (-desplazamiento * 10 - velocidadDesplazamiento * 6) *
+            delta;
+
+        desplazamiento += velocidadDesplazamiento * delta;
+
+        dibujar();
+
+        if (!reducirMovimiento.matches) {
+            requestAnimationFrame(animar);
+        }
+
+    }
+
+    function expandirFluido() {
+
+        if (reducirMovimiento.matches) {
+            return;
+        }
+
+        velocidadExpansion += .9;
+
+        velocidadDesplazamiento +=
+            (Math.random() - .5) * 15;
+
+    }
+
+    document.addEventListener(
+        "pointerdown",
+        function (evento) {
+
+            if (
+                evento.pointerType === "mouse" &&
+                evento.button !== 0
+            ) {
+                return;
+            }
+
+            expandirFluido();
+
+        },
+        { passive: true }
+    );
+
+    if (reducirMovimiento.matches) {
+        dibujar();
+    } else {
+        requestAnimationFrame(animar);
+    }
+
+})();
+</script>
+
+
+{% block extra_js %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+[Script Info]
+Title: RETORI-CUT
+ScriptType: v4.00+
+PlayResX: 720
+PlayResY: 1280
+ScaledBorderAndShadow: yes
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,53,&H00FFBD52,&H00FFBD52,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,5,1,2,56,56,289,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+Dialogue: 0,0:00:00.00,0:00:01.12,Default,,0,0,0,,{\fad(1000,0)}Mira esto, nigiris
+Dialogue: 0,0:00:01.12,0:00:02.02,Default,,0,0,0,,{\fad(899,0)}de socarrán. No
+Dialogue: 0,0:00:02.02,0:00:02.30,Default,,0,0,0,,{\fad(279,0)}sé si los
+Dialogue: 0,0:00:02.30,0:00:03.54,Default,,0,0,0,,{\fad(1000,0)}japoneses aprobarían esto,
+Dialogue: 0,0:00:03.64,0:00:04.16,Default,,0,0,0,,{\fad(520,0)}pero bueno, está
+Dialogue: 0,0:00:04.16,0:00:05.06,Default,,0,0,0,,{\fad(899,0)}que flipas. Primero
+Dialogue: 0,0:00:05.06,0:00:05.42,Default,,0,0,0,,{\fad(360,0)}vamos a hacer
+Dialogue: 0,0:00:05.42,0:00:05.98,Default,,0,0,0,,{\fad(560,0)}un buen sofrito
+Dialogue: 0,0:00:05.98,0:00:06.74,Default,,0,0,0,,{\fad(759,0)}con tomate y
+Dialogue: 0,0:00:06.74,0:00:07.62,Default,,0,0,0,,{\fad(879,0)}ajo. Hoy vamos
+Dialogue: 0,0:00:07.62,0:00:08.26,Default,,0,0,0,,{\fad(639,0)}a utilizar el
+Dialogue: 0,0:00:08.26,0:00:08.88,Default,,0,0,0,,{\fad(620,0)}arroz bomba de
+Dialogue: 0,0:00:08.88,0:00:09.14,Default,,0,0,0,,{\fad(259,0)}nomen.
+Dialogue: 0,0:00:09.74,0:00:10.38,Default,,0,0,0,,{\fad(640,0)}Sofreiremos un poco
+Dialogue: 0,0:00:10.38,0:00:10.90,Default,,0,0,0,,{\fad(519,0)}el arroz y
+Dialogue: 0,0:00:10.90,0:00:11.84,Default,,0,0,0,,{\fad(939,0)}añadiremos el caldo.
+Dialogue: 0,0:00:11.90,0:00:12.16,Default,,0,0,0,,{\fad(259,0)}Y en este
+Dialogue: 0,0:00:12.16,0:00:12.60,Default,,0,0,0,,{\fad(439,0)}caso le he
+Dialogue: 0,0:00:12.60,0:00:13.34,Default,,0,0,0,,{\fad(740,0)}puesto seis partes
+Dialogue: 0,0:00:13.34,0:00:14.06,Default,,0,0,0,,{\fad(720,0)}de caldo por
+Dialogue: 0,0:00:14.06,0:00:14.48,Default,,0,0,0,,{\fad(419,0)}uno de arroz.
+Dialogue: 0,0:00:14.54,0:00:14.90,Default,,0,0,0,,{\fad(360,0)}Y para hacer
+Dialogue: 0,0:00:14.90,0:00:15.58,Default,,0,0,0,,{\fad(679,0)}el aliolio, vamos
+Dialogue: 0,0:00:15.58,0:00:16.18,Default,,0,0,0,,{\fad(599,0)}a confitar unos
+Dialogue: 0,0:00:16.18,0:00:16.90,Default,,0,0,0,,{\fad(719,0)}dientes de ajo
+Dialogue: 0,0:00:16.90,0:00:17.66,Default,,0,0,0,,{\fad(760,0)}con unas ramitas
+Dialogue: 0,0:00:17.66,0:00:18.32,Default,,0,0,0,,{\fad(660,0)}de romero. Y
+Dialogue: 0,0:00:18.32,0:00:18.78,Default,,0,0,0,,{\fad(460,0)}ya sabes, para
+Dialogue: 0,0:00:18.78,0:00:19.78,Default,,0,0,0,,{\fad(1000,0)}confitar siempre a
+Dialogue: 0,0:00:19.78,0:00:20.34,Default,,0,0,0,,{\fad(559,0)}fuego o lento.
+Dialogue: 0,0:00:20.54,0:00:21.36,Default,,0,0,0,,{\fad(820,0)}Rematamos el aliolio
+Dialogue: 0,0:00:21.36,0:00:21.74,Default,,0,0,0,,{\fad(379,0)}con los ajos
+Dialogue: 0,0:00:21.74,0:00:22.60,Default,,0,0,0,,{\fad(860,0)}confitados y un
+Dialogue: 0,0:00:22.60,0:00:23.16,Default,,0,0,0,,{\fad(559,0)}poquito de heli.
+Dialogue: 0,0:00:23.32,0:00:24.14,Default,,0,0,0,,{\fad(820,0)}Cortaremos la lubina
+Dialogue: 0,0:00:24.14,0:00:25.24,Default,,0,0,0,,{\fad(1000,0)}bien finita y
+Dialogue: 0,0:00:25.24,0:00:26.32,Default,,0,0,0,,{\fad(1000,0)}volearemos los nigiris
+Dialogue: 0,0:00:26.32,0:00:26.72,Default,,0,0,0,,{\fad(399,0)}con la ayuda
+Dialogue: 0,0:00:26.72,0:00:27.28,Default,,0,0,0,,{\fad(560,0)}de las manos.
+Dialogue: 0,0:00:27.28,0:00:27.98,Default,,0,0,0,,{\fad(699,0)}Y ya solo
+Dialogue: 0,0:00:27.98,0:00:29.42,Default,,0,0,0,,{\fad(1000,0)}queda montar. Lubina
+Dialogue: 0,0:00:29.42,0:00:30.56,Default,,0,0,0,,{\fad(1000,0)}flambeada, un poquito
+Dialogue: 0,0:00:30.56,0:00:31.28,Default,,0,0,0,,{\fad(720,0)}de alioli de
+Dialogue: 0,0:00:31.28,0:00:32.82,Default,,0,0,0,,{\fad(1000,0)}romero, eneldo y
+Dialogue: 0,0:00:32.82,0:00:33.94,Default,,0,0,0,,{\fad(1000,0)}limarrallada. Y a
+Dialogue: 0,0:00:33.94,0:00:34.16,Default,,0,0,0,,{\fad(219,0)}comer.

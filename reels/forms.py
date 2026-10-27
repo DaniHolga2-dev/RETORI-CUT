@@ -1,10 +1,116 @@
 
+import re
+import uuid
 from pathlib import Path
 
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from .models import Reel, Plantilla, ConfiguracionMarca
+
+
+# ============================================================
+# FORMULARIO DE REGISTRO DE USUARIOS
+# ============================================================
+
+class RegistroUsuarioForm(UserCreationForm):
+
+    first_name = forms.CharField(
+        label="Nombre",
+        max_length=150,
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "rc-input",
+                "placeholder": "Introduce tu nombre",
+                "autocomplete": "given-name",
+            }
+        ),
+    )
+
+    email = forms.EmailField(
+        label="Correo electrónico",
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                "class": "rc-input",
+                "placeholder": "Introduce tu correo electrónico",
+                "autocomplete": "email",
+            }
+        ),
+    )
+
+    password1 = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "rc-input",
+                "placeholder": "Crea una contraseña",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
+
+    password2 = forms.CharField(
+        label="Confirmar contraseña",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "rc-input",
+                "placeholder": "Repite la contraseña",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
+
+    class Meta:
+        model = get_user_model()
+
+        fields = [
+            "first_name",
+            "email",
+            "password1",
+            "password2",
+        ]
+
+    def clean_email(self):
+
+        email = self.cleaned_data.get(
+            "email", ""
+        ).strip().lower()
+
+        if not email:
+            raise ValidationError(
+                "Introduce un correo electrónico."
+            )
+
+        Usuario = get_user_model()
+
+        if Usuario._default_manager.filter(
+            email__iexact=email
+        ).exists():
+
+            raise ValidationError(
+                "Ya existe una cuenta con este correo electrónico."
+            )
+
+        return email
+
+    def save(self, commit=True):
+
+        usuario = super().save(commit=False)
+
+        usuario.first_name = self.cleaned_data["first_name"]
+        usuario.email = self.cleaned_data["email"]
+
+        usuario.username = uuid.uuid4().hex
+
+        if commit:
+            usuario.save()
+
+        return usuario
 
 
 # ============================================================
@@ -13,9 +119,35 @@ from .models import Reel, Plantilla, ConfiguracionMarca
 
 class ReelUploadForm(forms.ModelForm):
 
-    # ========================================================
-    # FORMATOS PERMITIDOS
-    # ========================================================
+    palabras_destacadas = forms.CharField(
+        required=False,
+        max_length=1000,
+        widget=forms.Textarea(
+            attrs={
+                "rows": 2,
+                "placeholder": "Ej.: Retorika, creatividad, resultados",
+            }
+        ),
+    )
+
+    def clean_palabras_destacadas(self):
+
+        texto = self.cleaned_data.get(
+            "palabras_destacadas", ""
+        )
+
+        palabras = [
+            p.strip()
+            for p in texto.split(",")
+            if p.strip()
+        ]
+
+        if len(palabras) > 40:
+            raise forms.ValidationError(
+                "Puedes introducir hasta 40 palabras o expresiones."
+            )
+
+        return ", ".join(dict.fromkeys(palabras))
 
     EXTENSIONES_PERMITIDAS = {
         ".mp4",
@@ -27,10 +159,6 @@ class ReelUploadForm(forms.ModelForm):
 
     TAMANO_MAXIMO = 1024 * 1024 * 1024
 
-    # ========================================================
-    # CONFIGURACIÓN
-    # ========================================================
-
     class Meta:
 
         model = Reel
@@ -38,9 +166,11 @@ class ReelUploadForm(forms.ModelForm):
         fields = [
             "archivo_original",
             "plantilla",
+            "palabras_destacadas",
         ]
 
         widgets = {
+
             "archivo_original": forms.ClearableFileInput(
                 attrs={
                     "accept": (
@@ -62,21 +192,31 @@ class ReelUploadForm(forms.ModelForm):
             ),
         }
 
-    # ========================================================
-    # INICIALIZACIÓN
-    # ========================================================
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, usuario=None, **kwargs):
 
         super().__init__(*args, **kwargs)
 
-        self.fields["plantilla"].queryset = (
-            Plantilla.objects.filter(
-                activa=True
-            ).order_by(
-                "tipo",
-                "nombre"
+        filtro = Q(
+            tipo="oficial",
+            activa=True,
+        )
+
+        if (
+            usuario is not None
+            and usuario.is_authenticated
+        ):
+
+            filtro |= Q(
+                tipo="personalizada",
+                activa=True,
+                usuario=usuario,
             )
+
+        self.fields["plantilla"].queryset = (
+            Plantilla.objects
+            .filter(filtro)
+            .distinct()
+            .order_by("tipo", "nombre")
         )
 
         self.fields["plantilla"].required = False
@@ -86,20 +226,19 @@ class ReelUploadForm(forms.ModelForm):
         )
 
         plantilla_oficial = (
-            Plantilla.objects.filter(
+            Plantilla.objects
+            .filter(
                 tipo="oficial",
-                activa=True
-            ).first()
+                activa=True,
+            )
+            .first()
         )
 
         if plantilla_oficial and not self.is_bound:
+
             self.fields["plantilla"].initial = (
                 plantilla_oficial
             )
-
-    # ========================================================
-    # VALIDACIÓN DEL VÍDEO
-    # ========================================================
 
     def clean_archivo_original(self):
 
@@ -108,6 +247,7 @@ class ReelUploadForm(forms.ModelForm):
         )
 
         if not archivo:
+
             raise ValidationError(
                 "Selecciona un vídeo."
             )
@@ -117,21 +257,19 @@ class ReelUploadForm(forms.ModelForm):
         ).suffix.lower()
 
         if extension not in self.EXTENSIONES_PERMITIDAS:
+
             raise ValidationError(
                 "Formato no compatible. "
                 "Utiliza MP4, MOV, M4V, WEBM o MXF."
             )
 
         if archivo.size > self.TAMANO_MAXIMO:
+
             raise ValidationError(
                 "El vídeo no puede superar 1 GB."
             )
 
         return archivo
-
-    # ========================================================
-    # SELECCIÓN DE PLANTILLA
-    # ========================================================
 
     def clean_plantilla(self):
 
@@ -142,23 +280,22 @@ class ReelUploadForm(forms.ModelForm):
         if plantilla is None:
 
             plantilla = (
-                Plantilla.objects.filter(
+                Plantilla.objects
+                .filter(
                     tipo="oficial",
-                    activa=True
-                ).first()
+                    activa=True,
+                )
+                .first()
             )
 
         if plantilla is None:
+
             raise ValidationError(
                 "No hay ninguna plantilla disponible. "
                 "Crea primero la plantilla oficial de Retorika."
             )
 
         return plantilla
-
-    # ========================================================
-    # CREACIÓN DEL REEL
-    # ========================================================
 
     def save(self, commit=True):
 
@@ -190,10 +327,6 @@ class ReelUploadForm(forms.ModelForm):
 
 class PlantillaForm(forms.ModelForm):
 
-    # ========================================================
-    # CONFIGURACIÓN
-    # ========================================================
-
     class Meta:
 
         model = Plantilla
@@ -201,7 +334,6 @@ class PlantillaForm(forms.ModelForm):
         fields = [
             "nombre",
             "descripcion",
-            "logo",
             "color_azul",
             "color_fucsia",
             "color_verde",
@@ -209,6 +341,7 @@ class PlantillaForm(forms.ModelForm):
             "tipografia",
             "archivo_tipografia",
             "subtitulos_activos",
+            "formato_subtitulos",
             "tamano_subtitulos",
             "posicion_subtitulos",
             "margen_vertical",
@@ -241,31 +374,38 @@ class PlantillaForm(forms.ModelForm):
                 }
             ),
 
-            "logo": forms.ClearableFileInput(
+            "color_azul": forms.TextInput(
                 attrs={
-                    "class": "rc-input-archivo",
-                    "accept": ".png,.jpg,.jpeg,.webp",
+                    "type": "color",
+                    "class": "rc-input-color",
                 }
             ),
 
-            "color_azul": forms.TextInput(
-                attrs={"type": "color", "class": "rc-input-color"}
-            ),
-
             "color_fucsia": forms.TextInput(
-                attrs={"type": "color", "class": "rc-input-color"}
+                attrs={
+                    "type": "color",
+                    "class": "rc-input-color",
+                }
             ),
 
             "color_verde": forms.TextInput(
-                attrs={"type": "color", "class": "rc-input-color"}
+                attrs={
+                    "type": "color",
+                    "class": "rc-input-color",
+                }
             ),
 
             "color_blanco": forms.TextInput(
-                attrs={"type": "color", "class": "rc-input-color"}
+                attrs={
+                    "type": "color",
+                    "class": "rc-input-color",
+                }
             ),
 
             "tipografia": forms.Select(
-                attrs={"class": "rc-select"}
+                attrs={
+                    "class": "rc-select",
+                }
             ),
 
             "archivo_tipografia": forms.ClearableFileInput(
@@ -276,7 +416,13 @@ class PlantillaForm(forms.ModelForm):
             ),
 
             "subtitulos_activos": forms.CheckboxInput(
-                attrs={"class": "rc-checkbox"}
+                attrs={
+                    "class": "rc-checkbox",
+                }
+            ),
+
+            "formato_subtitulos": forms.Select(
+                attrs={"class": "rc-select"}
             ),
 
             "tamano_subtitulos": forms.NumberInput(
@@ -288,23 +434,36 @@ class PlantillaForm(forms.ModelForm):
             ),
 
             "posicion_subtitulos": forms.Select(
-                attrs={"class": "rc-select"}
+                attrs={
+                    "class": "rc-select",
+                }
             ),
 
             "margen_vertical": forms.NumberInput(
-                attrs={"class": "rc-input", "min": 0}
+                attrs={
+                    "class": "rc-input",
+                    "min": 0,
+                }
             ),
 
             "margen_horizontal": forms.NumberInput(
-                attrs={"class": "rc-input", "min": 0}
+                attrs={
+                    "class": "rc-input",
+                    "min": 0,
+                }
             ),
 
             "interlineado": forms.NumberInput(
-                attrs={"class": "rc-input", "min": 0}
+                attrs={
+                    "class": "rc-input",
+                    "min": 0,
+                }
             ),
 
             "animacion_subtitulos": forms.Select(
-                attrs={"class": "rc-select"}
+                attrs={
+                    "class": "rc-select",
+                }
             ),
 
             "duracion_animacion": forms.NumberInput(
@@ -317,25 +476,30 @@ class PlantillaForm(forms.ModelForm):
             ),
 
             "destacar_palabras": forms.CheckboxInput(
-                attrs={"class": "rc-checkbox"}
+                attrs={
+                    "class": "rc-checkbox",
+                }
             ),
 
             "color_destacado": forms.TextInput(
-                attrs={"type": "color", "class": "rc-input-color"}
+                attrs={
+                    "type": "color",
+                    "class": "rc-input-color",
+                }
             ),
 
             "efectos_activos": forms.CheckboxInput(
-                attrs={"class": "rc-checkbox"}
+                attrs={
+                    "class": "rc-checkbox",
+                }
             ),
 
             "intensidad_efectos": forms.Select(
-                attrs={"class": "rc-select"}
+                attrs={
+                    "class": "rc-select",
+                }
             ),
         }
-
-    # ========================================================
-    # INICIALIZACIÓN
-    # ========================================================
 
     def __init__(self, *args, **kwargs):
 
@@ -345,14 +509,11 @@ class PlantillaForm(forms.ModelForm):
             self.instance.pk
             and self.instance.tipo == "oficial"
         ):
+
             raise ValueError(
                 "La plantilla oficial de Retorika "
                 "no puede editarse desde este formulario."
             )
-
-    # ========================================================
-    # VALIDACIÓN DE COLORES
-    # ========================================================
 
     def clean(self):
 
@@ -366,8 +527,6 @@ class PlantillaForm(forms.ModelForm):
             "color_destacado",
         ]
 
-        import re
-
         for campo in campos_color:
 
             valor = datos.get(campo)
@@ -376,50 +535,19 @@ class PlantillaForm(forms.ModelForm):
 
                 if not re.fullmatch(
                     r"#[0-9a-fA-F]{6}",
-                    valor
+                    valor,
                 ):
+
                     self.add_error(
                         campo,
-                        "Introduce un color hexadecimal válido."
+                        "Introduce un color hexadecimal válido.",
                     )
 
                 else:
+
                     datos[campo] = valor.lower()
 
         return datos
-
-    # ========================================================
-    # VALIDACIÓN DEL LOGO
-    # ========================================================
-
-    def clean_logo(self):
-
-        archivo = self.cleaned_data.get("logo")
-
-        if not archivo:
-            return archivo
-
-        extension = Path(
-            archivo.name
-        ).suffix.lower()
-
-        if extension not in {
-            ".png", ".jpg", ".jpeg", ".webp"
-        }:
-            raise ValidationError(
-                "El logotipo debe ser PNG, JPG o WEBP."
-            )
-
-        if archivo.size > 5 * 1024 * 1024:
-            raise ValidationError(
-                "El logotipo no puede superar 5 MB."
-            )
-
-        return archivo
-
-    # ========================================================
-    # VALIDACIÓN DE TIPOGRAFÍA
-    # ========================================================
 
     def clean_archivo_tipografia(self):
 
@@ -435,20 +563,18 @@ class PlantillaForm(forms.ModelForm):
         ).suffix.lower()
 
         if extension not in {".ttf", ".otf"}:
+
             raise ValidationError(
                 "La fuente debe ser TTF u OTF."
             )
 
         if archivo.size > 10 * 1024 * 1024:
+
             raise ValidationError(
                 "La fuente no puede superar 10 MB."
             )
 
         return archivo
-
-    # ========================================================
-    # GUARDAR PLANTILLA
-    # ========================================================
 
     def save(self, commit=True):
 

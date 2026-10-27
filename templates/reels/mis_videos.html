@@ -1,0 +1,695 @@
+
+{% extends "reels/base.html" %}
+
+{% block title %}Mis vídeos | RETORI-CUT{% endblock %}
+
+{% block header_title %}Mis vídeos{% endblock %}
+
+{% block nav_videos %}active{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   MIS VÍDEOS · RETORI-CUT
+============================================================ */
+
+.biblioteca-reels {
+    --bv-texto: #101b38;
+    --bv-secundario: #7c879c;
+    --bv-tarjeta: #ffffff;
+    --bv-borde: #e8edf5;
+    --bv-miniatura: #eaf2ff;
+    --bv-etiqueta: #f2f6fc;
+    --bv-azul: #156fe7;
+    width: 100%;
+}
+
+html[data-theme="oscuro"] .biblioteca-reels,
+html[data-theme="dark"] .biblioteca-reels,
+body.tema-oscuro .biblioteca-reels,
+body.dark-mode .biblioteca-reels,
+html.dark .biblioteca-reels {
+    --bv-texto: #f3f6ff;
+    --bv-secundario: #a5b4cb;
+    --bv-tarjeta: #192437;
+    --bv-borde: #304057;
+    --bv-miniatura: #202f47;
+    --bv-etiqueta: #26364e;
+    --bv-azul: #398cff;
+}
+
+.biblioteca-reels *,
+.biblioteca-reels *::before,
+.biblioteca-reels *::after {
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   CABECERA
+============================================================ */
+
+.biblioteca-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.biblioteca-titulo {
+    margin: 0 0 7px;
+    color: var(--bv-texto);
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.biblioteca-descripcion {
+    margin: 0;
+    color: var(--bv-secundario);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.biblioteca-nuevo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 13px 20px;
+    border: none;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #156fe7, #105cb1);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 9px 24px rgba(21,111,231,.22);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.biblioteca-nuevo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(21,111,231,.3);
+    color: #ffffff;
+}
+
+/* ============================================================
+   CUADRÍCULA
+============================================================ */
+
+.biblioteca-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(250px, 1fr)
+    );
+    gap: 22px;
+}
+
+/* ============================================================
+   TARJETAS
+============================================================ */
+
+.video-tarjeta {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--bv-borde);
+    border-radius: 17px;
+    background: var(--bv-tarjeta);
+    box-shadow: 0 8px 30px rgba(16,27,56,.04);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.video-tarjeta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(16,27,56,.09);
+}
+
+/* ============================================================
+   MINIATURA
+============================================================ */
+
+.video-miniatura {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: var(--bv-miniatura);
+}
+
+.video-miniatura img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-sin-miniatura {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 66px;
+    height: 66px;
+    border-radius: 18px;
+    background: rgba(21,111,231,.1);
+    color: var(--bv-azul);
+    font-size: 30px;
+}
+
+/* ============================================================
+   ESTADOS
+============================================================ */
+
+.video-estado {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #526078;
+    font-size: 10px;
+    font-weight: 800;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+}
+
+.video-estado.listo {
+    background: #e4f8ed;
+    color: #168348;
+}
+
+.video-estado.error {
+    background: #fff0f2;
+    color: #bd334d;
+}
+
+.video-estado.procesando {
+    background: #eaf2ff;
+    color: #156fe7;
+}
+
+/* ============================================================
+   INFORMACIÓN
+============================================================ */
+
+.video-informacion {
+    padding: 19px;
+}
+
+.video-nombre {
+    margin: 0 0 9px;
+    color: var(--bv-texto);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.video-fecha {
+    margin: 0 0 15px;
+    color: var(--bv-secundario);
+    font-size: 11px;
+}
+
+.video-detalles {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.video-detalle {
+    padding: 6px 9px;
+    border-radius: 7px;
+    background: var(--bv-etiqueta);
+    color: var(--bv-secundario);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+/* ============================================================
+   BOTONES
+============================================================ */
+
+.video-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.video-accion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 35px;
+    padding: 8px 12px;
+    border: 1px solid #dce5f2;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--bv-secundario);
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.video-accion:hover {
+    background: var(--bv-etiqueta);
+}
+
+.video-accion.principal {
+    background: #156fe7;
+    border-color: #156fe7;
+    color: #ffffff;
+}
+
+.video-accion.principal:hover {
+    background: #105cb1;
+    border-color: #105cb1;
+    color: #ffffff;
+}
+
+/* ============================================================
+   ELIMINAR
+============================================================ */
+
+.video-eliminar-form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.video-accion.eliminar {
+    border-color: #f2cbd2;
+    color: #bd334d;
+}
+
+.video-accion.eliminar:hover {
+    background: #fff0f2;
+}
+
+/* ============================================================
+   ERROR POR AUSENCIA DE VOZ
+   TEXTO GRIS, SIN RECUADRO
+============================================================ */
+
+.video-aviso-audio {
+    margin: 13px 0 0;
+    color: #909bad;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.65;
+}
+
+html[data-theme="oscuro"] .video-aviso-audio,
+html[data-theme="dark"] .video-aviso-audio,
+body.tema-oscuro .video-aviso-audio,
+body.dark-mode .video-aviso-audio,
+html.dark .video-aviso-audio {
+    color: #a5b4cb;
+}
+
+/* ============================================================
+   BIBLIOTECA VACÍA
+============================================================ */
+
+.biblioteca-vacia {
+    max-width: 580px;
+    margin: 55px auto;
+    padding: 55px 30px;
+    border: 1px dashed var(--bv-borde);
+    border-radius: 20px;
+    background: var(--bv-tarjeta);
+    text-align: center;
+}
+
+.biblioteca-vacia-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 22px;
+    border-radius: 20px;
+    background: var(--bv-miniatura);
+    color: var(--bv-azul);
+    font-size: 36px;
+}
+
+.biblioteca-vacia h2 {
+    margin: 0 0 12px;
+    color: var(--bv-texto);
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.biblioteca-vacia p {
+    max-width: 380px;
+    margin: 0 auto 25px;
+    color: var(--bv-secundario);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 768px) {
+
+    .biblioteca-cabecera {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .biblioteca-titulo {
+        font-size: 22px;
+    }
+
+    .biblioteca-grid {
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(220px, 1fr)
+        );
+        gap: 15px;
+    }
+
+    .biblioteca-vacia {
+        margin: 30px auto;
+        padding: 40px 20px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .biblioteca-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .video-miniatura {
+        height: 220px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="biblioteca-reels">
+
+    <!-- ========================================================
+         CABECERA
+    ========================================================= -->
+
+    <div class="biblioteca-cabecera">
+
+        <div>
+
+            <h1 class="biblioteca-titulo">
+                Mis vídeos
+            </h1>
+
+            <p class="biblioteca-descripcion">
+                Aquí encontrarás todos los Reels que has creado
+                con tu cuenta de RETORI-CUT.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'nuevo_reel' %}"
+            class="biblioteca-nuevo"
+        >
+            + Crear nuevo Reel
+        </a>
+
+    </div>
+
+
+    <!-- ========================================================
+         LISTADO DE VÍDEOS
+    ========================================================= -->
+
+    {% if reels %}
+
+        <div class="biblioteca-grid">
+
+            {% for reel in reels %}
+
+                <article class="video-tarjeta">
+
+                    <!-- MINIATURA -->
+
+                    <div class="video-miniatura">
+
+                        {% if reel.miniatura %}
+
+                            <img
+                                src="{% url 'miniatura_reel_protegida' reel.id %}"
+                                alt="Miniatura de {{ reel.nombre }}"
+                                loading="lazy"
+                            >
+
+                        {% else %}
+
+                            <div class="video-sin-miniatura">
+                                ▷
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- ESTADO -->
+
+                        {% if reel.estado == "listo" %}
+
+                            <span class="video-estado listo">
+                                Completado
+                            </span>
+
+                        {% elif reel.estado == "error" %}
+
+                            <span class="video-estado error">
+                                Error
+                            </span>
+
+                        {% else %}
+
+                            <span class="video-estado procesando">
+                                Procesando
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         INFORMACIÓN
+                    ================================================== -->
+
+                    <div class="video-informacion">
+
+                        <h2 class="video-nombre">
+                            {{ reel.nombre }}
+                        </h2>
+
+                        <p class="video-fecha">
+                            {{ reel.fecha_creacion|date:"d/m/Y · H:i" }}
+                        </p>
+
+
+                        <!-- DETALLES TÉCNICOS -->
+
+                        <div class="video-detalles">
+
+                            {% if reel.duracion %}
+
+                                <span class="video-detalle">
+                                    {{ reel.duracion|floatformat:1 }} s
+                                </span>
+
+                            {% endif %}
+
+                            {% if reel.formato %}
+
+                                <span class="video-detalle">
+                                    {{ reel.formato }}
+                                </span>
+
+                            {% endif %}
+
+                            {% if reel.plantilla %}
+
+                                <span class="video-detalle">
+                                    {{ reel.plantilla.nombre }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =================================================
+                             BOTONES
+                        ================================================== -->
+
+                        <div class="video-acciones">
+
+                            <!-- VÍDEOS COMPLETADOS -->
+
+                            {% if reel.estado == "listo" and reel.archivo_editado %}
+
+                                <!--
+                                    VER VÍDEO
+
+                                    Abre la página de procesamiento
+                                    del Reel, donde se muestra el
+                                    reproductor y las opciones
+                                    de descarga e Instagram.
+
+                                    No vuelve a procesar el vídeo.
+                                -->
+
+                                <a
+                                    href="{% url 'procesando_reel' reel.id %}"
+                                    class="video-accion principal"
+                                >
+                                    Ver vídeo
+                                </a>
+
+                                <!-- DESCARGAR MP4 -->
+
+                                <a
+                                    href="{% url 'video_reel_protegido' reel.id %}?descargar=1"
+                                    class="video-accion"
+                                >
+                                    Descargar
+                                </a>
+
+                                <!-- DESCARGAR SRT -->
+
+                                {% if reel.archivo_subtitulos %}
+
+                                    <a
+                                        href="{% url 'subtitulos_reel_protegidos' reel.id %}"
+                                        class="video-accion"
+                                    >
+                                        Subtítulos
+                                    </a>
+
+                                {% endif %}
+
+                            <!-- VÍDEOS EN PROCESAMIENTO -->
+
+                            {% elif reel.estado != "error" %}
+
+                                <a
+                                    href="{% url 'procesando_reel' reel.id %}"
+                                    class="video-accion principal"
+                                >
+                                    Ver progreso
+                                </a>
+
+                            {% endif %}
+
+
+                            <!-- =================================================
+                                 BOTÓN ELIMINAR
+                            ================================================== -->
+
+                            {% if reel.estado == "listo" or reel.estado == "error" %}
+
+                                <form
+                                    method="post"
+                                    action="{% url 'eliminar_reel' reel.id %}"
+                                    class="video-eliminar-form"
+                                    onsubmit="return confirm('¿Eliminar este vídeo y todos sus archivos? Esta acción no se puede deshacer.');"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="video-accion eliminar"
+                                    >
+                                        Eliminar
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =================================================
+                             MENSAJE PARA VÍDEOS SIN VOZ
+                        ================================================== -->
+
+                        {% if reel.sin_voz %}
+
+                            <p class="video-aviso-audio">
+                                Error: este vídeo no se ha procesado
+                                porque no contiene voz reconocible
+                                para generar subtítulos.
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <!-- ====================================================
+             BIBLIOTECA VACÍA
+        ===================================================== -->
+
+        <section class="biblioteca-vacia">
+
+            <div class="biblioteca-vacia-icono">
+                ▣
+            </div>
+
+            <h2>
+                Todavía no tienes vídeos
+            </h2>
+
+            <p>
+                Cuando crees tu primer Reel, aparecerá aquí
+                automáticamente y podrás acceder a él
+                siempre que inicies sesión.
+            </p>
+
+            <a
+                href="{% url 'nuevo_reel' %}"
+                class="biblioteca-nuevo"
+            >
+                + Crear mi primer Reel
+            </a>
+
+        </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

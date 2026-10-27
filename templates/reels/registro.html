@@ -1,0 +1,275 @@
+
+{% extends "reels/base.html" %}
+
+{% block title %}
+Crear cuenta | RETORI-CUT
+{% endblock %}
+
+{% block header_title %}
+Crear cuenta
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .registro-contenedor {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 36px 16px 60px;
+    }
+
+    .registro-tarjeta {
+        width: 100%;
+        max-width: 480px;
+        padding: 40px;
+        background: #ffffff;
+        border: 1px solid #e8edf5;
+        border-radius: 22px;
+        box-shadow: 0 14px 48px rgba(16, 27, 56, 0.06);
+    }
+
+    .registro-icono {
+        width: 56px;
+        height: 56px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        background: #eaf2ff;
+        color: #156fe7;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .registro-titulo {
+        margin: 0 0 10px;
+        color: #101b38;
+        text-align: center;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .registro-descripcion {
+        margin: 0 0 30px;
+        color: #7c879c;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .registro-campo {
+        margin-bottom: 20px;
+    }
+
+    .registro-etiqueta {
+        display: block;
+        margin-bottom: 8px;
+        color: #263653;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .registro-campo input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 14px 15px;
+        background: #f8faff;
+        border: 1px solid #dce5f2;
+        border-radius: 11px;
+        outline: none;
+        color: #101b38;
+        font-family: inherit;
+        font-size: 13px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .registro-campo input:focus {
+        border-color: #156fe7;
+        box-shadow: 0 0 0 4px rgba(21, 111, 231, 0.1);
+    }
+
+    .registro-error {
+        margin-top: 7px;
+        color: #c92c48;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .registro-error-general {
+        padding: 13px 15px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        background: #fff0f2;
+        color: #a82a40;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .registro-ayuda {
+        margin-top: 7px;
+        color: #8490a5;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .registro-boton {
+        width: 100%;
+        margin-top: 8px;
+        padding: 15px 20px;
+        border: 0;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #156fe7, #105cb1);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 9px 24px rgba(21, 111, 231, 0.22);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .registro-boton:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(21, 111, 231, 0.3);
+    }
+
+    .registro-pie {
+        margin-top: 27px;
+        text-align: center;
+        color: #7c879c;
+        font-size: 12px;
+    }
+
+    .registro-pie a {
+        color: #156fe7;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .registro-pie a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+
+        .registro-contenedor {
+            padding: 20px 0 40px;
+        }
+
+        .registro-tarjeta {
+            padding: 28px 20px;
+            border-radius: 17px;
+        }
+
+        .registro-titulo {
+            font-size: 22px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="registro-contenedor">
+
+    <section class="registro-tarjeta">
+
+        <div class="registro-icono">
+            R
+        </div>
+
+        <h1 class="registro-titulo">
+            Crea tu cuenta
+        </h1>
+
+        <p class="registro-descripcion">
+            Empieza a crear tus Reels con RETORI-CUT.
+            Tus vídeos quedarán guardados en tu cuenta
+            para que puedas acceder a ellos cuando quieras.
+        </p>
+
+        <form method="post" action="{% url 'registro' %}">
+
+            {% csrf_token %}
+
+            {% if formulario.non_field_errors %}
+
+                <div class="registro-error-general">
+
+                    {% for error in formulario.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+            {% for campo in formulario %}
+
+                <div class="registro-campo">
+
+                    <label
+                        for="{{ campo.id_for_label }}"
+                        class="registro-etiqueta"
+                    >
+                        {{ campo.label }}
+                    </label>
+
+                    {{ campo }}
+
+                    {% if campo.errors %}
+
+                        <div class="registro-error">
+
+                            {% for error in campo.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                    {% if campo.name == "password1" %}
+
+                        <div class="registro-ayuda">
+                            Utiliza una contraseña segura,
+                            preferiblemente de al menos 8 caracteres.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+            <button
+                type="submit"
+                class="registro-boton"
+            >
+                Crear mi cuenta
+            </button>
+
+        </form>
+
+        <div class="registro-pie">
+
+            ¿Ya tienes una cuenta?
+
+            <a href="{% url 'iniciar_sesion' %}">
+                Inicia sesión
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

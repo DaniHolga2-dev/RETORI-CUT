@@ -1,12 +1,11 @@
 
-{% extends "base.html" %}
+{% extends "reels/base.html" %}
 
 {% block title %}Edición automática | RETORI-CUT{% endblock %}
 {% block header_title %}Edición automática{% endblock %}
 
 {% block extra_css %}
 <style>
-
 /* ============================================================
    RETORI-CUT - PANTALLA DE PROCESAMIENTO
 ============================================================ */
@@ -49,9 +48,7 @@
     line-height: 1.7;
 }
 
-/* ============================================================
-   PANEL PRINCIPAL
-============================================================ */
+/* PANEL PRINCIPAL */
 
 .rc-panel {
     display: grid;
@@ -82,9 +79,7 @@
     line-height: 1.7;
 }
 
-/* ============================================================
-   FASES DE PROCESAMIENTO
-============================================================ */
+/* FASES */
 
 .rc-fases {
     display: flex;
@@ -116,7 +111,8 @@
     transition: all .25s;
 }
 
-.rc-fase-icono svg {
+.rc-fase-icono svg,
+.rc-archivo-icono svg {
     width: 23px;
     height: 23px;
     fill: none;
@@ -188,17 +184,14 @@
 
 @keyframes rc-pulso {
     0%, 100% {
-        box-shadow: 0 0 0 0 rgba(21, 111, 231, .18);
+        box-shadow: 0 0 0 0 rgba(21,111,231,.18);
     }
-
     50% {
-        box-shadow: 0 0 0 8px rgba(21, 111, 231, 0);
+        box-shadow: 0 0 0 8px rgba(21,111,231,0);
     }
 }
 
-/* ============================================================
-   INFORMACIÓN DEL ARCHIVO
-============================================================ */
+/* INFORMACIÓN DEL ARCHIVO */
 
 .rc-informacion {
     margin-top: 26px;
@@ -215,22 +208,14 @@
 
 .rc-archivo-icono {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     width: 42px;
     height: 42px;
     flex-shrink: 0;
     border-radius: 12px;
     background: #eef4ff;
     color: #156fe7;
-}
-
-.rc-archivo-icono svg {
-    width: 21px;
-    height: 21px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
 }
 
 .rc-archivo-datos {
@@ -251,10 +236,6 @@
     font-size: 11px;
     color: #8b97a9;
 }
-
-/* ============================================================
-   BARRA DE PROGRESO
-============================================================ */
 
 .rc-progreso-cabecera {
     display: flex;
@@ -298,9 +279,7 @@
     line-height: 1.6;
 }
 
-/* ============================================================
-   PREVISUALIZACIÓN DEL VÍDEO
-============================================================ */
+/* PREVISUALIZACIÓN */
 
 .rc-panel-derecha {
     display: flex;
@@ -323,7 +302,7 @@
     overflow: hidden;
     border-radius: 19px;
     background: #07162e;
-    box-shadow: 0 15px 35px rgba(20, 45, 85, .17);
+    box-shadow: 0 15px 35px rgba(20,45,85,.17);
 }
 
 .rc-preview img,
@@ -346,7 +325,7 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
-    background: rgba(8, 27, 65, .48);
+    background: rgba(8,27,65,.48);
     backdrop-filter: blur(1.5px);
 }
 
@@ -401,16 +380,14 @@
     text-align: center;
 }
 
-.rc-preview-pie span {
+.rc-preview-pie span:first-child {
     width: 7px;
     height: 7px;
     background: #156fe7;
     border-radius: 50%;
 }
 
-/* ============================================================
-   BOTONES DE DESCARGA
-============================================================ */
+/* BOTONES */
 
 .rc-acciones {
     width: 100%;
@@ -431,6 +408,7 @@
     border-radius: 11px;
     background: #156fe7;
     color: #fff;
+    font-family: inherit;
     font-size: 13px;
     font-weight: 750;
     text-decoration: none;
@@ -456,6 +434,7 @@
 .rc-descargar svg {
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
@@ -463,9 +442,89 @@
     stroke-linejoin: round;
 }
 
-/* ============================================================
-   AVISOS
-============================================================ */
+/* INSTAGRAM */
+
+.rc-instagram {
+    background: linear-gradient(
+        110deg,
+        #833ab4 0%,
+        #c13584 35%,
+        #e1306c 65%,
+        #f77737 100%
+    );
+    box-shadow: 0 8px 22px rgba(193,53,132,.17);
+}
+
+.rc-instagram:hover {
+    background: linear-gradient(
+        110deg,
+        #702f9d,
+        #aa2e73,
+        #cc275f,
+        #df642d
+    );
+}
+
+.rc-instagram:disabled {
+    opacity: .65;
+    cursor: wait;
+    transform: none;
+}
+
+.rc-ayuda-instagram {
+    margin: 0;
+    color: #8b97a9;
+    font-size: 11px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.rc-qr-panel {
+    width: 100%;
+    max-width: 290px;
+    margin-top: 14px;
+    padding: 18px;
+    border: 1px solid #e2eaff;
+    border-radius: 14px;
+    background: #f8fbff;
+    text-align: center;
+}
+
+.rc-qr-panel h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+}
+
+.rc-qr-panel p {
+    margin: 0 0 13px;
+    color: #718096;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.rc-qr-imagen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    min-height: 180px;
+    margin: 0 auto 13px;
+    padding: 10px;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.rc-qr-imagen canvas,
+.rc-qr-imagen img {
+    max-width: 100%;
+    height: auto;
+}
+
+.rc-qr-aviso {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.6;
+}
 
 .rc-aviso {
     margin-top: 22px;
@@ -484,20 +543,13 @@
     color: #be123c;
 }
 
-/* ============================================================
-   ELEMENTOS OCULTOS
-============================================================ */
-
 .rc-editor [hidden] {
     display: none !important;
 }
 
-/* ============================================================
-   RESPONSIVE
-============================================================ */
+/* RESPONSIVE */
 
 @media (max-width: 900px) {
-
     .rc-panel {
         grid-template-columns: 1fr;
         gap: 28px;
@@ -512,11 +564,9 @@
     .rc-preview {
         width: min(100%, 260px);
     }
-
 }
 
 @media (max-width: 480px) {
-
     .rc-panel {
         padding: 17px;
         border-radius: 16px;
@@ -539,9 +589,7 @@
     .rc-preview {
         width: min(100%, 235px);
     }
-
 }
-
 </style>
 {% endblock %}
 
@@ -560,12 +608,9 @@
     data-srt-url="{% if reel.archivo_subtitulos %}{{ reel.archivo_subtitulos.url }}{% endif %}"
 >
 
-    <!-- ========================================================
-         ENCABEZADO
-    ======================================================== -->
+    <!-- ENCABEZADO -->
 
     <div class="rc-encabezado">
-
         <span class="rc-etiqueta">
             PROCESAMIENTO AUTOMÁTICO
         </span>
@@ -578,13 +623,9 @@
             Estamos preparando tu vídeo con las herramientas
             de RETORI-CUT.
         </p>
-
     </div>
 
-
-    <!-- ========================================================
-         PANEL PRINCIPAL
-    ======================================================== -->
+    <!-- PANEL PRINCIPAL -->
 
     <div class="rc-panel">
 
@@ -600,13 +641,11 @@
                 Sigue el estado de cada fase del procesamiento.
             </p>
 
-
-            <!-- FASES -->
-
             <div class="rc-fases">
 
-                <div class="rc-fase" data-fase="analisis">
+                <!-- ANÁLISIS -->
 
+                <div class="rc-fase" data-fase="analisis">
                     <div class="rc-fase-icono">
                         <svg viewBox="0 0 24 24">
                             <rect x="3" y="4" width="18" height="16" rx="3"/>
@@ -620,12 +659,11 @@
                     </div>
 
                     <span class="rc-fase-estado">✓</span>
-
                 </div>
 
+                <!-- TRANSCRIPCIÓN -->
 
                 <div class="rc-fase" data-fase="transcripcion">
-
                     <div class="rc-fase-icono">
                         <svg viewBox="0 0 24 24">
                             <rect x="9" y="2" width="6" height="13" rx="3"/>
@@ -639,12 +677,11 @@
                     </div>
 
                     <span class="rc-fase-estado">✓</span>
-
                 </div>
 
+                <!-- EDICIÓN -->
 
                 <div class="rc-fase" data-fase="edicion">
-
                     <div class="rc-fase-icono">
                         <svg viewBox="0 0 24 24">
                             <circle cx="6" cy="6" r="3"/>
@@ -659,12 +696,11 @@
                     </div>
 
                     <span class="rc-fase-estado">✓</span>
-
                 </div>
 
+                <!-- SUBTÍTULOS -->
 
                 <div class="rc-fase" data-fase="subtitulos">
-
                     <div class="rc-fase-icono">
                         <svg viewBox="0 0 24 24">
                             <rect x="2" y="5" width="20" height="14" rx="3"/>
@@ -678,12 +714,11 @@
                     </div>
 
                     <span class="rc-fase-estado">✓</span>
-
                 </div>
 
+                <!-- ESTILO -->
 
                 <div class="rc-fase" data-fase="estilo">
-
                     <div class="rc-fase-icono">
                         <svg viewBox="0 0 24 24">
                             <path d="M4 20L18 6M14 4l1-3M19 9l3 1M5 5L3 3M8 14l2 2"/>
@@ -697,12 +732,11 @@
                     </div>
 
                     <span class="rc-fase-estado">✓</span>
-
                 </div>
 
+                <!-- LISTO -->
 
                 <div class="rc-fase" data-fase="listo">
-
                     <div class="rc-fase-icono">
                         <svg viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="9"/>
@@ -712,19 +746,15 @@
 
                     <div class="rc-fase-contenido">
                         <strong>¡Vídeo listo!</strong>
-                        <span>Preparado para revisar y descargar</span>
+                        <span>Preparado para revisar, descargar y compartir</span>
                     </div>
 
                     <span class="rc-fase-estado">✓</span>
-
                 </div>
 
             </div>
 
-
-            <!-- ====================================================
-                 INFORMACIÓN DEL ARCHIVO
-            ==================================================== -->
+            <!-- INFORMACIÓN DEL ARCHIVO -->
 
             <div class="rc-informacion">
 
@@ -745,7 +775,6 @@
                         </strong>
 
                         <span id="rc-metadatos">
-
                             {% if reel.duracion %}
                                 {{ reel.duracion|floatformat:2 }} segundos
                             {% else %}
@@ -755,28 +784,23 @@
                             {% if reel.ancho and reel.alto %}
                                 · {{ reel.ancho }} × {{ reel.alto }} px
                             {% endif %}
-
                         </span>
 
                     </div>
 
                 </div>
 
-
-                <!-- BARRA DE PROGRESO -->
+                <!-- PROGRESO -->
 
                 <div class="rc-progreso-cabecera">
-
                     <span>Progreso general</span>
 
                     <strong id="rc-porcentaje">
                         {{ reel.progreso }}%
                     </strong>
-
                 </div>
 
                 <div class="rc-barra">
-
                     <div
                         class="rc-barra-interior"
                         id="rc-barra-interior"
@@ -786,7 +810,6 @@
                         aria-valuemax="100"
                         aria-valuenow="{{ reel.progreso }}"
                     ></div>
-
                 </div>
 
                 <p class="rc-mensaje" id="rc-mensaje">
@@ -797,10 +820,7 @@
 
         </div>
 
-
-        <!-- ====================================================
-             COLUMNA DERECHA - VÍDEO
-        ==================================================== -->
+        <!-- COLUMNA DERECHA -->
 
         <div class="rc-panel-derecha">
 
@@ -809,8 +829,6 @@
             </h3>
 
             <div class="rc-preview">
-
-                <!-- MINIATURA ORIGINAL -->
 
                 <img
                     id="rc-miniatura"
@@ -823,9 +841,6 @@
                     {% endif %}
                 >
 
-
-                <!-- REPRODUCTOR FINAL -->
-
                 <video
                     id="rc-video"
                     controls
@@ -836,20 +851,15 @@
                     Tu navegador no admite la reproducción de vídeo.
                 </video>
 
-
-                <!-- OVERLAY DE PROGRESO -->
-
                 <div
                     class="rc-preview-overlay"
                     id="rc-preview-overlay"
                 >
 
                     <div class="rc-circulo" id="rc-circulo">
-
                         <strong id="rc-circulo-texto">
                             {{ reel.progreso }}%
                         </strong>
-
                     </div>
 
                     <span
@@ -863,23 +873,15 @@
 
             </div>
 
-
-            <!-- INFORMACIÓN DE PREVISUALIZACIÓN -->
-
             <div class="rc-preview-pie">
-
                 <span></span>
 
                 <span id="rc-preview-leyenda">
                     Previsualización del archivo original
                 </span>
-
             </div>
 
-
-            <!-- ====================================================
-                 BOTONES DE DESCARGA
-            ==================================================== -->
+            <!-- ACCIONES -->
 
             <div
                 class="rc-acciones"
@@ -887,13 +889,40 @@
                 hidden
             >
 
+                <!-- INSTAGRAM -->
+
+                <button
+                    type="button"
+                    id="rc-continuar-instagram"
+                    class="rc-descargar rc-instagram"
+                >
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="18" height="18" rx="5"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <circle cx="17.5" cy="6.5" r=".8"
+                                fill="currentColor" stroke="none"/>
+                    </svg>
+
+                    <span id="rc-instagram-texto">
+                        Continuar en Instagram
+                    </span>
+                </button>
+
+                <p
+                    class="rc-ayuda-instagram"
+                    id="rc-ayuda-instagram"
+                >
+                    Comparte tu vídeo para terminar de editarlo en Instagram.
+                </p>
+
+                <!-- DESCARGAR VÍDEO -->
+
                 <a
                     id="rc-descargar-video"
                     class="rc-descargar"
                     href="#"
                     download
                 >
-
                     <svg viewBox="0 0 24 24">
                         <path d="M12 3v12"/>
                         <path d="M7 10l5 5 5-5"/>
@@ -901,9 +930,9 @@
                     </svg>
 
                     Descargar vídeo
-
                 </a>
 
+                <!-- DESCARGAR SRT -->
 
                 <a
                     id="rc-descargar-srt"
@@ -912,7 +941,6 @@
                     download
                     hidden
                 >
-
                     <svg viewBox="0 0 24 24">
                         <path d="M5 3h9l5 5v13H5z"/>
                         <path d="M14 3v5h5"/>
@@ -920,8 +948,62 @@
                     </svg>
 
                     Descargar subtítulos SRT
-
                 </a>
+
+                <!-- CONTINUAR EN EL MÓVIL -->
+
+                <button
+                    type="button"
+                    id="rc-mostrar-qr"
+                    class="rc-descargar secundario"
+                    hidden
+                >
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                        <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/>
+                    </svg>
+
+                    Continuar en el móvil
+                </button>
+
+            </div>
+
+            <!-- PANEL QR -->
+
+            <div
+                class="rc-qr-panel"
+                id="rc-qr-panel"
+                hidden
+            >
+
+                <h3>Continúa desde tu móvil</h3>
+
+                <p>
+                    Escanea este código para abrir tu Reel
+                    en RETORI-CUT desde el teléfono.
+                </p>
+
+                <div
+                    class="rc-qr-imagen"
+                    id="rc-qr-imagen"
+                ></div>
+
+                <p
+                    class="rc-qr-aviso"
+                    id="rc-qr-aviso"
+                >
+                    Inicia sesión en tu cuenta si es necesario.
+                </p>
+
+                <button
+                    type="button"
+                    id="rc-cerrar-qr"
+                    class="rc-descargar secundario"
+                >
+                    Cerrar
+                </button>
 
             </div>
 
@@ -929,15 +1011,13 @@
 
     </div>
 
-
-    <!-- ========================================================
-         AVISO INFERIOR
-    ======================================================== -->
+    <!-- AVISO INFERIOR -->
 
     <div
         class="rc-aviso"
         id="rc-aviso"
         role="status"
+        aria-live="polite"
     >
         RETORI-CUT está preparando tu vídeo.
     </div>
@@ -949,14 +1029,15 @@
 
 {% block extra_js %}
 
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
+<script>
 (function () {
 
     "use strict";
 
     // ========================================================
-    // ELEMENTOS DE LA INTERFAZ
+    // ELEMENTOS
     // ========================================================
 
     const editor = document.getElementById("rc-editor");
@@ -972,12 +1053,10 @@
 
     const porcentaje = document.getElementById("rc-porcentaje");
     const barra = document.getElementById("rc-barra-interior");
-
     const mensaje = document.getElementById("rc-mensaje");
 
     const miniatura = document.getElementById("rc-miniatura");
     const video = document.getElementById("rc-video");
-
     const overlay = document.getElementById("rc-preview-overlay");
 
     const circulo = document.getElementById("rc-circulo");
@@ -999,6 +1078,38 @@
         "rc-descargar-srt"
     );
 
+    const botonInstagram = document.getElementById(
+        "rc-continuar-instagram"
+    );
+
+    const textoInstagram = document.getElementById(
+        "rc-instagram-texto"
+    );
+
+    const ayudaInstagram = document.getElementById(
+        "rc-ayuda-instagram"
+    );
+
+    const botonQR = document.getElementById(
+        "rc-mostrar-qr"
+    );
+
+    const panelQR = document.getElementById(
+        "rc-qr-panel"
+    );
+
+    const imagenQR = document.getElementById(
+        "rc-qr-imagen"
+    );
+
+    const avisoQR = document.getElementById(
+        "rc-qr-aviso"
+    );
+
+    const cerrarQR = document.getElementById(
+        "rc-cerrar-qr"
+    );
+
     const fases = {
         analisis: document.querySelector('[data-fase="analisis"]'),
         transcripcion: document.querySelector('[data-fase="transcripcion"]'),
@@ -1008,12 +1119,550 @@
         listo: document.querySelector('[data-fase="listo"]')
     };
 
+    // ========================================================
+    // VARIABLES
+    // ========================================================
+
     let temporizador = null;
     let consultando = false;
 
+    let urlVideoActual = "";
+    let qrGenerado = false;
+
+    // Archivo preparado para compartir desde Android.
+    let archivoCompartir = null;
+
+    // Evita descargas simultáneas del mismo MP4.
+    let promesaPreparacion = null;
+
+    // Identifica el vídeo al que pertenece el archivo.
+    let urlArchivoPreparado = "";
 
     // ========================================================
-    // ACTUALIZAR ESTADO VISUAL DE UNA FASE
+    // DETECTAR MÓVIL
+    // ========================================================
+
+    function esMovil() {
+
+        const agente = navigator.userAgent || "";
+
+        const dispositivoMovil = /Android|iPhone|iPad|iPod/i.test(
+            agente
+        );
+
+        const ipadModerno = (
+            navigator.platform === "MacIntel" &&
+            navigator.maxTouchPoints > 1
+        );
+
+        return dispositivoMovil || ipadModerno;
+    }
+
+    // ========================================================
+    // COMPATIBILIDAD CON COMPARTIR ARCHIVOS
+    // ========================================================
+
+    function navegadorPermiteCompartir() {
+
+        return Boolean(
+            window.isSecureContext &&
+            typeof navigator.share === "function" &&
+            typeof navigator.canShare === "function" &&
+            typeof File !== "undefined"
+        );
+    }
+
+    // ========================================================
+    // ACTUALIZAR BOTÓN INSTAGRAM
+    // ========================================================
+
+    function actualizarBotonInstagram() {
+
+        if (!esMovil()) {
+
+            botonInstagram.disabled = false;
+
+            textoInstagram.textContent =
+                "Continuar en Instagram";
+
+            ayudaInstagram.textContent =
+                "Descargaremos el MP4 y abriremos Instagram " +
+                "para que puedas subirlo y terminar la edición.";
+
+            botonQR.hidden = false;
+
+            return;
+        }
+
+        botonQR.hidden = true;
+
+        if (!navegadorPermiteCompartir()) {
+
+            botonInstagram.disabled = false;
+
+            textoInstagram.textContent =
+                "Continuar en Instagram";
+
+            ayudaInstagram.textContent =
+                "Este navegador no permite compartir el MP4 " +
+                "directamente. Puedes descargarlo y abrirlo " +
+                "desde Instagram.";
+
+            return;
+        }
+
+        if (archivoCompartir && urlArchivoPreparado === urlVideoActual) {
+
+            botonInstagram.disabled = false;
+
+            textoInstagram.textContent =
+                "Continuar en Instagram";
+
+            ayudaInstagram.textContent =
+                "Vídeo preparado. Pulsa el botón y selecciona " +
+                "Instagram si aparece entre las aplicaciones.";
+
+            return;
+        }
+
+        botonInstagram.disabled = true;
+
+        textoInstagram.textContent =
+            "Preparando para compartir...";
+
+        ayudaInstagram.textContent =
+            "Estamos preparando el MP4 para enviarlo " +
+            "a las aplicaciones de tu móvil.";
+    }
+
+    // ========================================================
+    // PREPARAR ARCHIVO ANTES DEL CLIC
+    // ========================================================
+
+    async function prepararArchivoCompartir() {
+
+        if (!urlVideoActual) {
+            return;
+        }
+
+        if (!esMovil() || !navegadorPermiteCompartir()) {
+            actualizarBotonInstagram();
+            return;
+        }
+
+        const urlSolicitada = urlVideoActual;
+
+        if (
+            archivoCompartir &&
+            urlArchivoPreparado === urlSolicitada
+        ) {
+            actualizarBotonInstagram();
+            return;
+        }
+
+        if (
+            promesaPreparacion &&
+            urlArchivoPreparado === urlSolicitada
+        ) {
+            return promesaPreparacion;
+        }
+
+        archivoCompartir = null;
+        urlArchivoPreparado = urlSolicitada;
+
+        actualizarBotonInstagram();
+
+        promesaPreparacion = (async function () {
+
+            try {
+
+                const respuesta = await fetch(
+                    urlSolicitada,
+                    {
+                        credentials: "same-origin",
+                        cache: "no-store"
+                    }
+                );
+
+                if (!respuesta.ok) {
+                    throw new Error(
+                        "Error HTTP " + respuesta.status +
+                        " al obtener el MP4."
+                    );
+                }
+
+                const contenido = await respuesta.blob();
+
+                if (!contenido.size) {
+                    throw new Error(
+                        "El archivo descargado está vacío."
+                    );
+                }
+
+                const archivo = new File(
+                    [contenido],
+                    "retori_cut_reel.mp4",
+                    {
+                        type: "video/mp4"
+                    }
+                );
+
+                if (!navigator.canShare({ files: [archivo] })) {
+                    throw new Error(
+                        "Este dispositivo no admite compartir el MP4."
+                    );
+                }
+
+                // Evitar que una descarga antigua sustituya
+                // al archivo de un vídeo nuevo.
+
+                if (urlVideoActual !== urlSolicitada) {
+                    return;
+                }
+
+                archivoCompartir = archivo;
+
+            } catch (error) {
+
+                console.warn(
+                    "No se pudo preparar el MP4 para compartir:",
+                    error
+                );
+
+                if (urlVideoActual === urlSolicitada) {
+
+                    archivoCompartir = null;
+
+                    botonInstagram.disabled = false;
+
+                    textoInstagram.textContent =
+                        "Continuar en Instagram";
+
+                    ayudaInstagram.textContent =
+                        "No se pudo preparar el vídeo para compartir. " +
+                        "Pulsa el botón para descargarlo y abrirlo " +
+                        "manualmente desde Instagram.";
+                }
+
+            } finally {
+
+                if (urlVideoActual === urlSolicitada) {
+                    actualizarBotonInstagram();
+
+                    // Si la preparación ha fallado,
+                    // permitir la alternativa de descarga.
+
+                    if (!archivoCompartir) {
+
+                        botonInstagram.disabled = false;
+
+                        textoInstagram.textContent =
+                            "Continuar en Instagram";
+                    }
+                }
+
+                promesaPreparacion = null;
+            }
+
+        })();
+
+        return promesaPreparacion;
+    }
+
+    // ========================================================
+    // DESCARGAR ARCHIVO
+    // ========================================================
+
+    function descargarArchivo(url, nombre) {
+
+        const enlace = document.createElement("a");
+
+        enlace.href = url;
+        enlace.download = nombre;
+        enlace.style.display = "none";
+
+        document.body.appendChild(enlace);
+
+        enlace.click();
+
+        enlace.remove();
+    }
+
+    // ========================================================
+    // ABRIR INSTAGRAM
+    // ========================================================
+
+    function abrirInstagram() {
+
+        const ventana = window.open(
+            "https://www.instagram.com/",
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+        return Boolean(ventana);
+    }
+
+    // ========================================================
+    // CONTINUAR DESDE PC
+    // ========================================================
+
+    function continuarDesdePC() {
+
+        if (!urlVideoActual) {
+
+            aviso.textContent =
+                "Todavía no está disponible el vídeo exportado.";
+
+            return;
+        }
+
+        const instagramAbierto = abrirInstagram();
+
+        descargarArchivo(
+            urlVideoActual,
+            "retori_cut_reel.mp4"
+        );
+
+        aviso.textContent = instagramAbierto
+            ? "Se ha solicitado la descarga del MP4 y se ha " +
+              "abierto Instagram. Selecciona el archivo " +
+              "descargado para crear tu Reel."
+            : "Se ha solicitado la descarga del MP4. " +
+              "Abre Instagram manualmente para subirlo.";
+    }
+
+    // ========================================================
+    // CONTINUAR DESDE MÓVIL
+    // ========================================================
+
+    async function continuarDesdeMovil() {
+
+        if (!urlVideoActual) {
+
+            aviso.textContent =
+                "Todavía no está disponible el vídeo exportado.";
+
+            return;
+        }
+
+        // Sin HTTPS o sin Web Share API, ofrecemos descarga.
+
+        if (!navegadorPermiteCompartir()) {
+
+            descargarArchivo(
+                urlVideoActual,
+                "retori_cut_reel.mp4"
+            );
+
+            aviso.textContent =
+                "Tu navegador no permite compartir este archivo " +
+                "directamente. Descarga el MP4 y selecciónalo " +
+                "desde Instagram.";
+
+            return;
+        }
+
+        // El archivo debe estar preparado ANTES del clic.
+        // No utilizamos fetch aquí porque podríamos perder
+        // la activación temporal necesaria para navigator.share.
+
+        if (!archivoCompartir) {
+
+            if (promesaPreparacion) {
+
+                aviso.textContent =
+                    "El vídeo todavía se está preparando. " +
+                    "Espera a que termine y vuelve a pulsar.";
+
+                return;
+            }
+
+            descargarArchivo(
+                urlVideoActual,
+                "retori_cut_reel.mp4"
+            );
+
+            aviso.textContent =
+                "No se ha podido preparar el archivo para compartir. " +
+                "Descarga el MP4 y selecciónalo desde Instagram.";
+
+            return;
+        }
+
+        const datosCompartir = {
+            files: [archivoCompartir]
+        };
+
+        if (!navigator.canShare(datosCompartir)) {
+
+            descargarArchivo(
+                urlVideoActual,
+                "retori_cut_reel.mp4"
+            );
+
+            aviso.textContent =
+                "Android no admite compartir este archivo. " +
+                "Utiliza el vídeo descargado.";
+
+            return;
+        }
+
+        // Importante: llamar a share directamente
+        // durante la pulsación del usuario.
+
+        let operacionCompartir;
+
+        try {
+
+            operacionCompartir = navigator.share(datosCompartir);
+
+        } catch (error) {
+
+            console.warn(
+                "No se pudo abrir el menú de compartir:",
+                error
+            );
+
+            aviso.textContent =
+                "No se ha podido abrir el menú de compartir. " +
+                "Puedes descargar el MP4 manualmente.";
+
+            return;
+        }
+
+        try {
+
+            await operacionCompartir;
+
+            aviso.textContent =
+                "Se ha completado la acción de compartir. " +
+                "Si seleccionaste Instagram, continúa allí " +
+                "con la creación de tu Reel.";
+
+        } catch (error) {
+
+            if (error.name === "AbortError") {
+
+                aviso.textContent =
+                    "Has cancelado el menú de compartir.";
+
+            } else {
+
+                console.warn(
+                    "Error al compartir el Reel:",
+                    error
+                );
+
+                aviso.textContent =
+                    "No se ha podido compartir el MP4. " +
+                    "Puedes descargarlo con el botón inferior.";
+            }
+        }
+    }
+
+    // ========================================================
+    // BOTÓN INSTAGRAM
+    // ========================================================
+
+    botonInstagram.addEventListener(
+        "click",
+        function () {
+
+            if (esMovil()) {
+                continuarDesdeMovil();
+            } else {
+                continuarDesdePC();
+            }
+        }
+    );
+
+    // ========================================================
+    // MOSTRAR QR
+    // ========================================================
+
+    botonQR.addEventListener(
+        "click",
+        function () {
+
+            if (!urlVideoActual) {
+
+                aviso.textContent =
+                    "El vídeo todavía no está preparado.";
+
+                return;
+            }
+
+            panelQR.hidden = false;
+
+            const hostname = window.location.hostname;
+
+            const servidorLocal = (
+                hostname === "localhost" ||
+                hostname === "127.0.0.1" ||
+                hostname === "0.0.0.0"
+            );
+
+            if (servidorLocal) {
+
+                imagenQR.hidden = true;
+
+                avisoQR.textContent =
+                    "Estás utilizando RETORI-CUT en localhost. " +
+                    "Para abrir este Reel desde el móvil necesitas " +
+                    "una dirección accesible desde el teléfono.";
+
+                return;
+            }
+
+            if (!window.QRCode) {
+
+                imagenQR.hidden = true;
+
+                avisoQR.textContent =
+                    "No se ha podido cargar el generador de QR. " +
+                    "Comprueba la conexión a Internet.";
+
+                return;
+            }
+
+            imagenQR.hidden = false;
+
+            if (!qrGenerado) {
+
+                imagenQR.innerHTML = "";
+
+                new QRCode(
+                    imagenQR,
+                    {
+                        text: window.location.href,
+                        width: 160,
+                        height: 160,
+                        colorDark: "#17243b",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    }
+                );
+
+                qrGenerado = true;
+            }
+
+            avisoQR.textContent =
+                "Abre el enlace desde tu móvil e inicia sesión " +
+                "en RETORI-CUT si es necesario. " +
+                "Después pulsa Continuar en Instagram.";
+        }
+    );
+
+    cerrarQR.addEventListener(
+        "click",
+        function () {
+            panelQR.hidden = true;
+        }
+    );
+
+    // ========================================================
+    // ESTADO VISUAL DE FASES
     // ========================================================
 
     function establecerFase(nombre, estado) {
@@ -1033,9 +1682,7 @@
         if (estado) {
             elemento.classList.add(estado);
         }
-
     }
-
 
     // ========================================================
     // CONFIGURAR REPRODUCTOR Y DESCARGAS
@@ -1053,20 +1700,20 @@
 
         if (listo && urlVideo) {
 
-            // Mostrar el MP4 exportado.
+            const videoHaCambiado =
+                urlVideoActual !== urlVideo;
+
+            urlVideoActual = urlVideo;
 
             if (video.getAttribute("src") !== urlVideo) {
 
                 video.src = urlVideo;
                 video.load();
-
             }
 
             video.hidden = false;
             miniatura.hidden = true;
             overlay.hidden = true;
-
-            // Activar descargas.
 
             acciones.hidden = false;
 
@@ -1077,8 +1724,9 @@
                 "reel_exportado.mp4"
             );
 
-            previewLeyenda.textContent =
-                "Vídeo exportado con subtítulos";
+            previewLeyenda.textContent = urlSrt
+                ? "Vídeo exportado con subtítulos"
+                : "Vídeo exportado";
 
             if (urlSrt) {
 
@@ -1094,22 +1742,41 @@
             } else {
 
                 descargarSrt.hidden = true;
+            }
 
+            // Preparar el archivo solamente cuando
+            // aparece un vídeo nuevo.
+
+            if (videoHaCambiado) {
+
+                archivoCompartir = null;
+                urlArchivoPreparado = "";
+
+                actualizarBotonInstagram();
+
+                prepararArchivoCompartir();
+
+            } else {
+
+                actualizarBotonInstagram();
             }
 
         } else {
 
+            urlVideoActual = "";
+
+            archivoCompartir = null;
+            urlArchivoPreparado = "";
+
             video.hidden = true;
             overlay.hidden = false;
             acciones.hidden = true;
+            panelQR.hidden = true;
 
             previewLeyenda.textContent =
                 "Previsualización del archivo original";
-
         }
-
     }
-
 
     // ========================================================
     // ACTUALIZAR PANTALLA
@@ -1137,19 +1804,13 @@
             datos.transcripcion_completada === true ||
             (progreso >= 60 && !error);
 
-
-        // ====================================================
         // REINICIAR FASES
-        // ====================================================
 
         Object.keys(fases).forEach(function (nombre) {
             establecerFase(nombre, "");
         });
 
-
-        // ====================================================
         // ANÁLISIS
-        // ====================================================
 
         if (progreso >= 25 || listo) {
 
@@ -1158,33 +1819,26 @@
         } else if (!error) {
 
             establecerFase("analisis", "activa");
-
         }
 
-
-        // ====================================================
         // TRANSCRIPCIÓN
-        // ====================================================
 
         if (transcripcionCompletada || listo) {
 
             establecerFase("transcripcion", "completada");
 
         } else if (
-            estado === "transcribiendo" ||
-            progreso >= 35
+            !error &&
+            (
+                estado === "transcribiendo" ||
+                progreso >= 35
+            )
         ) {
 
-            if (!error) {
-                establecerFase("transcripcion", "activa");
-            }
-
+            establecerFase("transcripcion", "activa");
         }
 
-
-        // ====================================================
         // SUBTÍTULOS
-        // ====================================================
 
         if (subtitulosGenerados) {
 
@@ -1198,13 +1852,9 @@
         ) {
 
             establecerFase("subtitulos", "activa");
-
         }
 
-
-        // ====================================================
-        // EDICIÓN Y EXPORTACIÓN
-        // ====================================================
+        // EDICIÓN
 
         if (listo) {
 
@@ -1215,13 +1865,9 @@
         } else if (!error && estado === "editando") {
 
             establecerFase("edicion", "activa");
-
         }
 
-
-        // ====================================================
         // ERROR
-        // ====================================================
 
         if (error) {
 
@@ -1230,13 +1876,9 @@
         } else {
 
             aviso.classList.remove("error");
-
         }
 
-
-        // ====================================================
         // PROGRESO
-        // ====================================================
 
         porcentaje.textContent = progreso + "%";
 
@@ -1256,18 +1898,12 @@
             "rgba(255,255,255,.25) " + progreso + "%," +
             "rgba(255,255,255,.25) 100%)";
 
-
-        // ====================================================
         // MENSAJE
-        // ====================================================
 
         mensaje.textContent =
             datos.mensaje || "Preparando vídeo...";
 
-
-        // ====================================================
         // MINIATURA
-        // ====================================================
 
         if (datos.miniatura) {
 
@@ -1277,17 +1913,12 @@
             ) {
 
                 miniatura.src = datos.miniatura;
-
             }
 
             miniatura.hidden = false;
-
         }
 
-
-        // ====================================================
         // METADATOS
-        // ====================================================
 
         if (
             datos.duracion !== null &&
@@ -1306,24 +1937,16 @@
                     " × " +
                     datos.alto +
                     " px";
-
             }
 
             metadatos.textContent = texto;
-
         }
 
-
-        // ====================================================
-        // REPRODUCTOR Y DESCARGAS
-        // ====================================================
+        // REPRODUCTOR
 
         configurarVideo(datos, listo);
 
-
-        // ====================================================
-        // MENSAJES DE ESTADO
-        // ====================================================
+        // MENSAJES
 
         if (error) {
 
@@ -1354,8 +1977,22 @@
             aviso.textContent =
                 datos.archivo_editado ||
                 editor.dataset.videoUrl
-                    ? "Tu vídeo está listo para reproducir y descargar."
+                    ? "Tu vídeo está listo para reproducir, descargar y compartir."
                     : "El procesamiento ha terminado, pero no se ha encontrado la URL del vídeo exportado.";
+
+        } else if (estado === "editando") {
+
+            titulo.textContent =
+                "Exportando vídeo";
+
+            descripcion.textContent =
+                "Estamos generando el archivo MP4.";
+
+            previewEstado.textContent =
+                "Exportando vídeo";
+
+            aviso.textContent =
+                "RETORI-CUT está preparando el vídeo final.";
 
         } else if (subtitulosGenerados) {
 
@@ -1399,20 +2036,6 @@
             aviso.textContent =
                 "Estamos generando la transcripción del vídeo.";
 
-        } else if (estado === "editando") {
-
-            titulo.textContent =
-                "Exportando vídeo";
-
-            descripcion.textContent =
-                "Estamos generando el archivo MP4.";
-
-            previewEstado.textContent =
-                "Exportando vídeo";
-
-            aviso.textContent =
-                "RETORI-CUT está preparando el vídeo final.";
-
         } else {
 
             titulo.textContent =
@@ -1426,13 +2049,10 @@
 
             aviso.textContent =
                 "RETORI-CUT está preparando tu vídeo.";
-
         }
 
         return listo || error;
-
     }
-
 
     // ========================================================
     // CONSULTAR ESTADO EN DJANGO
@@ -1448,22 +2068,21 @@
 
         try {
 
-            const respuesta = await fetch(urlEstado, {
-
-                cache: "no-store",
-
-                headers: {
-                    "Accept": "application/json"
+            const respuesta = await fetch(
+                urlEstado,
+                {
+                    cache: "no-store",
+                    headers: {
+                        "Accept": "application/json"
+                    }
                 }
-
-            });
+            );
 
             if (!respuesta.ok) {
 
                 throw new Error(
                     "Error HTTP " + respuesta.status
                 );
-
             }
 
             const datos = await respuesta.json();
@@ -1474,7 +2093,6 @@
 
                 clearInterval(temporizador);
                 temporizador = null;
-
             }
 
         } catch (error) {
@@ -1490,11 +2108,8 @@
         } finally {
 
             consultando = false;
-
         }
-
     }
-
 
     // ========================================================
     // INICIALIZACIÓN
@@ -1521,35 +2136,26 @@
 
         archivo_subtitulos:
             editor.dataset.srtUrl
-
     });
 
-
-    // Primera consulta inmediata.
-
     consultarEstado();
-
-
-    // Consultar progreso cada 1,5 segundos.
 
     temporizador = setInterval(
         consultarEstado,
         1500
     );
 
+    window.addEventListener(
+        "pagehide",
+        function () {
 
-    // Detener consultas al abandonar la página.
-
-    window.addEventListener("pagehide", function () {
-
-        if (temporizador) {
-            clearInterval(temporizador);
+            if (temporizador) {
+                clearInterval(temporizador);
+            }
         }
-
-    });
+    );
 
 })();
-
 </script>
 
 {% endblock %}

@@ -1,0 +1,121 @@
+[Script Info]
+Title: RETORI-CUT
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+ScaledBorderAndShadow: yes
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,80,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,8,2,5,84,84,433,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+Dialogue: 0,0:00:01.23,0:00:01.41,Default,,0,0,0,,NO
+Dialogue: 0,0:00:01.41,0:00:01.53,Default,,0,0,0,,NO ME
+Dialogue: 0,0:00:01.53,0:00:01.95,Default,,0,0,0,,NO ME QUEDARON
+Dialogue: 0,0:00:01.95,0:00:02.23,Default,,0,0,0,,LOS
+Dialogue: 0,0:00:02.23,0:00:02.63,Default,,0,0,0,,LOS BESOS
+Dialogue: 0,0:00:02.63,0:00:02.77,Default,,0,0,0,,LOS BESOS Y
+Dialogue: 0,0:00:02.77,0:00:02.91,Default,,0,0,0,,TODOS
+Dialogue: 0,0:00:02.91,0:00:03.19,Default,,0,0,0,,TODOS LOS
+Dialogue: 0,0:00:03.19,0:00:03.59,Default,,0,0,0,,TODOS LOS PLANES
+Dialogue: 0,0:00:03.59,0:00:04.21,Default,,0,0,0,,NO
+Dialogue: 0,0:00:04.21,0:00:04.37,Default,,0,0,0,,NO SÉ
+Dialogue: 0,0:00:04.37,0:00:04.53,Default,,0,0,0,,NO SÉ SI
+Dialogue: 0,0:00:04.53,0:00:04.73,Default,,0,0,0,,ME
+Dialogue: 0,0:00:04.73,0:00:04.99,Default,,0,0,0,,ME VIERON
+Dialogue: 0,0:00:04.99,0:00:05.55,Default,,0,0,0,,ME VIERON MORIR
+Dialogue: 0,0:00:05.55,0:00:06.17,Default,,0,0,0,,ME
+Dialogue: 0,0:00:06.17,0:00:06.57,Default,,0,0,0,,ME ENCUENTRAN
+Dialogue: 0,0:00:06.57,0:00:06.75,Default,,0,0,0,,ME ENCUENTRAN UN
+Dialogue: 0,0:00:06.75,0:00:07.01,Default,,0,0,0,,LIMBO
+Dialogue: 0,0:00:07.01,0:00:07.25,Default,,0,0,0,,LIMBO DESDE
+Dialogue: 0,0:00:07.25,0:00:07.51,Default,,0,0,0,,LIMBO DESDE QUE
+Dialogue: 0,0:00:07.51,0:00:07.69,Default,,0,0,0,,TE
+Dialogue: 0,0:00:07.69,0:00:08.01,Default,,0,0,0,,TE FUISTE
+Dialogue: 0,0:00:08.01,0:00:08.19,Default,,0,0,0,,TE FUISTE DE
+Dialogue: 0,0:00:08.19,0:00:08.53,Default,,0,0,0,,AQUÍ
+Dialogue: 0,0:00:08.53,0:00:09.29,Default,,0,0,0,,AQUÍ ERES
+Dialogue: 0,0:00:09.29,0:00:09.51,Default,,0,0,0,,AQUÍ ERES LA
+Dialogue: 0,0:00:09.51,0:00:09.73,Default,,0,0,0,,ÚNICA
+Dialogue: 0,0:00:09.73,0:00:10.29,Default,,0,0,0,,ÚNICA PERSONA
+Dialogue: 0,0:00:10.29,0:00:10.57,Default,,0,0,0,,ÚNICA PERSONA QUE
+Dialogue: 0,0:00:10.57,0:00:10.73,Default,,0,0,0,,TE
+Dialogue: 0,0:00:10.73,0:00:10.81,Default,,0,0,0,,TE QUIERO
+Dialogue: 0,0:00:10.81,0:00:11.19,Default,,0,0,0,,TE QUIERO QUE
+Dialogue: 0,0:00:11.19,0:00:11.39,Default,,0,0,0,,SE
+Dialogue: 0,0:00:11.39,0:00:11.61,Default,,0,0,0,,SE VENDE
+Dialogue: 0,0:00:11.61,0:00:12.03,Default,,0,0,0,,SE VENDE ENCIMA
+Dialogue: 0,0:00:12.03,0:00:12.23,Default,,0,0,0,,DE
+Dialogue: 0,0:00:12.23,0:00:12.37,Default,,0,0,0,,DE MÍ
+Dialogue: 0,0:00:13.03,0:00:13.37,Default,,0,0,0,,MI
+Dialogue: 0,0:00:13.37,0:00:13.89,Default,,0,0,0,,MI LIBERTAD
+Dialogue: 0,0:00:13.89,0:00:14.05,Default,,0,0,0,,MI LIBERTAD NO
+Dialogue: 0,0:00:14.05,0:00:14.21,Default,,0,0,0,,LA
+Dialogue: 0,0:00:14.21,0:00:15.03,Default,,0,0,0,,LA QUIERO,
+Dialogue: 0,0:00:15.03,0:00:15.33,Default,,0,0,0,,LA QUIERO, TAMPOCO
+Dialogue: 0,0:00:15.33,0:00:15.69,Default,,0,0,0,,LA
+Dialogue: 0,0:00:15.69,0:00:15.89,Default,,0,0,0,,LA VIDA
+Dialogue: 0,0:00:15.89,0:00:16.13,Default,,0,0,0,,LA VIDA ES
+Dialogue: 0,0:00:16.13,0:00:17.15,Default,,0,0,0,,SOLTERO
+Dialogue: 0,0:00:17.15,0:00:17.39,Default,,0,0,0,,SOLTERO YO
+Dialogue: 0,0:00:17.39,0:00:17.53,Default,,0,0,0,,SOLTERO YO LO
+Dialogue: 0,0:00:17.53,0:00:17.67,Default,,0,0,0,,QUE
+Dialogue: 0,0:00:17.67,0:00:18.01,Default,,0,0,0,,QUE QUIERO
+Dialogue: 0,0:00:18.01,0:00:18.11,Default,,0,0,0,,QUE QUIERO ES
+Dialogue: 0,0:00:18.11,0:00:18.17,Default,,0,0,0,,QUE
+Dialogue: 0,0:00:18.17,0:00:18.47,Default,,0,0,0,,QUE QUIERO
+Dialogue: 0,0:00:18.47,0:00:18.63,Default,,0,0,0,,QUE QUIERO EL
+Dialogue: 0,0:00:18.63,0:00:18.77,Default,,0,0,0,,MISMO
+Dialogue: 0,0:00:18.77,0:00:19.17,Default,,0,0,0,,MISMO QUE
+Dialogue: 0,0:00:19.17,0:00:19.45,Default,,0,0,0,,MISMO QUE TODOS
+Dialogue: 0,0:00:19.45,0:00:20.09,Default,,0,0,0,,QUEREMOS
+Dialogue: 0,0:00:20.73,0:00:21.29,Default,,0,0,0,,ERES
+Dialogue: 0,0:00:21.29,0:00:21.65,Default,,0,0,0,,ERES UNA
+Dialogue: 0,0:00:21.65,0:00:21.95,Default,,0,0,0,,ERES UNA CUENTA
+Dialogue: 0,0:00:21.95,0:00:22.23,Default,,0,0,0,,DE
+Dialogue: 0,0:00:22.23,0:00:22.55,Default,,0,0,0,,DE PATO
+Dialogue: 0,0:00:22.55,0:00:22.75,Default,,0,0,0,,DE PATO CON
+Dialogue: 0,0:00:22.75,0:00:23.19,Default,,0,0,0,,DIGUITO
+Dialogue: 0,0:00:23.19,0:00:23.41,Default,,0,0,0,,DIGUITO Y
+Dialogue: 0,0:00:23.41,0:00:23.65,Default,,0,0,0,,DIGUITO Y MUCHO
+Dialogue: 0,0:00:23.65,0:00:24.33,Default,,0,0,0,,CERO
+Dialogue: 0,0:00:24.93,0:00:25.49,Default,,0,0,0,,HACÉLE
+Dialogue: 0,0:00:25.49,0:00:25.63,Default,,0,0,0,,HACÉLE EL
+Dialogue: 0,0:00:25.63,0:00:25.81,Default,,0,0,0,,HACÉLE EL AMOR
+Dialogue: 0,0:00:25.81,0:00:26.03,Default,,0,0,0,,AL
+Dialogue: 0,0:00:26.03,0:00:26.41,Default,,0,0,0,,AL DIARIO
+Dialogue: 0,0:00:26.41,0:00:26.75,Default,,0,0,0,,AL DIARIO DESPUÉS
+Dialogue: 0,0:00:26.75,0:00:26.76,Default,,0,0,0,,DE
+Dialogue: 0,0:00:26.75,0:00:27.25,Default,,0,0,0,,DE CADA
+Dialogue: 0,0:00:27.25,0:00:27.55,Default,,0,0,0,,DE CADA DÍA
+Dialogue: 0,0:00:29.50,0:00:30.12,Default,,0,0,0,,SI
+Dialogue: 0,0:00:30.12,0:00:30.72,Default,,0,0,0,,SI TODAVÍA
+Dialogue: 0,0:00:30.72,0:00:31.18,Default,,0,0,0,,SI TODAVÍA ME
+Dialogue: 0,0:00:31.18,0:00:31.76,Default,,0,0,0,,AMAS
+Dialogue: 0,0:00:31.76,0:00:32.06,Default,,0,0,0,,AMAS COMO
+Dialogue: 0,0:00:32.06,0:00:32.86,Default,,0,0,0,,AMAS COMO ANTES
+Dialogue: 0,0:00:33.50,0:00:34.12,Default,,0,0,0,,YA
+Dialogue: 0,0:00:34.12,0:00:34.52,Default,,0,0,0,,YA NADA
+Dialogue: 0,0:00:34.52,0:00:34.90,Default,,0,0,0,,YA NADA ME
+Dialogue: 0,0:00:34.90,0:00:35.40,Default,,0,0,0,,PARECE
+Dialogue: 0,0:00:35.40,0:00:36.74,Default,,0,0,0,,PARECE INTERESANTE
+Dialogue: 0,0:00:37.50,0:00:38.10,Default,,0,0,0,,YO
+Dialogue: 0,0:00:38.10,0:00:38.40,Default,,0,0,0,,YO SÉ
+Dialogue: 0,0:00:38.40,0:00:38.62,Default,,0,0,0,,YO SÉ QUE
+Dialogue: 0,0:00:38.62,0:00:38.80,Default,,0,0,0,,EN
+Dialogue: 0,0:00:38.80,0:00:39.02,Default,,0,0,0,,EN EL
+Dialogue: 0,0:00:39.02,0:00:39.34,Default,,0,0,0,,EN EL AMOR
+Dialogue: 0,0:00:39.34,0:00:39.72,Default,,0,0,0,,SOY
+Dialogue: 0,0:00:39.72,0:00:39.98,Default,,0,0,0,,SOY UN
+Dialogue: 0,0:00:39.98,0:00:40.78,Default,,0,0,0,,SOY UN PENSANTE
+Dialogue: 0,0:00:40.78,0:00:41.36,Default,,0,0,0,,YO
+Dialogue: 0,0:00:41.36,0:00:41.68,Default,,0,0,0,,YO SIN
+Dialogue: 0,0:00:41.68,0:00:41.88,Default,,0,0,0,,YO SIN TI
+Dialogue: 0,0:00:41.88,0:00:42.14,Default,,0,0,0,,NO
+Dialogue: 0,0:00:42.14,0:00:42.42,Default,,0,0,0,,NO PUEDO
+Dialogue: 0,0:00:42.42,0:00:43.54,Default,,0,0,0,,NO PUEDO ENAMORARME
+Dialogue: 0,0:00:43.54,0:00:44.28,Default,,0,0,0,,BEBÉ

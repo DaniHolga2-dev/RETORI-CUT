@@ -1,4 +1,5 @@
 
+from django.conf import settings
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -37,6 +38,18 @@ class Plantilla(models.Model):
         ("dinamico", "Dinámico"),
         ("impacto", "Impacto"),
     ]
+
+    # ========================================================
+    # PROPIETARIO DE LA PLANTILLA
+    # ========================================================
+
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="plantillas",
+        null=True,
+        blank=True,
+    )
 
     # ========================================================
     # INFORMACIÓN GENERAL
@@ -140,6 +153,17 @@ class Plantilla(models.Model):
         default=5
     )
 
+    FORMATO_SUBTITULOS = [
+        ("mayusculas", "Mayúsculas"),
+        ("minusculas", "Minúsculas"),
+    ]
+
+    formato_subtitulos = models.CharField(
+        max_length=12,
+        choices=FORMATO_SUBTITULOS,
+        default="mayusculas",
+    )
+
     # ========================================================
     # ANIMACIONES
     # ========================================================
@@ -217,6 +241,18 @@ class Plantilla(models.Model):
 class Reel(models.Model):
 
     # ========================================================
+    # PROPIETARIO DEL REEL
+    # ========================================================
+
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reels",
+        null=True,
+        blank=True,
+    )
+
+    # ========================================================
     # ESTADOS DEL REEL
     # ========================================================
 
@@ -267,6 +303,9 @@ class Reel(models.Model):
         blank=True,
         related_name="reels"
     )
+
+    # Palabras o expresiones específicas que el usuario desea resaltar.
+    palabras_destacadas = models.TextField(default="", blank=True)
 
     # ========================================================
     # INFORMACIÓN DEL VÍDEO
@@ -373,7 +412,6 @@ class Reel(models.Model):
 
 # ============================================================
 # CONFIGURACIÓN ANTERIOR
-# CONSERVADA TEMPORALMENTE PARA NO PERDER DATOS
 # ============================================================
 
 class ConfiguracionMarca(models.Model):
@@ -523,3 +561,81 @@ class ConfiguracionMarca(models.Model):
     class Meta:
         verbose_name = "Configuración de marca"
         verbose_name_plural = "Configuraciones de marca"
+
+
+# ============================================================
+# PREFERENCIAS GENERALES POR USUARIO
+# ============================================================
+
+class PreferenciasUsuario(models.Model):
+
+    usuario = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="preferencias_retori_cut",
+    )
+
+    resolucion = models.CharField(
+        max_length=4,
+        choices=[
+            ("720", "720p"),
+            ("1080", "1080p"),
+        ],
+        default="1080",
+    )
+
+    fps = models.PositiveSmallIntegerField(
+        choices=[
+            (24, "24 FPS"),
+            (30, "30 FPS"),
+            (60, "60 FPS"),
+        ],
+        default=30,
+    )
+
+    calidad = models.CharField(
+        max_length=20,
+        choices=[
+            ("alta", "Alta"),
+            ("equilibrada", "Equilibrada"),
+            ("ligera", "Archivo ligero"),
+        ],
+        default="equilibrada",
+    )
+
+    tema = models.CharField(
+        max_length=10,
+        choices=[
+            ("claro", "Claro"),
+            ("oscuro", "Oscuro"),
+        ],
+        default="claro",
+    )
+
+    avisar_finalizacion = models.BooleanField(
+        default=True
+    )
+
+    ir_a_mis_videos = models.BooleanField(
+        default=False
+    )
+
+    conservar_originales = models.BooleanField(
+        default=True
+    )
+
+    limpieza_automatica = models.BooleanField(
+        default=False
+    )
+
+    dias_limpieza = models.PositiveSmallIntegerField(
+        choices=[
+            (7, "7 días"),
+            (30, "30 días"),
+            (90, "90 días"),
+        ],
+        default=30,
+    )
+
+    def __str__(self):
+        return f"Preferencias de {self.usuario}"

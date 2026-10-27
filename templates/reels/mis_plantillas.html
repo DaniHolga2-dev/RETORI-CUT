@@ -1,315 +1,379 @@
-
-{% extends "base.html" %}
+{% extends "reels/base.html" %}
 
 {% block title %}Mis plantillas | RETORI-CUT{% endblock %}
-
 {% block nav_plantillas %}active{% endblock %}
 
 {% block content %}
 
 <style>
-    .plantillas-page {
-        max-width: 1250px;
-        margin: 0 auto;
-        padding: 12px 0 48px;
-    }
+.plantillas-page {
+    --pl-texto: #182238;
+    --pl-secundario: #777f91;
+    --pl-tarjeta: #ffffff;
+    --pl-borde: #e8ebf2;
+    --pl-descripcion: #788193;
+    --pl-separador: #edf0f5;
+    --pl-boton-fondo: #ffffff;
+    --pl-boton-borde: #e1e6ef;
+    --pl-boton-texto: #26344d;
+    --pl-boton-hover: #f4f7fc;
+    --pl-nota: #728099;
+    --pl-vacio-fondo: #fafbfe;
+    --pl-vacio-borde: #dce3ee;
+    --pl-vacio-texto: #7c8798;
+    --pl-vacio-titulo: #24314a;
 
-    .plantillas-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 24px;
-        margin-bottom: 32px;
-    }
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 12px 0 48px;
+}
 
-    .plantillas-header h1 {
-        font-size: 30px;
-        font-weight: 800;
-        letter-spacing: -1px;
-        margin: 0 0 8px;
-        color: #182238;
-    }
+html[data-theme="oscuro"] .plantillas-page {
+    --pl-texto: #f1f5ff;
+    --pl-secundario: #a3b1c8;
+    --pl-tarjeta: #192437;
+    --pl-borde: #304057;
+    --pl-descripcion: #a3b1c8;
+    --pl-separador: #304057;
+    --pl-boton-fondo: #24354d;
+    --pl-boton-borde: #40536d;
+    --pl-boton-texto: #dce7f7;
+    --pl-boton-hover: #30435e;
+    --pl-nota: #a5b6cc;
+    --pl-vacio-fondo: #192437;
+    --pl-vacio-borde: #40536d;
+    --pl-vacio-texto: #a3b1c8;
+    --pl-vacio-titulo: #f1f5ff;
+}
 
-    .plantillas-header p {
-        color: #777f91;
-        font-size: 14px;
-        margin: 0;
-    }
+.plantillas-page *,
+.plantillas-page *::before,
+.plantillas-page *::after {
+    box-sizing: border-box;
+}
 
-    .plantillas-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 9px;
-        padding: 13px 20px;
-        border: 0;
-        border-radius: 12px;
-        background: #156fe7;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 13px;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.2s;
-    }
+.plantillas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 32px;
+}
 
-    .plantillas-btn:hover {
-        background: #095ac4;
-        transform: translateY(-2px);
-    }
+.plantillas-header h1 {
+    margin: 0 0 8px;
+    color: var(--pl-texto);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
 
-    .plantillas-section-title {
-        margin: 30px 0 17px;
-        font-size: 17px;
-        font-weight: 800;
-        color: #182238;
-    }
+.plantillas-header p {
+    margin: 0;
+    color: var(--pl-secundario);
+    font-size: 14px;
+    line-height: 1.6;
+}
 
+.plantillas-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 13px 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #156fe7;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 9px 24px rgba(21,111,231,.18);
+    transition: background .2s, transform .2s, box-shadow .2s;
+}
+
+.plantillas-btn:hover {
+    background: #095ac4;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(21,111,231,.28);
+}
+
+.plantillas-section-title {
+    margin: 30px 0 17px;
+    color: var(--pl-texto);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.plantillas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.plantilla-card {
+    overflow: hidden;
+    border: 1px solid var(--pl-borde);
+    border-radius: 18px;
+    background: var(--pl-tarjeta);
+    box-shadow: 0 8px 28px rgba(15,35,70,.04);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+
+.plantilla-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(15,35,70,.08);
+}
+
+html[data-theme="oscuro"] .plantilla-card {
+    box-shadow: 0 8px 28px rgba(0,0,0,.1);
+}
+
+html[data-theme="oscuro"] .plantilla-card:hover {
+    border-color: #4c6585;
+    box-shadow: 0 12px 30px rgba(0,0,0,.2);
+}
+
+.plantilla-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 165px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #111b35, #263b64);
+}
+
+.plantilla-preview::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -50px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.04);
+}
+
+.plantilla-preview-text {
+    position: relative;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -.6px;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.plantilla-preview-text span {
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: #156fe7;
+    color: inherit;
+}
+
+.plantilla-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.15);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+}
+
+.plantilla-info {
+    padding: 20px;
+}
+
+.plantilla-name {
+    margin: 0 0 8px;
+    color: var(--pl-texto);
+    font-size: 17px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.plantilla-description {
+    min-height: 39px;
+    margin: 0 0 16px;
+    color: var(--pl-descripcion);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.plantilla-colors {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 18px;
+}
+
+.plantilla-color {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 50%;
+    background: #e5e7eb;
+}
+
+html[data-theme="oscuro"] .plantilla-color {
+    border-color: rgba(255,255,255,.25);
+}
+
+.plantilla-actions {
+    display: flex;
+    gap: 9px;
+    padding-top: 16px;
+    border-top: 1px solid var(--pl-separador);
+}
+
+.plantilla-delete-form {
+    flex: 1;
+    margin: 0;
+}
+
+.plantilla-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--pl-boton-borde);
+    border-radius: 9px;
+    background: var(--pl-boton-fondo);
+    color: var(--pl-boton-texto);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s;
+}
+
+.plantilla-action:hover {
+    background: var(--pl-boton-hover);
+    color: var(--pl-boton-texto);
+}
+
+.plantilla-action-danger {
+    color: #db3551;
+    border-color: #f4dbe0;
+}
+
+.plantilla-action-danger:hover {
+    background: #fff1f3;
+    color: #c32745;
+}
+
+html[data-theme="oscuro"] .plantilla-action-danger {
+    color: #ff9cad;
+    border-color: #794453;
+    background: #3b2732;
+}
+
+html[data-theme="oscuro"] .plantilla-action-danger:hover {
+    background: #53313e;
+    border-color: #aa596d;
+    color: #ffc0cc;
+}
+
+.plantilla-official-note {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-top: 12px;
+    border-top: 1px solid var(--pl-separador);
+    color: var(--pl-nota);
+    font-size: 12px;
+}
+
+.plantillas-empty {
+    grid-column: 1 / -1;
+    padding: 45px 25px;
+    border: 2px dashed var(--pl-vacio-borde);
+    border-radius: 18px;
+    background: var(--pl-vacio-fondo);
+    color: var(--pl-vacio-texto);
+    text-align: center;
+}
+
+.plantillas-empty[hidden] {
+    display: none !important;
+}
+
+.plantillas-empty h3 {
+    margin: 0 0 10px;
+    color: var(--pl-vacio-titulo);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.plantillas-empty p {
+    margin: 0 0 20px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+@media (max-width: 1000px) {
     .plantillas-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 22px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+}
 
-    .plantilla-card {
-        background: #fff;
-        border: 1px solid #e8ebf2;
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 8px 28px rgba(15, 35, 70, 0.04);
-        transition: transform 0.2s, box-shadow 0.2s;
+@media (max-width: 650px) {
+    .plantillas-page {
+        padding: 8px 0 35px;
     }
-
-    .plantilla-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(15, 35, 70, 0.08);
+    .plantillas-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
     }
-
-    .plantilla-preview {
-        height: 165px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        background: linear-gradient(145deg, #111b35, #263b64);
-        overflow: hidden;
+    .plantillas-header h1 {
+        font-size: 25px;
     }
-
-    .plantilla-preview::before {
-        content: "";
-        position: absolute;
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.04);
-        right: -50px;
-        top: -70px;
+    .plantillas-grid {
+        grid-template-columns: 1fr;
     }
-
-    .plantilla-preview-text {
-        position: relative;
-        color: #fff;
-        font-size: 22px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: -0.6px;
-        text-align: center;
-        padding: 15px;
-        line-height: 1.3;
-    }
-
-    .plantilla-preview-text span {
-        background: #156fe7;
-        color: #fff;
-        padding: 2px 7px;
-        border-radius: 3px;
-    }
-
-    .plantilla-badge {
-        position: absolute;
-        left: 15px;
-        top: 15px;
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        padding: 7px 10px;
-        border-radius: 8px;
-        backdrop-filter: blur(8px);
-    }
-
-    .plantilla-info {
-        padding: 20px;
-    }
-
-    .plantilla-name {
-        font-size: 17px;
-        font-weight: 800;
-        margin: 0 0 8px;
-        color: #182238;
-        overflow-wrap: anywhere;
-    }
-
-    .plantilla-description {
-        color: #788193;
-        font-size: 12px;
-        line-height: 1.6;
-        min-height: 39px;
-        margin: 0 0 16px;
-        overflow-wrap: anywhere;
-    }
-
-    .plantilla-colors {
-        display: flex;
-        gap: 7px;
-        margin-bottom: 18px;
-    }
-
-    .plantilla-color {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        flex-shrink: 0;
-        background-color: #e5e7eb;
-    }
-
-    .plantilla-actions {
-        display: flex;
-        gap: 9px;
-        border-top: 1px solid #edf0f5;
-        padding-top: 16px;
-    }
-
-    .plantilla-delete-form {
-        flex: 1;
-        margin: 0;
-    }
-
-    .plantilla-action {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
+    .plantillas-btn {
         width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-        padding: 10px;
-        border-radius: 9px;
-        border: 1px solid #e1e6ef;
-        background: #fff;
-        color: #26344d;
-        text-decoration: none;
-        font-size: 12px;
-        font-weight: 700;
-        font-family: inherit;
-        cursor: pointer;
-        transition: background 0.2s;
     }
-
-    .plantilla-action:hover {
-        background: #f4f7fc;
+    .plantilla-preview {
+        height: 175px;
     }
-
-    .plantilla-action-danger {
-        color: #db3551;
-        border-color: #f4dbe0;
-    }
-
-    .plantilla-action-danger:hover {
-        background: #fff1f3;
-    }
-
-    .plantilla-official-note {
-        font-size: 12px;
-        color: #728099;
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        padding-top: 12px;
-        border-top: 1px solid #edf0f5;
-    }
-
-    .plantillas-empty {
-        grid-column: 1 / -1;
-        border: 2px dashed #dce3ee;
-        border-radius: 18px;
-        padding: 45px 25px;
-        text-align: center;
-        color: #7c8798;
-        background: #fafbfe;
-    }
-
-    .plantillas-empty h3 {
-        color: #24314a;
-        margin: 0 0 10px;
-        font-size: 16px;
-    }
-
-    .plantillas-empty p {
-        margin: 0 0 20px;
-        font-size: 13px;
-    }
-
-    @media (max-width: 1000px) {
-        .plantillas-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-    }
-
-    @media (max-width: 650px) {
-        .plantillas-header {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .plantillas-header h1 {
-            font-size: 25px;
-        }
-
-        .plantillas-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .plantillas-btn {
-            width: 100%;
-            box-sizing: border-box;
-        }
-    }
+}
 </style>
-
 
 <div class="plantillas-page">
 
-    <!-- ======================================================
-         CABECERA
-    ======================================================= -->
+    <!-- CABECERA -->
 
     <div class="plantillas-header">
-
         <div>
             <h1>Mis plantillas</h1>
-
             <p>
                 Gestiona los estilos que puedes aplicar
                 a tus vídeos.
             </p>
         </div>
 
-        <a
-            href="{% url 'crear_plantilla' %}"
-            class="plantillas-btn"
-        >
+        <a href="{% url 'crear_plantilla' %}" class="plantillas-btn">
             + Crear plantilla
         </a>
-
     </div>
 
-
-    <!-- ======================================================
-         PLANTILLA OFICIAL
-    ======================================================= -->
+    <!-- PLANTILLA OFICIAL -->
 
     <h2 class="plantillas-section-title">
         Plantilla oficial
@@ -318,7 +382,6 @@
     <div class="plantillas-grid">
 
         {% for plantilla in plantillas %}
-
             {% if plantilla.tipo == "oficial" %}
 
                 <article class="plantilla-card">
@@ -329,9 +392,21 @@
                             Oficial
                         </div>
 
-                        <div class="plantilla-preview-text">
-                            ESTO ES
-                            <span>RETORIKA</span>
+                        <div
+                            class="plantilla-preview-text"
+                            data-text-color="{{ plantilla.color_blanco }}"
+                            data-format="{{ plantilla.formato_subtitulos }}"
+                        >
+                            <span class="preview-primera">
+                                ESTO ES
+                            </span>
+
+                            <span
+                                class="preview-destacada"
+                                data-color="{{ plantilla.color_destacado }}"
+                            >
+                                RETORIKA
+                            </span>
                         </div>
 
                     </div>
@@ -348,29 +423,21 @@
 
                         <div class="plantilla-colors">
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_azul }}"
-                                title="Color principal"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_azul }}"
+                                 title="Color principal"></div>
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_fucsia }}"
-                                title="Color secundario"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_fucsia }}"
+                                 title="Color secundario"></div>
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_verde }}"
-                                title="Color adicional"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_verde }}"
+                                 title="Color adicional"></div>
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_blanco }}"
-                                title="Color del texto"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_blanco }}"
+                                 title="Color del texto"></div>
 
                         </div>
 
@@ -379,19 +446,14 @@
                         </div>
 
                     </div>
-
                 </article>
 
             {% endif %}
-
         {% endfor %}
 
     </div>
 
-
-    <!-- ======================================================
-         PLANTILLAS PERSONALIZADAS
-    ======================================================= -->
+    <!-- PLANTILLAS PERSONALIZADAS -->
 
     <h2 class="plantillas-section-title">
         Plantillas personalizadas
@@ -400,7 +462,6 @@
     <div class="plantillas-grid">
 
         {% for plantilla in plantillas %}
-
             {% if plantilla.tipo == "personalizada" %}
 
                 <article class="plantilla-card">
@@ -411,10 +472,17 @@
                             Personalizada
                         </div>
 
-                        <div class="plantilla-preview-text">
-                            TU PROPIO
+                        <div
+                            class="plantilla-preview-text"
+                            data-text-color="{{ plantilla.color_blanco }}"
+                            data-format="{{ plantilla.formato_subtitulos }}"
+                        >
+                            <span class="preview-primera">
+                                TU PROPIO
+                            </span>
 
                             <span
+                                class="preview-destacada"
                                 data-color="{{ plantilla.color_destacado }}"
                             >
                                 ESTILO
@@ -435,37 +503,29 @@
 
                         <div class="plantilla-colors">
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_azul }}"
-                                title="Color principal"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_azul }}"
+                                 title="Color principal"></div>
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_fucsia }}"
-                                title="Color secundario"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_fucsia }}"
+                                 title="Color secundario"></div>
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_verde }}"
-                                title="Color adicional"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_verde }}"
+                                 title="Color adicional"></div>
 
-                            <div
-                                class="plantilla-color"
-                                data-color="{{ plantilla.color_blanco }}"
-                                title="Color del texto"
-                            ></div>
+                            <div class="plantilla-color"
+                                 data-color="{{ plantilla.color_blanco }}"
+                                 title="Color del texto"></div>
 
                         </div>
 
                         <div class="plantilla-actions">
 
                             <a
-                                class="plantilla-action"
                                 href="{% url 'editar_plantilla' plantilla.id %}"
+                                class="plantilla-action"
                             >
                                 Editar
                             </a>
@@ -476,7 +536,6 @@
                                 class="plantilla-delete-form"
                                 data-delete-form
                             >
-
                                 {% csrf_token %}
 
                                 <button
@@ -485,25 +544,18 @@
                                 >
                                     Eliminar
                                 </button>
-
                             </form>
 
                         </div>
 
                     </div>
-
                 </article>
 
             {% endif %}
-
         {% endfor %}
 
         {% if not plantillas_personalizadas %}
-            <div
-                class="plantillas-empty"
-                id="plantillas-empty"
-                hidden
-            >
+            <div class="plantillas-empty" id="plantillas-empty" hidden>
                 <h3>
                     Todavía no tienes plantillas personalizadas
                 </h3>
@@ -513,102 +565,107 @@
                     estilo de edición.
                 </p>
 
-                <a
-                    href="{% url 'crear_plantilla' %}"
-                    class="plantillas-btn"
-                >
+                <a href="{% url 'crear_plantilla' %}" class="plantillas-btn">
                     + Crear mi primera plantilla
                 </a>
             </div>
         {% endif %}
 
     </div>
-
 </div>
-
-
-<!-- ==========================================================
-     COLORES DINÁMICOS Y CONFIRMACIÓN DE ELIMINACIÓN
-=========================================================== -->
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ========================================================
-    // APLICAR LOS COLORES GUARDADOS EN DJANGO
-    // ========================================================
+    "use strict";
 
-    const elementosConColor = document.querySelectorAll(
-        "[data-color]"
-    );
+    // COLORES DE FONDO Y CÍRCULOS
 
-    elementosConColor.forEach(function (elemento) {
+    document.querySelectorAll(
+        ".plantillas-page [data-color]"
+    ).forEach(function (elemento) {
 
         const color = elemento.dataset.color || "";
 
-        const colorValido = /^#[0-9a-fA-F]{6}$/.test(color);
-
-        if (colorValido) {
+        if (/^#[0-9a-fA-F]{6}$/.test(color)) {
             elemento.style.backgroundColor = color;
         }
-
     });
 
+    // COLOR DEL TEXTO Y MAYÚSCULAS/MINÚSCULAS
 
-    // ========================================================
-    // CONFIRMAR ELIMINACIÓN
-    // ========================================================
+    document.querySelectorAll(
+        ".plantillas-page [data-text-color]"
+    ).forEach(function (elemento) {
 
-    const formulariosEliminar = document.querySelectorAll(
-        "[data-delete-form]"
-    );
+        const color = elemento.dataset.textColor || "";
+        const formato = elemento.dataset.format || "mayusculas";
 
-    formulariosEliminar.forEach(function (formulario) {
+        if (/^#[0-9a-fA-F]{6}$/.test(color)) {
+            elemento.style.color = color;
+        }
+
+        const primera = elemento.querySelector(".preview-primera");
+        const destacada = elemento.querySelector(".preview-destacada");
+
+        if (formato === "minusculas") {
+
+            if (primera) {
+                primera.textContent = primera.textContent
+                    .trim()
+                    .toLowerCase()
+                    .replace(/^./, letra => letra.toUpperCase());
+            }
+
+            if (destacada) {
+                destacada.textContent = destacada.textContent
+                    .trim()
+                    .toLowerCase();
+            }
+
+        } else {
+
+            if (primera) {
+                primera.textContent =
+                    primera.textContent.trim().toUpperCase();
+            }
+
+            if (destacada) {
+                destacada.textContent =
+                    destacada.textContent.trim().toUpperCase();
+            }
+        }
+    });
+
+    // CONFIRMACIÓN DE ELIMINACIÓN
+
+    document.querySelectorAll(
+        ".plantillas-page [data-delete-form]"
+    ).forEach(function (formulario) {
 
         formulario.addEventListener("submit", function (evento) {
 
-            const confirmado = window.confirm(
+            if (!window.confirm(
                 "¿Seguro que quieres eliminar esta plantilla?"
-            );
-
-            if (!confirmado) {
+            )) {
                 evento.preventDefault();
             }
-
         });
-
     });
 
+    // MOSTRAR ESTADO VACÍO
 
-    // ========================================================
-    // MOSTRAR ESTADO VACÍO CUANDO NO HAYA PERSONALIZADAS
-    // ========================================================
+    const cantidadPersonalizadas = Array.from(
+        document.querySelectorAll(".plantilla-badge")
+    ).filter(function (badge) {
+        return badge.textContent.trim().toLowerCase() === "personalizada";
+    }).length;
 
-    const tarjetasPersonalizadas = document.querySelectorAll(
-        ".plantilla-card .plantilla-badge"
-    );
-
-    let cantidadPersonalizadas = 0;
-
-    tarjetasPersonalizadas.forEach(function (badge) {
-
-        if (
-            badge.textContent.trim().toLowerCase()
-            === "personalizada"
-        ) {
-            cantidadPersonalizadas++;
-        }
-
-    });
-
-    const mensajeVacio = document.getElementById(
-        "plantillas-empty"
-    );
+    const mensajeVacio = document.getElementById("plantillas-empty");
 
     if (mensajeVacio && cantidadPersonalizadas === 0) {
         mensajeVacio.hidden = false;
     }
-
 });
 </script>
 

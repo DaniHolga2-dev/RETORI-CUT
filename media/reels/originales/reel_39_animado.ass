@@ -1,0 +1,109 @@
+[Script Info]
+Title: RETORI-CUT
+ScriptType: v4.00+
+PlayResX: 604
+PlayResY: 1076
+ScaledBorderAndShadow: yes
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,45,&H00FFBD52,&H00FFBD52,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,4,1,2,47,47,243,1
+Style: Resaltado,Montserrat,45,&H00FFBD52,&H00FFBD52,&H00E433FF,&H00E433FF,-1,0,0,0,100,100,0,0,3,7,0,2,47,47,243,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+
+Dialogue: 0,0:00:00.00,0:00:01.24,Default,,0,0,0,,Ser feminista no
+Dialogue: 0,0:00:01.24,0:00:02.68,Default,,0,0,0,,sereda, porque tengas
+Dialogue: 0,0:00:02.68,0:00:03.44,Default,,0,0,0,,una madre, una
+Dialogue: 0,0:00:03.44,0:00:04.18,Default,,0,0,0,,hermana o una
+Dialogue: 0,0:00:04.18,0:00:05.44,Default,,0,0,0,,prima -amorcia, no
+Dialogue: 0,0:00:05.44,0:00:06.30,Default,,0,0,0,,eres feminista igual
+Dialogue: 0,0:00:06.30,0:00:07.38,Default,,0,0,0,,que cuando tienes
+Dialogue: 0,0:00:07.38,0:00:08.10,Default,,0,0,0,,un amigo gay,
+Dialogue: 0,0:00:08.26,0:00:09.84,Default,,0,0,0,,no eres defensor
+Dialogue: 0,0:00:09.84,0:00:10.54,Default,,0,0,0,,de los {\rResaltado}derechos{\rDefault}
+Dialogue: 0,0:00:10.54,0:00:11.68,Default,,0,0,0,,del colectivo, igual
+Dialogue: 0,0:00:11.68,0:00:12.64,Default,,0,0,0,,que cuando tienes
+Dialogue: 0,0:00:12.64,0:00:13.96,Default,,0,0,0,,un primo negro,
+Dialogue: 0,0:00:14.16,0:00:14.90,Default,,0,0,0,,un vecino negro,
+Dialogue: 0,0:00:15.10,0:00:16.38,Default,,0,0,0,,un vecino de
+Dialogue: 0,0:00:16.38,0:00:17.72,Default,,0,0,0,,marruecos, no te
+Dialogue: 0,0:00:17.72,0:00:18.34,Default,,0,0,0,,libras de ser
+Dialogue: 0,0:00:18.34,0:00:19.04,Default,,0,0,0,,un {\rResaltado}racista{\rDefault}.
+Dialogue: 0,0:00:19.58,0:00:20.96,Default,,0,0,0,,Incluso, {\rResaltado}feijo{\rDefault} aquí,
+Dialogue: 0,0:00:21.12,0:00:21.86,Default,,0,0,0,,yo creo que
+Dialogue: 0,0:00:21.86,0:00:22.76,Default,,0,0,0,,deja claro que
+Dialogue: 0,0:00:22.76,0:00:23.10,Default,,0,0,0,,es de todo
+Dialogue: 0,0:00:23.10,0:00:24.12,Default,,0,0,0,,menos feminista, porque
+Dialogue: 0,0:00:24.12,0:00:24.86,Default,,0,0,0,,el {\rResaltado}feminismo{\rDefault} se
+Dialogue: 0,0:00:24.86,0:00:25.36,Default,,0,0,0,,pelea y se
+Dialogue: 0,0:00:25.36,0:00:26.30,Default,,0,0,0,,lucha. Y cuando
+Dialogue: 0,0:00:26.30,0:00:27.30,Default,,0,0,0,,tú hablas de
+Dialogue: 0,0:00:27.30,0:00:28.26,Default,,0,0,0,,retroceder en {\rResaltado}derechos{\rDefault}
+Dialogue: 0,0:00:28.26,0:00:29.32,Default,,0,0,0,,garantizados como el
+Dialogue: 0,0:00:29.32,0:00:30.56,Default,,0,0,0,,{\rResaltado}aborto{\rDefault}, dejas claro
+Dialogue: 0,0:00:30.56,0:00:30.96,Default,,0,0,0,,que no eres
+Dialogue: 0,0:00:30.96,0:00:32.22,Default,,0,0,0,,feminista. Cuando tú
+Dialogue: 0,0:00:32.22,0:00:33.02,Default,,0,0,0,,cuestionas, a mí
+Dialogue: 0,0:00:33.02,0:00:33.46,Default,,0,0,0,,me hace mucha
+Dialogue: 0,0:00:33.46,0:00:34.62,Default,,0,0,0,,gracia que diga,
+Dialogue: 0,0:00:35.28,0:00:36.16,Default,,0,0,0,,no, porque si
+Dialogue: 0,0:00:36.16,0:00:36.78,Default,,0,0,0,,una mujer no
+Dialogue: 0,0:00:36.78,0:00:37.26,Default,,0,0,0,,se puede hacer
+Dialogue: 0,0:00:37.26,0:00:37.92,Default,,0,0,0,,un tatuaje con
+Dialogue: 0,0:00:37.92,0:00:38.70,Default,,0,0,0,,16 años,
+Dialogue: 0,0:00:39.88,0:00:40.32,Default,,0,0,0,,perdona,
+Dialogue: 0,0:00:40.94,0:00:41.80,Default,,0,0,0,,porque una mujer
+Dialogue: 0,0:00:41.80,0:00:42.88,Default,,0,0,0,,no se puede
+Dialogue: 0,0:00:42.88,0:00:43.52,Default,,0,0,0,,hacer un tatuaje
+Dialogue: 0,0:00:43.52,0:00:44.44,Default,,0,0,0,,con 16 años,
+Dialogue: 0,0:00:44.60,0:00:45.18,Default,,0,0,0,,pero sí puede
+Dialogue: 0,0:00:45.18,0:00:45.68,Default,,0,0,0,,ser madre.
+Dialogue: 0,0:00:46.34,0:00:46.88,Default,,0,0,0,,Es mucho más
+Dialogue: 0,0:00:46.88,0:00:47.60,Default,,0,0,0,,fácil y más
+Dialogue: 0,0:00:47.60,0:00:48.46,Default,,0,0,0,,sencillo hacerte un
+Dialogue: 0,0:00:48.46,0:00:49.00,Default,,0,0,0,,tatuaje y un
+Dialogue: 0,0:00:49.00,0:00:50.18,Default,,0,0,0,,piercing que criar
+Dialogue: 0,0:00:50.18,0:00:50.62,Default,,0,0,0,,a un niño
+Dialogue: 0,0:00:50.62,0:00:51.58,Default,,0,0,0,,y que además
+Dialogue: 0,0:00:51.58,0:00:52.66,Default,,0,0,0,,llevar las riendas
+Dialogue: 0,0:00:52.66,0:00:53.10,Default,,0,0,0,,de una casa,
+Dialogue: 0,0:00:53.24,0:00:53.62,Default,,0,0,0,,de un hogar
+Dialogue: 0,0:00:53.62,0:00:54.20,Default,,0,0,0,,y de una
+Dialogue: 0,0:00:54.20,0:00:55.32,Default,,0,0,0,,infancia. Es mucho
+Dialogue: 0,0:00:55.32,0:00:56.34,Default,,0,0,0,,más fácil tatuarte
+Dialogue: 0,0:00:56.34,0:00:57.32,Default,,0,0,0,,un infinito en
+Dialogue: 0,0:00:57.32,0:00:57.90,Default,,0,0,0,,la muñeca o
+Dialogue: 0,0:00:57.90,0:00:59.06,Default,,0,0,0,,cualquier culosilería o
+Dialogue: 0,0:00:59.06,0:01:00.00,Default,,0,0,0,,la firma de
+Dialogue: 0,0:01:00.00,0:01:01.08,Default,,0,0,0,,tu padre que
+Dialogue: 0,0:01:01.08,0:01:01.98,Default,,0,0,0,,tener a un
+Dialogue: 0,0:01:01.98,0:01:02.64,Default,,0,0,0,,hijo. A mí
+Dialogue: 0,0:01:02.64,0:01:03.06,Default,,0,0,0,,me hace mucha
+Dialogue: 0,0:01:03.06,0:01:04.00,Default,,0,0,0,,gracia el cuestionamiento,
+Dialogue: 0,0:01:04.18,0:01:04.70,Default,,0,0,0,,sobre todo de
+Dialogue: 0,0:01:04.70,0:01:05.02,Default,,0,0,0,,debates
+Dialogue: 0,0:01:05.52,0:01:06.02,Default,,0,0,0,,que ya no
+Dialogue: 0,0:01:06.02,0:01:07.22,Default,,0,0,0,,deberían existir porque
+Dialogue: 0,0:01:07.22,0:01:07.92,Default,,0,0,0,,ya son {\rResaltado}derechos{\rDefault}.
+Dialogue: 0,0:01:08.32,0:01:08.90,Default,,0,0,0,,El debate sobre
+Dialogue: 0,0:01:08.90,0:01:09.88,Default,,0,0,0,,el {\rResaltado}aborto{\rDefault} fue
+Dialogue: 0,0:01:09.88,0:01:10.88,Default,,0,0,0,,hace muchísimos años
+Dialogue: 0,0:01:10.88,0:01:11.50,Default,,0,0,0,,y hoy no
+Dialogue: 0,0:01:11.50,0:01:13.02,Default,,0,0,0,,podemos permitirnos que
+Dialogue: 0,0:01:13.02,0:01:13.52,Default,,0,0,0,,esté sobre la
+Dialogue: 0,0:01:13.52,0:01:14.22,Default,,0,0,0,,mesa. Lo que
+Dialogue: 0,0:01:14.22,0:01:15.16,Default,,0,0,0,,ha demostrado es
+Dialogue: 0,0:01:15.16,0:01:15.78,Default,,0,0,0,,que es de
+Dialogue: 0,0:01:15.78,0:01:16.78,Default,,0,0,0,,todo menos feminista
+Dialogue: 0,0:01:16.78,0:01:17.48,Default,,0,0,0,,y yo aquí
+Dialogue: 0,0:01:17.48,0:01:18.90,Default,,0,0,0,,reivindico una respuesta
+Dialogue: 0,0:01:18.90,0:01:20.12,Default,,0,0,0,,que tuvo aquel
+Dialogue: 0,0:01:20.12,0:01:20.68,Default,,0,0,0,,día que fue.
+Dialogue: 0,0:01:21.02,0:01:21.44,Default,,0,0,0,,Si te crías
+Dialogue: 0,0:01:21.44,0:01:22.16,Default,,0,0,0,,con mujeres eres
+Dialogue: 0,0:01:22.16,0:01:23.24,Default,,0,0,0,,feminista y si
+Dialogue: 0,0:01:23.24,0:01:23.84,Default,,0,0,0,,te rodeas de
+Dialogue: 0,0:01:23.84,0:01:23.96,Default,,0,0,0,,nada...

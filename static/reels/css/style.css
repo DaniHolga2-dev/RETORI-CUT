@@ -28,7 +28,6 @@
         0 14px 40px rgba(20, 49, 91, 0.10);
 
     --sidebar-ancho: 240px;
-    --cabecera-alto: 72px;
     --radio: 16px;
 }
 
@@ -101,42 +100,6 @@ a {
     padding: 4px 8px;
 }
 
-.marca-icono {
-    width: 39px;
-    height: 39px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 11px;
-    background: var(--azul-retorika);
-    overflow: hidden;
-}
-
-.marca-icono span {
-    position: absolute;
-    width: 4px;
-    height: 20px;
-    background: var(--blanco);
-    border-radius: 10px;
-}
-
-.marca-icono span:nth-child(1) {
-    left: 11px;
-}
-
-.marca-icono span:nth-child(2) {
-    left: 18px;
-    height: 15px;
-    transform: rotate(-42deg);
-}
-
-.marca-icono span:nth-child(3) {
-    left: 25px;
-    height: 11px;
-    transform: rotate(42deg);
-}
-
 .marca-texto {
     display: flex;
     flex-direction: column;
@@ -186,13 +149,6 @@ a {
     color: var(--azul-retorika);
 }
 
-.nav-item.activo {
-    background: var(--azul-retorika);
-    color: var(--blanco);
-    box-shadow:
-        0 8px 20px rgba(21, 111, 231, 0.20);
-}
-
 .nav-icono {
     width: 22px;
     height: 22px;
@@ -201,20 +157,6 @@ a {
     justify-content: center;
     font-size: 18px;
     font-weight: 500;
-}
-
-.nav-deshabilitado {
-    opacity: 0.55;
-    cursor: default;
-}
-
-.nav-deshabilitado:hover {
-    background: transparent;
-    color: var(--texto-secundario);
-}
-
-.sidebar-inferior {
-    margin-top: auto;
 }
 
 /* ============================================================
@@ -227,57 +169,11 @@ a {
 }
 
 /* ============================================================
-   CABECERA
-============================================================ */
-
-.cabecera {
-    height: var(--cabecera-alto);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 34px;
-    background: rgba(255, 255, 255, 0.94);
-    border-bottom: 1px solid var(--borde);
-}
-
-.cabecera-titulo {
-    font-size: 16px;
-    font-weight: 750;
-}
-
-.cabecera-acciones {
-    display: flex;
-    align-items: center;
-}
-
-.estado-retorika {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    border: 1px solid var(--borde);
-    border-radius: 100px;
-    background: var(--blanco);
-    color: var(--texto-secundario);
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.estado-punto {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--azul-retorika);
-    box-shadow:
-        0 0 0 4px rgba(21, 111, 231, 0.10);
-}
-
-/* ============================================================
    CONTENIDO GENERAL
 ============================================================ */
 
 .contenido {
-    min-height: calc(100vh - var(--cabecera-alto));
+    min-height: 100vh;
     padding: 46px 40px 60px;
 }
 
@@ -800,7 +696,6 @@ a {
     opacity: 0.8;
 }
 
-
 /* ============================================================
    RETORI-CUT
    PANTALLA DE PROCESAMIENTO
@@ -1267,10 +1162,6 @@ a {
         padding: 34px 25px 45px;
     }
 
-    .cabecera {
-        padding: 0 24px;
-    }
-
     .informacion-proceso {
         grid-template-columns:
             minmax(0, 1fr)
@@ -1296,7 +1187,6 @@ a {
 
     :root {
         --sidebar-ancho: 0px;
-        --cabecera-alto: 64px;
     }
 
     .sidebar {
@@ -1338,30 +1228,12 @@ a {
         font-size: 15px;
     }
 
-    .sidebar-inferior {
-        display: none;
-    }
-
     .aplicacion {
         margin-left: 0;
     }
 
-    .cabecera {
-        height: var(--cabecera-alto);
-        padding: 0 17px;
-    }
-
-    .cabecera-titulo {
-        font-size: 13px;
-    }
-
-    .estado-retorika {
-        padding: 7px 9px;
-        font-size: 10px;
-    }
-
     .contenido {
-        min-height: calc(100vh - var(--cabecera-alto));
+        min-height: 100vh;
         padding: 30px 16px 45px;
     }
 
@@ -1528,3 +1400,108 @@ a {
     }
 
 }
+
+
+/* ============================================================
+   RETORI-CUT - MODO OSCURO
+   Se activa con data-theme="oscuro" en <html>.
+============================================================ */
+html[data-theme="oscuro"] {
+    color-scheme: dark;
+    --azul-retorika: #63a5ff;
+    --azul-profundo: #3d8ff4;
+    --azul-muy-claro: #1c3352;
+    --azul-claro: #233d60;
+    --blanco: #192537;
+    --texto: #f1f5ff;
+    --texto-secundario: #bdc9dc;
+    --texto-suave: #9caec6;
+    --borde: #30415a;
+    --borde-azul: #416ea2;
+    --fondo: #0e1726;
+    --fondo-sidebar: #121d2e;
+    --sombra-suave: 0 8px 30px rgba(0,0,0,.22);
+    --sombra: 0 14px 40px rgba(0,0,0,.32);
+}
+html[data-theme="oscuro"] body,
+html[data-theme="oscuro"] .aplicacion,
+html[data-theme="oscuro"] .contenido {background-color:#0e1726;color:#f1f5ff}
+html[data-theme="oscuro"] .sidebar {background:#121d2e;border-color:#30415a}
+html[data-theme="oscuro"] .sidebar-marca,
+html[data-theme="oscuro"] .sidebar-perfil {border-color:#30415a}
+html[data-theme="oscuro"] .marca-texto strong,
+html[data-theme="oscuro"] .perfil-info strong,
+html[data-theme="oscuro"] .perfil-desplegable-titulo {color:#f1f5ff}
+html[data-theme="oscuro"] .marca-texto small,
+html[data-theme="oscuro"] .perfil-info small,
+html[data-theme="oscuro"] .sidebar-seccion-titulo {color:#9caec6}
+html[data-theme="oscuro"] .sidebar-navegacion .nav-item:not(.nav-item-principal) {color:#bdc9dc}
+html[data-theme="oscuro"] .sidebar-navegacion .nav-item:not(.nav-item-principal):hover,
+html[data-theme="oscuro"] .sidebar-navegacion .nav-item:not(.nav-item-principal).active {background:#223958;color:#85baff;box-shadow:none}
+html[data-theme="oscuro"] .sidebar-navegacion .nav-item-principal {color:#fff;background:linear-gradient(110deg,#156fe7,#2785ff,#156fe7)}
+html[data-theme="oscuro"] .sidebar-perfil summary:hover,
+html[data-theme="oscuro"] .sidebar-perfil details[open] summary {background:#223958}
+html[data-theme="oscuro"] .perfil-avatar,
+html[data-theme="oscuro"] .perfil-desplegable,
+html[data-theme="oscuro"] .perfil-editar {background:#223958;color:#85baff;border-color:#30415a}
+html[data-theme="oscuro"] .perfil-cerrar {background:#192537;border-color:#30415a;color:#e1e9f7}
+html[data-theme="oscuro"] .nuevo-reel-cabecera h1,
+html[data-theme="oscuro"] .procesando-cabecera h1,
+html[data-theme="oscuro"] .procesando-archivo strong,
+html[data-theme="oscuro"] .fase-texto strong {color:#f1f5ff}
+html[data-theme="oscuro"] .zona-subida,
+html[data-theme="oscuro"] .archivo-seleccionado,
+html[data-theme="oscuro"] .procesando-tarjeta {background:#192537;border-color:#30415a;color:#f1f5ff}
+html[data-theme="oscuro"] .zona-subida.arrastrando {background:#223958}
+html[data-theme="oscuro"] .formatos-admitidos span,
+html[data-theme="oscuro"] .boton-cambiar-video,
+html[data-theme="oscuro"] .fase-icono {background:#24344c;border-color:#30415a;color:#bdc9dc}
+html[data-theme="oscuro"] .procesando-fase.activa {background:#223958;border-color:#416ea2}
+html[data-theme="oscuro"] .procesando-fase.activa .fase-icono {background:#192537;color:#85baff}
+html[data-theme="oscuro"] .procesando-icono {background:#173b30}
+html[data-theme="oscuro"] .configuracion-page,
+html[data-theme="oscuro"] .config-page {color:#f1f5ff}
+html[data-theme="oscuro"] .configuracion-cabecera h1,
+html[data-theme="oscuro"] .configuracion-tarjeta-titulo h2,
+html[data-theme="oscuro"] .configuracion-opcion-info strong,
+html[data-theme="oscuro"] .configuracion-campo label,
+html[data-theme="oscuro"] .configuracion-subseccion h3,
+html[data-theme="oscuro"] .configuracion-acerca-info h3,
+html[data-theme="oscuro"] .configuracion-detalle strong,
+html[data-theme="oscuro"] .config-page h1,
+html[data-theme="oscuro"] .config-card h2,
+html[data-theme="oscuro"] .config-field label {color:#f1f5ff}
+html[data-theme="oscuro"] .configuracion-tarjeta,
+html[data-theme="oscuro"] .config-card {background:#192537;border-color:#30415a;box-shadow:0 8px 28px rgba(0,0,0,.16)}
+html[data-theme="oscuro"] .configuracion-tarjeta-cabecera,
+html[data-theme="oscuro"] .configuracion-subseccion,
+html[data-theme="oscuro"] .configuracion-opcion,
+html[data-theme="oscuro"] .configuracion-detalle,
+html[data-theme="oscuro"] .configuracion-detalles,
+html[data-theme="oscuro"] .config-stat {border-color:#30415a}
+html[data-theme="oscuro"] .configuracion-estadistica,
+html[data-theme="oscuro"] .configuracion-aviso,
+html[data-theme="oscuro"] .configuracion-icono,
+html[data-theme="oscuro"] .configuracion-estadistica-icono {background:#223958;border-color:#30415a;color:#b8d6ff}
+html[data-theme="oscuro"] .configuracion-estadistica strong {color:#f1f5ff}
+html[data-theme="oscuro"] .configuracion-campo select,
+html[data-theme="oscuro"] .config-field select {background:#111c2d;border-color:#3b506c;color:#f1f5ff}
+html[data-theme="oscuro"] .configuracion-campo select:disabled,
+html[data-theme="oscuro"] .config-field select:disabled {opacity:.7}
+html[data-theme="oscuro"] .configuracion-tarjeta p,
+html[data-theme="oscuro"] .configuracion-ayuda,
+html[data-theme="oscuro"] .configuracion-opcion-info p,
+html[data-theme="oscuro"] .configuracion-detalle span,
+html[data-theme="oscuro"] .config-intro,
+html[data-theme="oscuro"] .config-card>p,
+html[data-theme="oscuro"] .config-hint {color:#a9b8ce}
+html[data-theme="oscuro"] .config-check {color:#e0e9f8}
+html[data-theme="oscuro"] .configuracion-switch-pista {background:#40516a}
+html[data-theme="oscuro"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+html[data-theme="oscuro"] textarea,
+html[data-theme="oscuro"] select {color-scheme:dark}
+html[data-theme="oscuro"] .mensaje-sistema {background:#183d32;color:#a7ebc6;border-color:#2a6852}
+html[data-theme="oscuro"] .mensaje-sistema.error {background:#4b2732;color:#ffb8c7;border-color:#784050}
+/* Tarjetas de otras páginas que usan estilos propios */
+html[data-theme="oscuro"] :is(.plantilla-card,.plantillas-card,.video-card,.reel-card,.perfil-card,.tarjeta,.card) {background:#192537!important;border-color:#30415a!important;color:#f1f5ff!important}
+html[data-theme="oscuro"] :is(.plantilla-card,.plantillas-card,.video-card,.reel-card,.perfil-card,.tarjeta,.card) :is(h1,h2,h3,h4,strong) {color:#f1f5ff}

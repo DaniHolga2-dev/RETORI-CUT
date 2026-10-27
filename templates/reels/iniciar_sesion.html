@@ -1,0 +1,397 @@
+
+{% extends "reels/base.html" %}
+
+{% block title %}
+Iniciar sesión | RETORI-CUT
+{% endblock %}
+
+{% block header_title %}
+Iniciar sesión
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    /* ================================================
+       CONTENEDOR
+    ================================================= */
+
+    .login-contenedor {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 50px 16px 60px;
+    }
+
+    /* ================================================
+       TARJETA
+    ================================================= */
+
+    .login-tarjeta {
+        width: 100%;
+        max-width: 460px;
+        padding: 42px;
+        box-sizing: border-box;
+        background: #ffffff;
+        border: 1px solid #e8edf5;
+        border-radius: 22px;
+        box-shadow: 0 14px 48px rgba(16, 27, 56, 0.06);
+    }
+
+    /* ================================================
+       ICONO
+    ================================================= */
+
+    .login-icono {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        background: #eaf2ff;
+        color: #156fe7;
+        font-size: 27px;
+        font-weight: 800;
+    }
+
+    /* ================================================
+       TEXTOS
+    ================================================= */
+
+    .login-titulo {
+        margin: 0 0 10px;
+        text-align: center;
+        color: #101b38;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .login-descripcion {
+        margin: 0 0 32px;
+        text-align: center;
+        color: #7c879c;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    /* ================================================
+       FORMULARIO
+    ================================================= */
+
+    .login-campo {
+        margin-bottom: 22px;
+    }
+
+    .login-etiqueta {
+        display: block;
+        margin-bottom: 9px;
+        color: #263653;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .login-input {
+        width: 100%;
+        padding: 14px 15px;
+        box-sizing: border-box;
+        border: 1px solid #dce5f2;
+        border-radius: 11px;
+        background: #f8faff;
+        outline: none;
+        color: #101b38;
+        font-family: inherit;
+        font-size: 13px;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .login-input:focus {
+        border-color: #156fe7;
+        box-shadow: 0 0 0 4px rgba(21, 111, 231, 0.1);
+    }
+
+    .login-input::placeholder {
+        color: #a2adbf;
+    }
+
+    /* ================================================
+       ERRORES
+    ================================================= */
+
+    .login-error {
+        padding: 13px 15px;
+        margin-bottom: 22px;
+        border-radius: 11px;
+        background: #fff0f2;
+        color: #a82a40;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .login-error-campo {
+        margin-top: 7px;
+        color: #c92c48;
+        font-size: 11px;
+    }
+
+    /* ================================================
+       BOTÓN PRINCIPAL
+    ================================================= */
+
+    .login-boton {
+        position: relative;
+        width: 100%;
+        padding: 15px 20px;
+        margin-top: 7px;
+        border: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        background: linear-gradient(
+            135deg,
+            #156fe7,
+            #105cb1
+        );
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 9px 24px rgba(21, 111, 231, 0.22);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .login-boton:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(21, 111, 231, 0.3);
+    }
+
+    .login-boton:active {
+        transform: translateY(0);
+    }
+
+    /* ================================================
+       ENLACE DE REGISTRO
+    ================================================= */
+
+    .login-pie {
+        margin-top: 29px;
+        text-align: center;
+        color: #7c879c;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .login-pie a {
+        color: #156fe7;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .login-pie a:hover {
+        text-decoration: underline;
+    }
+
+    /* ================================================
+       RESPONSIVE
+    ================================================= */
+
+    @media (max-width: 600px) {
+
+        .login-contenedor {
+            padding: 22px 0 40px;
+        }
+
+        .login-tarjeta {
+            padding: 30px 22px;
+            border-radius: 17px;
+        }
+
+        .login-titulo {
+            font-size: 22px;
+        }
+
+        .login-descripcion {
+            font-size: 12px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="login-contenedor">
+
+    <section class="login-tarjeta">
+
+        <!-- ============================================
+             IDENTIDAD RETORI-CUT
+        ============================================= -->
+
+        <div class="login-icono">
+            R
+        </div>
+
+        <h1 class="login-titulo">
+            ¡Bienvenido de nuevo!
+        </h1>
+
+        <p class="login-descripcion">
+            Inicia sesión para continuar creando tus Reels
+            y acceder a todos tus vídeos guardados.
+        </p>
+
+
+        <!-- ============================================
+             FORMULARIO DE INICIO DE SESIÓN
+        ============================================= -->
+
+        <form
+            method="post"
+            action="{% url 'iniciar_sesion' %}"
+        >
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="next"
+                value="{{ next }}"
+            >
+
+
+            <!-- ERRORES GENERALES -->
+
+            {% if formulario.non_field_errors %}
+
+                <div
+                    class="login-error"
+                    role="alert"
+                >
+
+                    {% for error in formulario.non_field_errors %}
+
+                        <div>
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- CORREO ELECTRÓNICO -->
+
+            <div class="login-campo">
+
+                <label
+                    for="id_username"
+                    class="login-etiqueta"
+                >
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    id="id_username"
+                    name="username"
+                    class="login-input"
+                    placeholder="Introduce tu correo electrónico"
+                    autocomplete="email"
+                    value="{{ formulario.username.value|default_if_none:'' }}"
+                    required
+                >
+
+                {% if formulario.username.errors %}
+
+                    <div class="login-error-campo">
+
+                        {% for error in formulario.username.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- CONTRASEÑA -->
+
+            <div class="login-campo">
+
+                <label
+                    for="id_password"
+                    class="login-etiqueta"
+                >
+                    Contraseña
+                </label>
+
+                <input
+                    type="password"
+                    id="id_password"
+                    name="password"
+                    class="login-input"
+                    placeholder="Introduce tu contraseña"
+                    autocomplete="current-password"
+                    required
+                >
+
+                {% if formulario.password.errors %}
+
+                    <div class="login-error-campo">
+
+                        {% for error in formulario.password.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- BOTÓN INICIAR SESIÓN -->
+
+            <button
+                type="submit"
+                class="login-boton"
+            >
+                Iniciar sesión
+            </button>
+
+        </form>
+
+
+        <!-- ============================================
+             REGISTRO
+        ============================================= -->
+
+        <div class="login-pie">
+
+            ¿Todavía no tienes una cuenta?
+
+            <a href="{% url 'registro' %}">
+                Crear cuenta gratis
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
